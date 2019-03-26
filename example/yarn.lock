@@ -5233,6 +5233,13 @@ react-is@^16.8.1, react-is@^16.8.3, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.5.tgz#c54ac229dd66b5afe0de5acbe47647c3da692ff8"
   integrity sha512-sudt2uq5P/2TznPV4Wtdi+Lnq3yaYW8LfvPKLM9BKD8jJNBkxMVyB0C9/GmVhLw7Jbdmndk/73n7XQGeN9A3QQ==
 
+react-native-carplay@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-carplay/-/react-native-carplay-1.0.0.tgz#bda1391e439d9976375201eaa62ca7b21ecf10c1"
+  integrity sha512-SpYix4s5Tx77ZTSrgdRlY+I6UqZG7r9GHoa3o09c6TrDUh4i1NvTB5uLaHhp2P5ADVQ443CJ1MSdF233xbYfMA==
+  dependencies:
+    traverse "^0.6.6"
+
 react-native@0.59.1:
   version "0.59.1"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.59.1.tgz#3274dcc0f9558799bd41c8092acac2a79bd627ce"
