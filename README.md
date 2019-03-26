@@ -2,11 +2,64 @@
 
 What if you could create CarPlay with React Native. Well, now you can.
 
+![Animated Demo](https://media.giphy.com/media/Ffa4hukA3YMLh6U8fl/giphy.gif)
+
 ![List Template](.github/list-template.png)
 
 ![Grid Template](.github/grid-template.png)
 
 ![Search Template](.github/search-template.png)
+
+## Installing
+
+1. Install the library
+
+```bash
+yarn add react-native-carplay --save
+```
+
+2. Link using normal or cocoapods method
+```bash
+react-native link react-native-carplay
+```
+```ruby
+# in ios/Podfile:
+
+pod 'react-native-carplay', path: '../node_modules/react-native-carplay'
+```
+
+3. Edit your AppDelegate
+
+
+```objc
+// AppDelegate.h
+
+// [step 1] add this line to the top
+#import <CarPlay/CarPlay.h>
+
+// [step 2] add the "CPApplicationDelegate" to the end, before ">":
+@interface AppDelegate : UIResponder <UIApplicationDelegate, CPApplicationDelegate>
+```
+
+```objc
+// AppDelegate.m
+
+// [step 1] add this line to the top
+#import <RNCarPlay.h>
+
+// ...
+
+// [step 2] add the following two methods before @end
+
+- (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window {
+  [RNCarPlay registerWithInterfaceController:interfaceController window:window];
+}
+
+- (void)application:(nonnull UIApplication *)application didDisconnectCarInterfaceController:(nonnull CPInterfaceController *)interfaceController fromWindow:(nonnull CPWindow *)window {
+}
+
+@end
+```
 
 ## Usage
 
