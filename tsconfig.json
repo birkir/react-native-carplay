@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "isolatedModules": true,
+    "declaration": true,
+    // "declarationDir": "types",
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -10,8 +11,8 @@
     "sourceMap": false,
     "outDir": "lib"
   },
-  "exclude": ["node_modules"],
-  "filesGlob": ["src/**/*.ts"],
+  "exclude": ["node_modules", "lib"],
+  "include": ["src/**/*.ts"],
   "compileOnSave": false,
   "buildOnSave": false
 }

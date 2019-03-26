@@ -3,8 +3,19 @@ import { ListItem } from '../interfaces/ListItem';
 import { Template, TemplateConfig } from './Template';
 
 interface SearchTemplateConfig extends TemplateConfig {
-  onSearch(query: string): Promise<ListItem[]>;
-  onItemSelect(item: any): Promise<void>;
+  /**
+   * Fired when search input is changed.
+   * Must return list of items to show.
+   * @param query Search query
+   */
+  onSearch?(query: string): Promise<ListItem[]>;
+  /**
+   * Fired when result item is selected.
+   * Spinner shows by default.
+   * When the returned promise is resolved the spinner will hide.
+   * @param item Object with the selected index
+   */
+  onItemSelect?(item: { index: number }): Promise<void>;
 }
 
 export class SearchTemplate extends Template<SearchTemplateConfig> {

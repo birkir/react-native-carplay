@@ -3,124 +3,93 @@ import { Template } from './templates/Template';
 
 const { RNCarPlay } = NativeModules;
 
+/**
+ * A controller that manages all user interface elements appearing on your map displayed on the CarPlay screen.
+ */
 class CarPlayInterface {
+
+  /**
+   * React Native bridge to the CarPlay interface
+   */
   public bridge = RNCarPlay;
+
+  /**
+   * CarPlay Event Emitter
+   */
   public emitter = new NativeEventEmitter(RNCarPlay);
 
-  public setRootTemplate(template: Template<any>, animated = true) {
-    return RNCarPlay.setRootTemplate(template.id, animated);
+  /**
+   * Sets the root template, starting a new stack for the template navigation hierarchy.
+   * @param rootTemplate The root template. Replaces the current rootTemplate, if one exists.
+   * @param animated Set TRUE to animate the presentation of the root template; ignored if there isn't a current rootTemplate.
+   */
+  public setRootTemplate(rootTemplate: Template<any>, animated = true) {
+    return RNCarPlay.setRootTemplate(rootTemplate.id, animated);
   }
 
-  public pushTemplate(template: Template<any>, animated = true) {
-    return RNCarPlay.pushTemplate(template.id, animated);
+  /**
+   * Pushes a template onto the navigation stack and updates the display.
+   * @param templateToPush The template to push onto the navigation stack.
+   * @param animated Set TRUE to animate the presentation of the template.
+   */
+  public pushTemplate(templateToPush: Template<any>, animated = true) {
+    return RNCarPlay.pushTemplate(templateToPush.id, animated);
   }
 
-  public popToTemplate(template: Template<any>, animated = true) {
-    return RNCarPlay.popToTemplate(template.id, animated);
+  /**
+   * Pops templates until the specified template is at the top of the navigation stack.
+   * @param targetTemplate The template that you want at the top of the stack. The template must be on the navigation stack before calling this method.
+   * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
+   */
+  public popToTemplate(targetTemplate: Template<any>, animated = true) {
+    return RNCarPlay.popToTemplate(targetTemplate.id, animated);
   }
 
+  /**
+   * Pops all templates on the stack—except the root template—and updates the display.
+   * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
+   */
   public popToRootTemplate(animated = true) {
     return RNCarPlay.popToRootTemplate(animated);
   }
 
+  /**
+   * Pops the top template from the navigation stack and updates the display.
+   * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
+   */
   public popTemplate(animated = true) {
     return RNCarPlay.popTemplate(animated);
+  }
+
+  /**
+   * @todo Not implemented yet
+   */
+  public presentTemplate(templateToPresent: Template<any>, animated = true) {
+    return null;
+  }
+
+  /**
+   * @todo Not implemented yet
+   */
+  public dismissTemplate(animated = true) {
+    return null;
+  }
+
+  /**
+   * The current root template in the template navigation hierarchy.
+   * @todo Not implemented yet
+   */
+  public get rootTemplate(): Promise<string> {
+    return Promise.resolve('');
+  }
+
+  /**
+   * The top-most template in the navigation hierarchy stack.
+   * @todo Not implemented yet
+   */
+  public get topTemplate(): Promise<string> {
+    return Promise.resolve('');
   }
 }
 
 export const CarPlay = new CarPlayInterface();
-
-// export const CarPlay = new CarPlay();
-
-// interface ListItem {
-//   text: string;
-//   detailText?: string;
-//   image?: null;
-//   showsDisclosureIndicator?: boolean;
-// }
-
-// interface ListSection {
-//   header?: string;
-//   sectionIndexTitle?: string;
-//   items: ListItem[];
-// }
-
-// interface GridButton {
-//   titleVariants: string[];
-//   image?: null;
-//   enabled?: boolean;
-// }
-
-// interface BarButtonText {
-//   type: 'text';
-//   title: string;
-// }
-
-// interface BarButtonImage {
-//   type: 'image';
-//   image: null;
-// }
-
-// type BarButton = BarButtonText | BarButtonImage & {
-//   id: string;
-//   enabled?: boolean;
-// };
-
-// const sections: ListSection[] = [{
-//   items: [{
-//     text: 'foo',
-//   }, {
-//     text: 'bar'
-//   }]
-// }]
-
-// type TemplateEvent = 'willAppear' | 'willDisappear' | 'didAppear' | 'didDisappear';
-
-// class Template {
-//   leadingNavigationBarButtons: BarButton[];
-//   trailingNavigationBarButtons: BarButton[];
-//   backButton: boolean;
-// }
-
-// type ListTemplateEvent = TemplateEvent & 'didSelectListItem';
-
-// class ListTemplate {
-//   constructor(public title: string, public sections: ListSection[]) {}
-//   addEventListener(name: ListTemplateEvent, callback: Function) {}
-// }
-
-// class GridTemplate {
-//   constructor(public title: string, public buttons: GridButton[]) {}
-// }
-
-// type SearchTemplateEvent = 'updatedSearchText' | 'selectedResult' | 'searchButtonPressed';
-
-// class SearchTemplate {
-//   addEventListener(name: SearchTemplateEvent, callback: Function) {}
-// }
-
-// type InterfaceControllerEvent = 'didConnectCarInterfaceController' | 'didDisconnectCarInterfaceController' | 'didSelectNavigationAlert' | 'didSelectManeuver';
-
-// class InterfaceController {
-//   addEventListener(name: InterfaceControllerEvent, callback: Function) {}
-//   setRoot(template: ListTemplate, animated = true) {}
-//   push(template: ListTemplate, animated = true) {}
-//   pop(animated = true) {}
-//   popToRoot(animated = true) {}
-//   popToTemplate(template: ListTemplate, animated = true) {}
-//   present(template: ListTemplate, animated = true) {}
-//   dismiss(animated = true) {}
-// }
-
-// const ic = new InterfaceController();
-
-// const template = new ListTemplate('demo', [{
-//   header:"Stuff",
-//   sectionIndexTitle:"S",
-//   items:[{
-//     text:"Lipsum",
-//     detailText:"Yeb"
-//   }]
-// }]);
-
-// ic.setRoot(template, true);
