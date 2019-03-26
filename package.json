@@ -1,12 +1,13 @@
 {
   "name": "react-native-carplay",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CarPlay for React Native",
   "main": "lib/index.js",
   "files": [
     "src",
     "lib",
-    "ios"
+    "ios",
+    "react-native-carplay.podspec"
   ],
   "scripts": {
     "prepublish": "yarn run build",
