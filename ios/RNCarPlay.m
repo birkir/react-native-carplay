@@ -55,14 +55,14 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config) {
     RNCPStore *store = [RNCPStore sharedManager];
-    
+
     NSString *type = [RCTConvert NSString:config[@"type"]];
     NSString *title = [RCTConvert NSString:config[@"title"]];
     NSArray *leadingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"leadingNavigationBarButtons"]] templateId:templateId];
     NSArray *trailingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"trailingNavigationBarButtons"]] templateId:templateId];
-    
+
     CPTemplate *template = [[CPTemplate alloc] init];
-    
+
     if ([type isEqualToString:@"search"]) {
         CPSearchTemplate *searchTemplate = [[CPSearchTemplate alloc] init];
         searchTemplate.delegate = self;
@@ -83,18 +83,40 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         listTemplate.delegate = self;
         template = listTemplate;
     }
-    
+    else if ([type isEqualToString:@"map"]) {
+        CPMapTemplate *mapTemplate = [[CPMapTemplate alloc] init];
+
+        NSString *moduleName = [RCTConvert NSString:config[@"moduleName"]];
+        if (moduleName) {
+            RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:moduleName initialProperties:@{}];
+            [rootView setFrame:store.window.frame];
+            [store.window addSubview:rootView];
+        }
+
+        MKMapItem *origin = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(64, -21)]];
+        MKMapItem *destination = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(64, -21)]];
+        NSMutableArray *routeChoices = [NSMutableArray array];
+
+        CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:[NSArray array] additionalInformationVariants:[NSArray array] selectionSummaryVariants:[NSArray array]];
+        [routeChoices addObject:routeChoice];
+
+        CPTrip *trip = [[CPTrip alloc] initWithOrigin:origin destination:destination routeChoices:routeChoices];
+        [mapTemplate startNavigationSessionForTrip:trip];
+
+        template = mapTemplate;
+    }
+
     [template setUserInfo:@{ @"templateId": templateId }];
-    
+
     [store setTemplate:templateId template:template];
 }
 
 RCT_EXPORT_METHOD(setRootTemplate:(NSString *)templateId animated:(BOOL)animated) {
     RNCPStore *store = [RNCPStore sharedManager];
     CPTemplate *template = [store findTemplateById:templateId];
-    
+
     store.interfaceController.delegate = self;
-    
+
     if (template) {
         [store.interfaceController setRootTemplate:template animated:animated];
     } else {

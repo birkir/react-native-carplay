@@ -81,7 +81,7 @@ export class Template<P> {
 
   public parseConfig(config: any) {
     const result = traverse(config).map(function node(x) {
-      if (this.key === 'image') {
+      if (this.key.match(/[Ii]mage$/)) {
         this.update(resolveAssetSource(x));
       }
     });
