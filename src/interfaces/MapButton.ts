@@ -3,6 +3,10 @@
  */
 export interface MapButton {
   /**
+   * Button ID
+   */
+  id: string;
+  /**
    * The image to display on the button.
    */
   image?: any;

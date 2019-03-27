@@ -30,6 +30,6 @@ export class Trip {
       this.id = `trip-${Date.now()}-${Math.round(Math.random() * Number.MAX_SAFE_INTEGER)}`;
     }
 
-    CarPlay.bridge.createTrip(config);
+    CarPlay.bridge.createTrip(this.id, config);
   }
 }

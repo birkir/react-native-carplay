@@ -10,6 +10,8 @@
 
 @implementation RNCPStore {
     NSMutableDictionary* _templatesStore;
+    NSMutableDictionary* _navigationSessionsStore;
+    NSMutableDictionary* _tripsStore;
 }
 
 @synthesize window;
@@ -18,7 +20,10 @@
 -(instancetype)init {
     if (self = [super init]) {
         _templatesStore = [[NSMutableDictionary alloc] init];
+        _navigationSessionsStore = [[NSMutableDictionary alloc] init];
+        _tripsStore = [[NSMutableDictionary alloc] init];
     }
+    
     return self;
 }
 
@@ -38,6 +43,24 @@
 - (NSString*) setTemplate:(NSString*)templateId template:(CPTemplate*)template {
     [_templatesStore setObject:template forKey:templateId];
     return templateId;
+}
+
+- (CPTrip*) findTripById:(NSString*)tripId {
+    return [_tripsStore objectForKey:tripId];
+}
+
+- (NSString*) setTrip:(NSString*)tripId trip:(CPTrip*)trip {
+    [_tripsStore setObject:trip forKey:tripId];
+    return tripId;
+}
+
+- (CPNavigationSession*) findNavigationSessionById:(NSString*)navigationSessionId {
+    return [_navigationSessionsStore objectForKey:navigationSessionId];
+}
+
+- (NSString*) setNavigationSession:(NSString*)navigationSessionId navigationSession:(CPNavigationSession*)navigationSession {
+    [_tripsStore setObject:navigationSession forKey:navigationSessionId];
+    return navigationSessionId;
 }
 
 @end

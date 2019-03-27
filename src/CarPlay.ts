@@ -1,7 +1,7 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import { DeviceEventEmitter, NativeEventEmitter, NativeModules } from 'react-native';
 import { Template } from './templates/Template';
 
-const { RNCarPlay } = NativeModules;
+const { RNCarPlay, RNCPStore } = NativeModules;
 
 /**
  * A controller that manages all user interface elements appearing on your map displayed on the CarPlay screen.
@@ -17,6 +17,30 @@ class CarPlayInterface {
    * CarPlay Event Emitter
    */
   public emitter = new NativeEventEmitter(RNCarPlay);
+
+  private onConnectCallback: () => void;
+  private onDisconnectCallback: () => void;
+
+  constructor() {
+    this.emitter.addListener('didConnect', () => {
+      if (this.onConnectCallback) {
+        this.onConnectCallback();
+      }
+    });
+    this.emitter.addListener('didDisconnect', () => {
+      if (this.onDisconnectCallback) {
+        this.onDisconnectCallback();
+      }
+    })
+  }
+
+  public onConnect = (callback: () => void) => {
+    this.onConnectCallback = callback;
+  };
+
+  public onDisconnect = (callback: () => void) => {
+    this.onDisconnectCallback = callback;
+  }
 
   /**
    * Sets the root template, starting a new stack for the template navigation hierarchy.

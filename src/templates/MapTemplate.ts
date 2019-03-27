@@ -1,7 +1,9 @@
+import { AppRegistry, ComponentProvider, EventSubscription } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { MapButton } from '../interfaces/MapButton';
 import { TextConfiguration } from '../interfaces/TextConfiguration';
 import { TimeRemainingColor } from '../interfaces/TimeRemainingColor';
+import { NavigationSession } from '../navigation/NavigationSession';
 import { Trip } from '../navigation/Trip';
 import { Template } from './Template';
 
@@ -9,10 +11,10 @@ interface MapTemplateConfig {
   guidanceBackgroundColor?: string;
   tripEstimateStyle?: 'dark' | 'light';
   /**
-   * Your react module name
-   * Example `MODULE_NAME` from `AppRegistry.registerComponent('MODULE_NAME', () => YourComponent);`
+   * Your react view to render inside CarPlay
+   * Example `render: () => <MyComponent />`
    */
-  moduleName: string;
+  render: ComponentProvider;
   /**
    * An array of map buttons displayed on the trailing bottom corner of the map template.
    *
@@ -34,10 +36,32 @@ export class MapTemplate extends Template<MapTemplateConfig> {
     return 'map';
   }
 
-  public updateTravelEstimates(tripId: string, distanceRemaining: number, timeRemaining: number, timeRemainingColor: TimeRemainingColor = 'default') {
-    CarPlay.bridge.updateTravelEstimates(this.id, tripId, distanceRemaining, timeRemaining, timeRemainingColor);
+  constructor(public config: MapTemplateConfig) {
+    super(config);
+
+    if (config.render) {
+      AppRegistry.registerComponent(this.id, config.render);
+    }
+
+    requestAnimationFrame(() => {
+      CarPlay.bridge.createTemplate(this.id, this.parseConfig({ type: this.type, ...config, render: true }));
+    });
   }
 
+  /**
+   * Begins guidance for a trip.
+   *
+   * Keep a reference to the navigation session to perform guidance updates.
+   * @param trip Trip class instance
+   */
+  public async startNavigationSession(trip: Trip): Promise<NavigationSession> {
+    const navigationSessionId = await CarPlay.bridge.startNavigationSession(this.id, trip.id);
+    return new NavigationSession(navigationSessionId, trip, this);
+  }
+
+  public updateTravelEstimates(trip: Trip, distanceRemaining: number, timeRemaining: number, timeRemainingColor: TimeRemainingColor = 'default') {
+    CarPlay.bridge.updateTravelEstimates(this.id, trip.id, distanceRemaining, timeRemaining, timeRemainingColor);
+  }
   /**
    * Update MapTemplate configuration
    */

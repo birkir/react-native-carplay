@@ -25,19 +25,19 @@ export class SearchTemplate extends Template<SearchTemplateConfig> {
     return 'search';
   }
 
-  constructor(props: SearchTemplateConfig) {
-    super(props);
+  constructor(public config: SearchTemplateConfig) {
+    super(config);
 
     CarPlay.emitter.addListener('updatedSearchText', e => {
-      if (props.onSearch && e.templateId === this.id) {
-        const x = props.onSearch(e.searchText);
+      if (config.onSearch && e.templateId === this.id) {
+        const x = config.onSearch(e.searchText);
         Promise.resolve(x).then(result => CarPlay.bridge.reactToUpdatedSearchText(result));
       }
     });
 
     CarPlay.emitter.addListener('selectedResult', e => {
-      if (props.onItemSelect && e.templateId === this.id) {
-        const x = props.onItemSelect(e);
+      if (config.onItemSelect && e.templateId === this.id) {
+        const x = config.onItemSelect(e);
         Promise.resolve(x).then(() => CarPlay.bridge.reactToSelectedResult(true));
       }
     });

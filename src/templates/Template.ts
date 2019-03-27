@@ -58,7 +58,7 @@ export class Template<P> {
   public type: string;
   public id: string;
 
-  constructor(config: TemplateConfig & P) {
+  constructor(public config: TemplateConfig & P) {
     if (config.id) {
       this.id = config.id;
     }
@@ -76,12 +76,14 @@ export class Template<P> {
       });
     });
 
-    CarPlay.bridge.createTemplate(this.id, this.parseConfig({ type: this.type, ...config }));
+    if (this.type !== 'map') {
+      CarPlay.bridge.createTemplate(this.id, this.parseConfig({ type: this.type, ...config }));
+    }
   }
 
   public parseConfig(config: any) {
     const result = traverse(config).map(function node(x) {
-      if (this.key.match(/[Ii]mage$/)) {
+      if (String(this.key).match(/[Ii]mage$/)) {
         this.update(resolveAssetSource(x));
       }
     });

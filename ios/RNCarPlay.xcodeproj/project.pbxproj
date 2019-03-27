@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E344BCC72249585C006FD80D /* RNCarPlay.m in Sources */ = {isa = PBXBuildFile; fileRef = E344BBF222494D53006FD80D /* RNCarPlay.m */; };
 		E344BCC82249585C006FD80D /* RNCPStore.m in Sources */ = {isa = PBXBuildFile; fileRef = E344BBF422494D9D006FD80D /* RNCPStore.m */; };
+		E35223EB224BD4E500623F30 /* RCTConvert+RNCarPlay.m in Sources */ = {isa = PBXBuildFile; fileRef = E35223EA224BD4E500623F30 /* RCTConvert+RNCarPlay.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,6 +30,8 @@
 		E344BBF422494D9D006FD80D /* RNCPStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCPStore.m; sourceTree = "<group>"; };
 		E344BBF622494DAC006FD80D /* RNCPStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNCPStore.h; sourceTree = "<group>"; };
 		E344BCBE22495851006FD80D /* libRNCarPlay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNCarPlay.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E35223E9224BD4C400623F30 /* RCTConvert+RNCarPlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+RNCarPlay.h"; sourceTree = "<group>"; };
+		E35223EA224BD4E500623F30 /* RCTConvert+RNCarPlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+RNCarPlay.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +48,8 @@
 		E344BBDD22494CBD006FD80D = {
 			isa = PBXGroup;
 			children = (
+				E35223EA224BD4E500623F30 /* RCTConvert+RNCarPlay.m */,
+				E35223E9224BD4C400623F30 /* RCTConvert+RNCarPlay.h */,
 				E344BBEA22494CBD006FD80D /* RNCarPlay.h */,
 				E344BBF222494D53006FD80D /* RNCarPlay.m */,
 				E344BBF622494DAC006FD80D /* RNCPStore.h */,
@@ -117,6 +122,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E35223EB224BD4E500623F30 /* RCTConvert+RNCarPlay.m in Sources */,
 				E344BCC72249585C006FD80D /* RNCarPlay.m in Sources */,
 				E344BCC82249585C006FD80D /* RNCPStore.m in Sources */,
 			);

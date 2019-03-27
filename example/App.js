@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import { CarPlay, GridTemplate, SearchTemplate } from 'react-native-carplay';
+import { CarPlay, GridTemplate, SearchTemplate, MapTemplate } from 'react-native-carplay';
 import Cat from './cat.jpg';
-
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -11,8 +10,73 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
+
+function CarPlayApp() {
+  const [backgroundColor, setBackgroundColor] = React.useState('orange');
+  const onPress = () => {
+    setBackgroundColor('blue');
+  }
+
+  CarPlay.emitter.addListener('didEndPanGestureWithVelocity', e => {
+    const rgb = Array.from({ length: 3 }).map(n => Math.floor(Math.random() * 255));
+    setBackgroundColor(`rgba(${rgb.join(', ')}, 1)`);
+  })
+
+  return (
+    <View
+      onPress={onPress}
+      style={[{ backgroundColor }, StyleSheet.absoluteFill]}
+    >
+      <Text>Hello world</Text>
+    </View>
+  );
+}
+
 export default class App extends Component {
   componentDidMount() {
+
+    const events = [
+      // interface
+      'barButtonPressed',
+      'didAppear',
+      'didDisappear',
+      'willAppear',
+      'willDisappear',
+      // grid
+      'gridButtonPressed',
+      // list
+      'didSelectListItem',
+      // search
+      'updatedSearchText',
+      'searchButtonPressed',
+      'selectedResult',
+      // maps
+      'didUpdatePanGestureWithTranslation',
+      'didEndPanGestureWithVelocity',
+      'panEndedWithDirection',
+      'panWithDirection',
+      'didBeginPanGesture',
+      'didDismissPanningInterface',
+      'willDismissPanningInterface',
+      'didShowPanningInterface',
+      'didDismissNavigationAlert',
+      'willDismissNavigationAlert',
+      'didShowNavigationAlert',
+      'willShowNavigationAlert',
+      'didCancelNavigation',
+    ];
+
+    events.forEach(eventName =>
+      CarPlay.emitter.addListener(eventName, e => {
+        console.log('HELLO', eventName, e);
+      })
+    );
+
+    const mapTpl = new MapTemplate({
+      id: 'MAP_TPL',
+      render: () => CarPlayApp,
+    });
+
     const tpl = new GridTemplate({
       id: 'SCREEN_1',
       title: 'demo',
@@ -46,7 +110,14 @@ export default class App extends Component {
 
     this.tpl = tpl;
 
-    CarPlay.setRootTemplate(tpl, false);
+    CarPlay.onConnect(() => {
+      console.log('connected');
+      CarPlay.setRootTemplate(mapTpl, false);
+    });
+
+    CarPlay.onDisconnect(() => {
+      console.log('disconnected');
+    })
   }
 
   update = () => {
