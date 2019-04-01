@@ -4,11 +4,15 @@ import { BarButton } from '../interfaces/BarButton';
 const traverse = require('traverse'); // tslint:disable-line no-var-requires
 const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource'); // tslint:disable-line no-var-requires
 
-interface BaseEvent {
+export interface BaseEvent {
   /**
    * Template id that fired the event
    */
   templateId: string;
+}
+
+interface BarButtonEvent extends BaseEvent {
+  id: string;
 }
 
 export interface TemplateConfig {
@@ -36,29 +40,36 @@ export interface TemplateConfig {
    * Fired before template appears
    * @param e Event
    */
-  willAppear?(e: BaseEvent): void;
+  onWillAppear?(e: BaseEvent): void;
   /**
    * Fired before template disappears
    * @param e Event
    */
-  willDisappear?(e: BaseEvent): void;
+  onWillDisappear?(e: BaseEvent): void;
   /**
    * Fired after template appears
    * @param e Event
    */
-  didAppear?(e: BaseEvent): void;
+  onDidAppear?(e: BaseEvent): void;
   /**
    * Fired after template disappears
    * @param e Event
    */
-  didDisappear?(e: BaseEvent): void;
+  onDidDisappear?(e: BaseEvent): void;
+
+  /**
+   * Fired when bar button is pressed
+   * @param e Event
+   */
+  onBarButtonPressed?(e: BarButtonEvent): void;
 }
 
 export class Template<P> {
   public type: string;
   public id: string;
+  public eventMap: any;
 
-  constructor(config: TemplateConfig & P) {
+  constructor(public config: TemplateConfig & P) {
     if (config.id) {
       this.id = config.id;
     }
@@ -67,21 +78,31 @@ export class Template<P> {
       this.id = `${this.type}-${Date.now()}-${Math.round(Math.random() * Number.MAX_SAFE_INTEGER)}`;
     }
 
-    const events = ['willAppear', 'didAppear', 'willDisappear', 'willDisappear'];
-    events.forEach(eventName => {
+    const eventMap = {
+      barButtonPressed: 'onBarButtonPressed',
+      didAppear: 'onDidAppear',
+      didDisappear: 'onDidDisappear',
+      willAppear: 'onWillAppear',
+      willDisappear: 'onWillDisappear',
+      ...(this.eventMap || {}),
+    };
+
+    Object.entries(eventMap).forEach(([eventName, callbackName]: any) => {
       CarPlay.emitter.addListener(eventName, e => {
-        if (config[eventName] && e.templateId === this.id) {
-          config[eventName](e);
+        if (config[callbackName] && e.templateId === this.id) {
+          config[callbackName](e);
         }
       });
     });
 
-    CarPlay.bridge.createTemplate(this.id, this.parseConfig({ type: this.type, ...config }));
+    if (this.type !== 'map') {
+      CarPlay.bridge.createTemplate(this.id, this.parseConfig({ type: this.type, ...config }));
+    }
   }
 
   public parseConfig(config: any) {
     const result = traverse(config).map(function node(x) {
-      if (this.key === 'image') {
+      if (String(this.key).match(/[Ii]mage$/)) {
         this.update(resolveAssetSource(x));
       }
     });

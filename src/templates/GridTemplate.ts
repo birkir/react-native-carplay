@@ -1,5 +1,17 @@
+import { CarPlay } from '../CarPlay';
 import { GridButton } from '../interfaces/GridButton';
-import { Template } from './Template';
+import { BaseEvent, Template } from './Template';
+
+interface ButtonPressedEvent extends BaseEvent {
+  /**
+   * Button ID
+   */
+  id: string;
+  /**
+   * Button Index
+   */
+  index: number
+}
 
 interface GridTemplateConfig {
   /**
@@ -10,10 +22,20 @@ interface GridTemplateConfig {
    * The array of grid buttons displayed on the template.
    */
   buttons: GridButton[];
+  /**
+   * Fired when a button is pressed
+   */
+  onButtonPressed?(e: ButtonPressedEvent): void;
 }
 
 export class GridTemplate extends Template<GridTemplateConfig> {
   get type() {
     return 'grid';
+  }
+
+  get eventMap() {
+    return {
+      gridButtonPressed: 'onButtonPressed',
+    };
   }
 }

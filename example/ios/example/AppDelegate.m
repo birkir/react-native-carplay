@@ -11,6 +11,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <RNCarPlay.h>
+#import <RNCPStore.h>
 
 @implementation AppDelegate
 
@@ -22,7 +23,7 @@
                                             initialProperties:nil];
 
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
-
+  
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
@@ -33,11 +34,11 @@
 }
 
 - (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window {
-  [RNCarPlay registerWithInterfaceController:interfaceController window:window];
+  [RNCarPlay connectWithInterfaceController:interfaceController window:window];
 }
 
 - (void)application:(nonnull UIApplication *)application didDisconnectCarInterfaceController:(nonnull CPInterfaceController *)interfaceController fromWindow:(nonnull CPWindow *)window {
-  NSLog(@"Disconnected CarPlay");
+  [RNCarPlay disconnect];
 }
 
 

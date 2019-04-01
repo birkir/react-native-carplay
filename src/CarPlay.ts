@@ -18,13 +18,43 @@ class CarPlayInterface {
    */
   public emitter = new NativeEventEmitter(RNCarPlay);
 
+  private onConnectCallback: () => void;
+  private onDisconnectCallback: () => void;
+
+  constructor() {
+    this.emitter.addListener('didConnect', () => {
+      if (this.onConnectCallback) {
+        this.onConnectCallback();
+      }
+    });
+    this.emitter.addListener('didDisconnect', () => {
+      if (this.onDisconnectCallback) {
+        this.onDisconnectCallback();
+      }
+    })
+  }
+
+  /**
+   * Fired when CarPlay is connected to the device.
+   */
+  public onConnect = (callback: () => void) => {
+    this.onConnectCallback = callback;
+  };
+
+  /**
+   * Fired when CarPlay is disconnected from the device.
+   */
+  public onDisconnect = (callback: () => void) => {
+    this.onDisconnectCallback = callback;
+  }
+
   /**
    * Sets the root template, starting a new stack for the template navigation hierarchy.
    * @param rootTemplate The root template. Replaces the current rootTemplate, if one exists.
    * @param animated Set TRUE to animate the presentation of the root template; ignored if there isn't a current rootTemplate.
    */
   public setRootTemplate(rootTemplate: Template<any>, animated = true) {
-    return RNCarPlay.setRootTemplate(rootTemplate.id, animated);
+    return this.bridge.setRootTemplate(rootTemplate.id, animated);
   }
 
   /**
@@ -33,7 +63,7 @@ class CarPlayInterface {
    * @param animated Set TRUE to animate the presentation of the template.
    */
   public pushTemplate(templateToPush: Template<any>, animated = true) {
-    return RNCarPlay.pushTemplate(templateToPush.id, animated);
+    return this.bridge.pushTemplate(templateToPush.id, animated);
   }
 
   /**
@@ -42,7 +72,7 @@ class CarPlayInterface {
    * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
    */
   public popToTemplate(targetTemplate: Template<any>, animated = true) {
-    return RNCarPlay.popToTemplate(targetTemplate.id, animated);
+    return this.bridge.popToTemplate(targetTemplate.id, animated);
   }
 
   /**
@@ -50,7 +80,7 @@ class CarPlayInterface {
    * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
    */
   public popToRootTemplate(animated = true) {
-    return RNCarPlay.popToRootTemplate(animated);
+    return this.bridge.popToRootTemplate(animated);
   }
 
   /**
@@ -58,21 +88,21 @@ class CarPlayInterface {
    * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
    */
   public popTemplate(animated = true) {
-    return RNCarPlay.popTemplate(animated);
+    return this.bridge.popTemplate(animated);
   }
 
   /**
    * @todo Not implemented yet
    */
   public presentTemplate(templateToPresent: Template<any>, animated = true) {
-    return null;
+    return this.bridge.presentTemplate(templateToPresent.id, animated);
   }
 
   /**
    * @todo Not implemented yet
    */
   public dismissTemplate(animated = true) {
-    return null;
+    return this.bridge.dismissTemplate(animated);
   }
 
   /**

@@ -10,12 +10,13 @@
 #import <CarPlay/CarPlay.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
+#import "RCTConvert+RNCarPlay.h"
 #import "RNCPStore.h"
 
 typedef void(^SearchResultUpdateBlock)(NSArray<CPListItem *> * _Nonnull);
 typedef void(^SelectedResultBlock)(void);
 
-@interface RNCarPlay : RCTEventEmitter<RCTBridgeModule, CPInterfaceControllerDelegate, CPSearchTemplateDelegate, CPListTemplateDelegate> {
+@interface RNCarPlay : RCTEventEmitter<RCTBridgeModule, CPInterfaceControllerDelegate, CPSearchTemplateDelegate, CPListTemplateDelegate, CPMapTemplateDelegate> {
     CPInterfaceController *interfaceController;
     CPWindow *window;
     SearchResultUpdateBlock searchResultBlock;
@@ -27,7 +28,8 @@ typedef void(^SelectedResultBlock)(void);
 @property (nonatomic, copy) SearchResultUpdateBlock searchResultBlock;
 @property (nonatomic, copy) SelectedResultBlock selectedResultBlock;
 
-+ (void) registerWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window;
++ (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window;
++ (void) disconnect;
 - (NSArray<CPListSection*>*) parseSections:(NSArray*)sections;
 
 @end

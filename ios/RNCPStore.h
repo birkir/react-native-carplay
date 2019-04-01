@@ -19,8 +19,11 @@
 @property (nonatomic, retain) CPWindow *window;
 
 + (id)sharedManager;
-
 - (CPTemplate*) findTemplateById: (NSString*)templateId;
 - (NSString*) setTemplate:(NSString*)templateId template:(CPTemplate*)template;
+- (CPTrip*) findTripById: (NSString*)tripId;
+- (NSString*) setTrip:(NSString*)tripId trip:(CPTrip*)trip;
+- (CPNavigationSession*) findNavigationSessionById:(NSString*)navigationSessionId;
+- (NSString*) setNavigationSession:(NSString*)navigationSessionId navigationSession:(CPNavigationSession*)navigationSession;
 
 @end
