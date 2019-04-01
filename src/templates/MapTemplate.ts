@@ -1,8 +1,10 @@
-import { AppRegistry, ComponentProvider, EventSubscription } from 'react-native';
+import { AppRegistry } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { MapButton } from '../interfaces/MapButton';
+import { NavigationAlert } from '../interfaces/NavigationAlert';
 import { TextConfiguration } from '../interfaces/TextConfiguration';
 import { TimeRemainingColor } from '../interfaces/TimeRemainingColor';
+import { TravelEstimates } from '../interfaces/TravelEstimates';
 import { NavigationSession } from '../navigation/NavigationSession';
 import { Trip } from '../navigation/Trip';
 import { Template } from './Template';
@@ -11,41 +13,62 @@ interface MapTemplateConfig {
   guidanceBackgroundColor?: string;
   tripEstimateStyle?: 'dark' | 'light';
   /**
-   * Your react view to render inside CarPlay
-   * Example `render: () => <MyComponent />`
+   * Your component to render inside CarPlay
+   * Example `component: MyComponent`
    */
-  render: ComponentProvider;
+  component: React.ComponentType<any>;
   /**
    * An array of map buttons displayed on the trailing bottom corner of the map template.
    *
    * If the array contains more than three buttons, the map template displays only the first three buttons, ignoring the remaining buttons.
    */
-  mapButtons: MapButton[];
+  mapButtons?: MapButton[];
   /**
    * A Boolean value that indicates whether the navigation bar hides automatically.
    */
-  automaticallyHidesNavigationBar: boolean;
+  automaticallyHidesNavigationBar?: boolean;
   /**
    * A Boolean value that tells the system to hide the map buttons when hiding the navigation bar.
    */
-  hidesButtonsWithNavigationBar: boolean;
+  hidesButtonsWithNavigationBar?: boolean;
+
+  /**
+   * Fired when Alert Action button is pressed
+   * @param e Event
+   */
+  onAlertActionPressed?(e: { secondary?: boolean; primary?: boolean }): void;
 }
 
+/**
+ * The Map Template is a control layer that appears as an overlay over the base view and allows you to present user controls.
+ *
+ * The control layer consists of a navigation bar and map buttons. By default, the navigation bar appears when the user interacts with the app, and disappears after a period of inactivity.
+ *
+ * The navigation bar includes up to two leading buttons and two trailing buttons. You can customize the appearance of these buttons with icons or text.
+ *
+ * The control layer may also include up to four map buttons. The map buttons are always shown as icons.
+ *
+ * Navigation apps enter panning mode, zoom in or out, and perform other functions by responding to user actions on these buttons.
+ */
 export class MapTemplate extends Template<MapTemplateConfig> {
   get type() {
     return 'map';
   }
 
+  get eventMap() {
+    return {
+      alertActionPressed: 'onAlertActionPressed',
+    };
+  }
+
   constructor(public config: MapTemplateConfig) {
     super(config);
 
-    if (config.render) {
-      AppRegistry.registerComponent(this.id, config.render);
+    if (config.component) {
+      AppRegistry.registerComponent(this.id, () => config.component);
     }
 
-    requestAnimationFrame(() => {
-      CarPlay.bridge.createTemplate(this.id, this.parseConfig({ type: this.type, ...config, render: true }));
-    });
+    CarPlay.bridge.createTemplate(this.id, this.parseConfig({ type: this.type, ...config, render: true }));
   }
 
   /**
@@ -55,12 +78,12 @@ export class MapTemplate extends Template<MapTemplateConfig> {
    * @param trip Trip class instance
    */
   public async startNavigationSession(trip: Trip): Promise<NavigationSession> {
-    const navigationSessionId = await CarPlay.bridge.startNavigationSession(this.id, trip.id);
-    return new NavigationSession(navigationSessionId, trip, this);
+    const res = await CarPlay.bridge.startNavigationSession(this.id, trip.id);
+    return new NavigationSession(res.navigationSessionId, trip, this);
   }
 
-  public updateTravelEstimates(trip: Trip, distanceRemaining: number, timeRemaining: number, timeRemainingColor: TimeRemainingColor = 'default') {
-    CarPlay.bridge.updateTravelEstimates(this.id, trip.id, distanceRemaining, timeRemaining, timeRemainingColor);
+  public updateTravelEstimates(trip: Trip, travelEstimates: TravelEstimates, timeRemainingColor: TimeRemainingColor = 'default') {
+    CarPlay.bridge.updateTravelEstimates(this.id, trip.id, travelEstimates, timeRemainingColor);
   }
   /**
    * Update MapTemplate configuration
@@ -80,8 +103,16 @@ export class MapTemplate extends Template<MapTemplateConfig> {
     CarPlay.bridge.showTripPreviews(this.id, tripPreviews, textConfiguration);
   }
 
-  public showRouteChoicesPreviewForTrip(tripPreviews: Trip[], textConfiguration: TextConfiguration = {}) {
-    CarPlay.bridge.showRouteChoicesPreviewForTrip(this.id, tripPreviews, textConfiguration);
+  public showRouteChoicesPreviewForTrip(trip: Trip, textConfiguration: TextConfiguration = {}) {
+    CarPlay.bridge.showRouteChoicesPreviewForTrip(this.id, trip, textConfiguration);
+  }
+
+  public presentNavigationAlert(config: NavigationAlert, animated = true) {
+    CarPlay.bridge.presentNavigationAlert(this.id, config, animated)
+  }
+
+  public dismissNavigationAlert(animated = true) {
+    CarPlay.bridge.dismissNavigationAlert(this.id, animated);
   }
 
   /**

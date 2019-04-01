@@ -1,17 +1,17 @@
 import { CarPlay } from "../CarPlay";
 
-interface RouteChoice {
+export interface RouteChoice {
   additionalInformationVariants: string[];
   selectionSummaryVariants: string[];
   summaryVariants: string[];
 }
 
-interface TripPoint {
+export interface TripPoint {
   latitude: number;
   longitude: number;
 }
 
-interface TripConfig {
+export interface TripConfig {
   id?: string;
   origin: TripPoint;
   destination: TripPoint;
@@ -21,7 +21,7 @@ interface TripConfig {
 export class Trip {
   public id: string;
 
-  constructor(config: TripConfig) {
+  constructor(public config: TripConfig) {
     if (config.id) {
       this.id = config.id;
     }

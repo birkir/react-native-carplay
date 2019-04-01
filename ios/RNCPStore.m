@@ -59,7 +59,7 @@
 }
 
 - (NSString*) setNavigationSession:(NSString*)navigationSessionId navigationSession:(CPNavigationSession*)navigationSession {
-    [_tripsStore setObject:navigationSession forKey:navigationSessionId];
+    [_navigationSessionsStore setObject:navigationSession forKey:navigationSessionId];
     return navigationSessionId;
 }
 

@@ -79,7 +79,8 @@ RCT_EXPORT_MODULE();
              @"willDismissNavigationAlert",
              @"didShowNavigationAlert",
              @"willShowNavigationAlert",
-             @"didCancelNavigation"
+             @"didCancelNavigation",
+             @"alertActionPressed"
              ];
 }
 
@@ -127,6 +128,9 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         mapTemplate.mapDelegate = self;
 
         template = mapTemplate;
+    } else if ([type isEqualToString:@"voice"]) {
+        CPVoiceControlTemplate *voiceTemplate = [[CPVoiceControlTemplate alloc] initWithVoiceControlStates: [self parseVoiceControlStates:config[@"voiceControlStates"]]];
+        template = voiceTemplate;
     }
 
     [template setUserInfo:@{ @"templateId": templateId }];
@@ -136,17 +140,20 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
 
 RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
     RNCPStore *store = [RNCPStore sharedManager];
-    
-    MKMapItem *origin = [RCTConvert MKMapItem:config[@"origin"]];
-    MKMapItem *destination = [RCTConvert MKMapItem:config[@"destination"]];
-    NSMutableArray *routeChoices = [NSMutableArray array];
-    if ([config objectForKey:@"routeChoices"]) {
-        for (NSDictionary *routeChoice in [RCTConvert NSArray:config[@"routeChoices"]]) {
-            [routeChoices addObject:[RCTConvert CPRouteChoice:routeChoice]];
+    CPTrip *trip = [self parseTrip:config];
+    [store setTrip:tripId trip:trip];
+}
+
+RCT_EXPORT_METHOD(updateTravelEstimatesForTrip:(NSString*)templateId tripId:(NSString*)tripId travelEstimates:(NSDictionary*)travelEstimates timeRemainingColor:(NSUInteger*)timeRemainingColor) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
+        CPTrip *trip = [[RNCPStore sharedManager] findTripById:tripId];
+        if (trip) {
+            [mapTemplate updateTravelEstimates:[self parseTravelEstimates:travelEstimates] forTrip:trip withTimeRemainingColor:(CPTimeRemainingColor) timeRemainingColor];
         }
     }
-    CPTrip *trip = [[CPTrip alloc] initWithOrigin:origin destination:destination routeChoices:routeChoices];
-    [store setTrip:tripId trip:trip];
 }
 
 RCT_REMAP_METHOD(startNavigationSession,
@@ -161,16 +168,58 @@ RCT_REMAP_METHOD(startNavigationSession,
         CPTrip *trip = [[RNCPStore sharedManager] findTripById:tripId];
         if (trip) {
             CPNavigationSession *navigationSession = [mapTemplate startNavigationSessionForTrip:trip];
-            NSError *error = nil;
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"trip" options:NSRegularExpressionCaseInsensitive error:&error];
-            NSString *navigationSessionId = [regex stringByReplacingMatchesInString:tripId options:0 range:NSMakeRange(0, [tripId length]) withTemplate:@"navigationsession"];
-            [store setNavigationSession:navigationSessionId navigationSession:navigationSession];
-            resolve(@{ @"tripId": tripId, @"navigationSessionId": navigationSessionId });
+            [store setNavigationSession:tripId navigationSession:navigationSession];
+            resolve(@{ @"tripId": tripId, @"navigationSessionId": tripId });
         }
     } else {
         reject(@"template_not_found", @"Template not found in store", nil);
     }
-    
+}
+
+RCT_EXPORT_METHOD(updateManeuversNavigationSession:(NSString*)navigationSessionId maneuvers:(NSArray*)maneuvers) {
+    CPNavigationSession* navigationSession = [[RNCPStore sharedManager] findNavigationSessionById:navigationSessionId];
+    if (navigationSession) {
+        NSMutableArray<CPManeuver*>* upcomingManeuvers = [NSMutableArray array];
+        for (NSDictionary *maneuver in maneuvers) {
+            [upcomingManeuvers addObject:[self parseManeuver:maneuver]];
+        }
+        [navigationSession setUpcomingManeuvers:upcomingManeuvers];
+    }
+}
+
+RCT_EXPORT_METHOD(updateTravelEstimatesNavigationSession:(NSString*)navigationSessionId maneuverIndex:(NSUInteger)maneuverIndex travelEstimates:(NSDictionary*)travelEstimates) {
+    CPNavigationSession* navigationSession = [[RNCPStore sharedManager] findNavigationSessionById:navigationSessionId];
+    if (navigationSession) {
+        CPManeuver *maneuver = [[navigationSession upcomingManeuvers] objectAtIndex:maneuverIndex];
+        if (maneuver) {
+            [navigationSession updateTravelEstimates:[self parseTravelEstimates:travelEstimates] forManeuver:maneuver];
+        }
+    }
+}
+
+RCT_EXPORT_METHOD(pauseNavigationSession:(NSString*)navigationSessionId reason:(NSUInteger*)reason description:(NSString*)description) {
+    CPNavigationSession* navigationSession = [[RNCPStore sharedManager] findNavigationSessionById:navigationSessionId];
+    if (navigationSession) {
+        [navigationSession pauseTripForReason:(CPTripPauseReason) reason description:description];
+    } else {
+        NSLog(@"Could not find session");
+    }
+}
+
+RCT_EXPORT_METHOD(cancelNavigationSession:(NSString*)navigationSessionId) {
+    CPNavigationSession* navigationSession = [[RNCPStore sharedManager] findNavigationSessionById:navigationSessionId];
+    if (navigationSession) {
+        [navigationSession cancelTrip];
+    } else {
+        NSLog(@"Could not cancel. No session found.");
+    }
+}
+
+RCT_EXPORT_METHOD(finishNavigationSession:(NSString*)navigationSessionId) {
+    CPNavigationSession* navigationSession = [[RNCPStore sharedManager] findNavigationSessionById:navigationSessionId];
+    if (navigationSession) {
+        [navigationSession finishTrip];
+    }
 }
 
 RCT_EXPORT_METHOD(setRootTemplate:(NSString *)templateId animated:(BOOL)animated) {
@@ -216,6 +265,23 @@ RCT_EXPORT_METHOD(popTemplate:(BOOL)animated) {
     [store.interfaceController popTemplateAnimated:animated];
 }
 
+RCT_EXPORT_METHOD(presentTemplate:(NSString *)templateId animated:(BOOL)animated) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        [store.interfaceController presentTemplate:template animated:animated];
+    } else {
+        NSLog(@"Failed to find template %@", template);
+    }
+}
+
+RCT_EXPORT_METHOD(dismissTemplate:(BOOL)animated) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    [store.interfaceController dismissTemplateAnimated:animated];
+}
+
+
+
 RCT_EXPORT_METHOD(updateListTemplateSections:(NSString *)templateId sections:(NSArray*)sections) {
     RNCPStore *store = [RNCPStore sharedManager];
     CPTemplate *template = [store findTemplateById:templateId];
@@ -257,6 +323,48 @@ RCT_EXPORT_METHOD(dismissPanningInterface:(NSString *)templateId animated:(BOOL)
     }
 }
 
+RCT_EXPORT_METHOD(hideTripPreviews:(NSString*)templateId) {
+    CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
+    if (template) {
+        CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
+        [mapTemplate hideTripPreviews];
+    }
+}
+
+RCT_EXPORT_METHOD(showTripPreviews:(NSString*)templateId tripPreviews:(NSArray*)tripPreviews tripConfiguration:(NSDictionary*)tripConfiguration) {
+    CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
+    if (template) {
+        CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
+        [mapTemplate showTripPreviews:[self parseTrips:tripPreviews] textConfiguration:[self parseTripPreviewTextConfiguration:tripConfiguration]];
+    }
+}
+
+RCT_EXPORT_METHOD(presentNavigationAlert:(NSString*)templateId json:(NSDictionary*)json animated:(BOOL)animated) {
+    CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
+    if (template) {
+        CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
+        [mapTemplate presentNavigationAlert:[self parseNavigationAlert:json templateId:templateId] animated:animated];
+    }
+}
+
+RCT_EXPORT_METHOD(dismissNavigationAlert:(NSString*)templateId animated:(BOOL)animated) {
+    CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
+    if (template) {
+        CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
+        [mapTemplate dismissNavigationAlertAnimated:YES completion:^(BOOL completion) {
+            [self sendTemplateEventWithName:template name:@"didDismissNavigationAlert"];
+        }];
+    }
+}
+
+RCT_EXPORT_METHOD(activateVoiceControlState:(NSString*)templateId identifier:(NSString*)identifier) {
+    CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
+    if (template) {
+        CPVoiceControlTemplate *voiceTemplate = (CPVoiceControlTemplate*) template;
+        [voiceTemplate activateVoiceControlStateWithIdentifier:identifier];
+    }
+}
+
 RCT_EXPORT_METHOD(reactToUpdatedSearchText:(NSArray *)items) {
     NSArray *sectionsItems = [self parseListItems:items startIndex:0];
 
@@ -272,6 +380,8 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
         self.selectedResultBlock = nil;
     }
 }
+
+# pragma parsers
 
 - (void) applyConfigForMapTemplate:(CPMapTemplate*)mapTemplate templateId:(NSString*)templateId config:(NSDictionary*)config {
     RNCPStore *store = [RNCPStore sharedManager];
@@ -389,6 +499,88 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     return result;
 }
 
+- (CPTravelEstimates*)parseTravelEstimates: (NSDictionary*)json {
+    NSUnit *unitKilometer = [NSUnitLength kilometers];
+    double value = [RCTConvert double:json[@"distanceRemaining"]];
+    NSMeasurement *distance = [[NSMeasurement alloc] initWithDoubleValue:value unit:unitKilometer];
+    double time = [RCTConvert double:json[@"timeRemaining"]];
+    return [[CPTravelEstimates alloc] initWithDistanceRemaining:distance timeRemaining:time];
+}
+
+- (CPManeuver*)parseManeuver:(NSDictionary*)json {
+    CPManeuver* maneuver = [[CPManeuver alloc] init];
+    
+    if ([json objectForKey:@"junctionImage"]) {
+        [maneuver setJunctionImage:[RCTConvert UIImage:json[@"junctionImage"]]];
+    }
+    
+    if ([json objectForKey:@"initialTravelEstimates"]) {
+        CPTravelEstimates* travelEstimates = [self parseTravelEstimates:json[@"initialTravelEstimates"]];
+        [maneuver setInitialTravelEstimates:travelEstimates];
+    }
+    
+    if ([json objectForKey:@"symbolLight"] && [json objectForKey:@"symbolDark"]) {
+        CPImageSet *symbolSet = [[CPImageSet alloc] initWithLightContentImage:[RCTConvert UIImage:json[@"symbolLight"]] darkContentImage:[RCTConvert UIImage:json[@"symbolDark"]]];
+        [maneuver setSymbolSet:symbolSet];
+    }
+    
+    if ([json objectForKey:@"instructionVariants"]) {
+        [maneuver setInstructionVariants:[RCTConvert NSStringArray:json[@"instructionVariants"]]];
+    }
+    
+    return maneuver;
+}
+
+- (CPTripPreviewTextConfiguration*)parseTripPreviewTextConfiguration:(NSDictionary*)json {
+    return [[CPTripPreviewTextConfiguration alloc] initWithStartButtonTitle:[RCTConvert NSString:json[@"startButtonTitle"]] additionalRoutesButtonTitle:[RCTConvert NSString:json[@"additionalRoutesButtonTitle"]] overviewButtonTitle:[RCTConvert NSString:json[@"overviewButtonTitle"]]];
+}
+
+- (CPTrip*)parseTrip:(NSDictionary*)config {
+    MKMapItem *origin = [RCTConvert MKMapItem:config[@"origin"]];
+    MKMapItem *destination = [RCTConvert MKMapItem:config[@"destination"]];
+    NSMutableArray *routeChoices = [NSMutableArray array];
+    if ([config objectForKey:@"routeChoices"]) {
+        for (NSDictionary *routeChoice in [RCTConvert NSArray:config[@"routeChoices"]]) {
+            [routeChoices addObject:[RCTConvert CPRouteChoice:routeChoice]];
+        }
+    }
+    return [[CPTrip alloc] initWithOrigin:origin destination:destination routeChoices:routeChoices];
+}
+
+- (NSArray<CPTrip*>*)parseTrips:(NSArray*)trips {
+    NSMutableArray<CPTrip*>* res = [NSMutableArray array];
+    for (NSDictionary *trip in trips) {
+        [res addObject:[self parseTrip:trip]];
+    }
+    return res;
+}
+
+- (CPNavigationAlert*)parseNavigationAlert:(NSDictionary*)json templateId:(NSString*)templateId {
+    CPImageSet *imageSet;
+    if ([json objectForKey:@"lightImage"] && [json objectForKey:@"darkImage"]) {
+        imageSet = [[CPImageSet alloc] initWithLightContentImage:[RCTConvert UIImage:json[@"lightImage"]] darkContentImage:[RCTConvert UIImage:json[@"darkImage"]]];
+    }
+    return [[CPNavigationAlert alloc] initWithTitleVariants:[RCTConvert NSStringArray:json[@"titleVariants"]] subtitleVariants:[RCTConvert NSStringArray:json[@"subtitleVariants"]] imageSet:imageSet primaryAction:[self parseAlertAction:json[@"primaryAction"] body:@{ @"templateId": templateId, @"primary": @(YES) }] secondaryAction:[self parseAlertAction:json[@"secondaryAction"] body:@{ @"templateId": templateId, @"secondary": @(YES) }] duration:[RCTConvert double:json[@"duration"]]];
+}
+
+- (CPAlertAction*)parseAlertAction:(NSDictionary*)json body:(NSDictionary*)body {
+    return [[CPAlertAction alloc] initWithTitle:[RCTConvert NSString:json[@"title"]] style:(CPAlertActionStyle) [RCTConvert NSUInteger:json[@"style"]] handler:^(CPAlertAction * _Nonnull action) {
+        [self sendEventWithName:@"alertActionPressed" body:body];
+    }];
+}
+
+- (NSArray<CPVoiceControlState*>*)parseVoiceControlStates:(NSArray<NSDictionary*>*)items {
+    NSMutableArray<CPVoiceControlState*>* res = [NSMutableArray array];
+    for (NSDictionary *item in items) {
+        [res addObject:[self parseVoiceControlState:item]];
+    }
+    return res;
+}
+
+- (CPVoiceControlState*)parseVoiceControlState:(NSDictionary*)json {
+    return [[CPVoiceControlState alloc] initWithIdentifier:[RCTConvert NSString:json[@"identifier"]] titleVariants:[RCTConvert NSStringArray:json[@"titleVariants"]] image:[RCTConvert UIImage:json[@"image"]] repeats:[RCTConvert BOOL:json[@"repeats"]]];
+}
+
 - (NSString*)panDirectionToString:(CPPanDirection)panDirection {
     switch (panDirection) {
         case CPPanDirectionUp: return @"up";
@@ -416,18 +608,15 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     }
     
     return @{
-             @"titleVariants": navigationAlert.titleVariants,
-             @"subtitleVariants": navigationAlert.subtitleVariants,
-             @"duration": @(navigationAlert.duration),
+             @"todo": @(YES),
              @"reason": dismissalCtx
              };
 }
 - (NSDictionary*)navigationAlertToJson:(CPNavigationAlert*)navigationAlert {
-    return @{
-                            @"titleVariants": navigationAlert.titleVariants,
-                            @"subtitleVariants": navigationAlert.subtitleVariants,
-                            @"duration": @(navigationAlert.duration),
-                            };
+    return @{ @"todo": @(YES) };
+//    NSMutableDictionary *res = [[NSMutableDictionary alloc] init];
+//    return @{
+//                            };
 }
 
 - (void)sendTemplateEventWithName:(CPTemplate *)template name:(NSString*)name {

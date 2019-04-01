@@ -74,7 +74,7 @@ export default class App extends Component {
 
     const mapTpl = new MapTemplate({
       id: 'MAP_TPL',
-      render: () => CarPlayApp,
+      component: CarPlayApp,
     });
 
     const tpl = new GridTemplate({

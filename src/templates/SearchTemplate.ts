@@ -1,6 +1,6 @@
 import { CarPlay } from '../CarPlay';
 import { ListItem } from '../interfaces/ListItem';
-import { Template, TemplateConfig } from './Template';
+import { BaseEvent, Template, TemplateConfig } from './Template';
 
 interface SearchTemplateConfig extends TemplateConfig {
   /**
@@ -16,13 +16,22 @@ interface SearchTemplateConfig extends TemplateConfig {
    * @param item Object with the selected index
    */
   onItemSelect?(item: { index: number }): Promise<void>;
+  /**
+   * Fired when search button is pressed
+   */
+  onSearchButtonPressed?(e: BaseEvent): void;
 }
 
 export class SearchTemplate extends Template<SearchTemplateConfig> {
-  public events = ['updatedSearchText', 'searchButtonPressed', 'selectedResult'];
 
   get type() {
     return 'search';
+  }
+
+  get eventMap() {
+    return {
+      searchButtonPressed: 'onSearchButtonPressed',
+    };
   }
 
   constructor(public config: SearchTemplateConfig) {

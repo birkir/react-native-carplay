@@ -34,7 +34,7 @@ export class ListTemplate extends Template<ListTemplateConfig> {
     return 'list';
   }
 
-  constructor(config: ListTemplateConfig) {
+  constructor(public config: ListTemplateConfig) {
     super(config);
 
     CarPlay.emitter.addListener('didSelectListItem', e => {

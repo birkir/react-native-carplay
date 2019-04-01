@@ -52,10 +52,11 @@ pod 'react-native-carplay', path: '../node_modules/react-native-carplay'
 // [step 2] add the following two methods before @end
 
 - (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window {
-  [RNCarPlay registerWithInterfaceController:interfaceController window:window];
+  [RNCarPlay connectWithInterfaceController:interfaceController window:window];
 }
 
 - (void)application:(nonnull UIApplication *)application didDisconnectCarInterfaceController:(nonnull CPInterfaceController *)interfaceController fromWindow:(nonnull CPWindow *)window {
+  [RNCarPlay disconnect];
 }
 
 @end
@@ -121,6 +122,36 @@ CarPlay.popToRoot(/* animated */ false);
 
 ## Example
 
+### MapTemplate
+
+```jsx
+import { CarPlay, MapTemplate } from 'react-native-carplay';
+
+function CarPlayView() {
+  return (
+    <View>
+      <Image style={{ width: 100, height: 100 }} />
+      <Text>My thing</Text>
+      <GoogleMap />
+    </View>
+  );
+}
+
+const map = new MapTemplate({
+  guidanceBackgroundColor: '#aeafaf',
+  component: CarPlayView,
+  mapButtons: [{
+    id: 'test',
+    image: require('assets/images/test.png'),
+    focusedImage: require('assets/images/test-focused.png'),
+  }]
+});
+
+CarPlay.setRootTemplate(map);
+```
+
+### ListTemplate
+
 ```jsx
 import { CarPlay, ListTemplate } from 'react-native-carplay';
 
@@ -150,12 +181,7 @@ const artists = new ListTemplate({
   }
 });
 
-// Somewhere in your app
-class App extends Component {
-  componentDidMount() {
-    CarPlay.setRootTemplate(songs, false);
-  }
-}
+CarPlay.setRootTemplate(songs, false);
 ```
 
 ## Progress
@@ -165,19 +191,21 @@ class App extends Component {
 - [x] CPListTemplate
 - [x] CPGridTemplate
 - [x] CPSearchTemplate
-- [ ] CPMapTemplate
+- [x] CPMapTemplate
+- [x] CPVoiceControlTemplate
+- [ ] CPAlertTemplate
+- [ ] CPActionSheetTemplate
 
 ### Route Guidance
 
-- [ ] CPNavigationSession
-- [ ] CPTrip
-- [ ] CPManeuver
+- [x] CPNavigationSession
+- [x] CPTrip
+- [x] CPManeuver
 
 ### Other
 
+- [x] CPAlertAction
 - [ ] CPSessionConfiguration
-- [ ] CPAlertTemplate
-- [ ] CPAlertAction
 
 ### Methods
 
@@ -185,9 +213,16 @@ class App extends Component {
 - [x] pushTemplate
 - [x] popTemplate
 - [x] popToTemplate
+- [x] presentTemplate
+- [x] dismissTemplate
 - [x] updateListTemplateSections
 - [x] reactToUpdatedSearchText
 - [x] reactToSelectedResult
+
+### Getters
+
+- [ ] topTemplate
+- [ ] rootTemplate
 
 ### Events
 

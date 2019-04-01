@@ -38,29 +38,25 @@ RCT_ENUM_CONVERTER(CPPanDirection, (@{
     }
 
     if ([json objectForKey:@"disabled"]) {
-        [mapButton setEnabled:![RCTConvert BOOL:@"disabled"]];
+        [mapButton setEnabled:![RCTConvert BOOL:json[@"disabled"]]];
     }
 
     if ([json objectForKey:@"hidden"]) {
-        [mapButton setHidden:[RCTConvert BOOL:@"hidden"]];
+        [mapButton setHidden:[RCTConvert BOOL:json[@"hidden"]]];
     }
     
     return mapButton;
 }
 
 + (MKMapItem*)MKMapItem:(id)json {
-    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([RCTConvert double:json[@"latitude"]], [RCTConvert double:@"longitude"]);
+    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([RCTConvert double:json[@"latitude"]], [RCTConvert double:json[@"longitude"]]);
     MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:coordinate];
     MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
     return mapItem;
 }
 
 + (CPRouteChoice*)CPRouteChoice:(id)json {
-    return @{
-             @"additionalInformationVariants": [RCTConvert NSStringArray:json[@"additionalInformationVariants"]],
-             @"selectionSummaryVariants": [RCTConvert NSStringArray:json[@"selectionSummaryVariants"]],
-             @"summaryVariants": [RCTConvert NSStringArray:json[@"summaryVariants"]],
-             };
+    return [[CPRouteChoice alloc] initWithSummaryVariants:[RCTConvert NSStringArray:json[@"additionalInformationVariants"]] additionalInformationVariants:[RCTConvert NSStringArray:json[@"selectionSummaryVariants"]] selectionSummaryVariants:[RCTConvert NSStringArray:json[@"summaryVariants"]]];
 }
 
 @end
