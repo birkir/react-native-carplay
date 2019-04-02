@@ -5309,10 +5309,10 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-native-carplay@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-carplay/-/react-native-carplay-1.1.0.tgz#389f21548e65cc51ea9340a6c616f9b3ebb8303d"
-  integrity sha512-DURdTMZNHoz1tlK4W+5ihBHVX488ifKZOwy//pUkvtIx3DHrmYcw3/HbzFAcWdiQyR9l8j9yn8P9F4ZBrpP5Ww==
+react-native-carplay@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-carplay/-/react-native-carplay-1.2.0.tgz#b3be16934fcb85d0ab31ccd690d36899ed006a38"
+  integrity sha512-Oas8d7pHxetAkzuL4drQruYeB4svOwcnaV5cdnievVjxM8QbHnSc6Sn3XzxYy/CtVK8Ml2lESbwichEHMmVSXw==
   dependencies:
     traverse "^0.6.6"
 
