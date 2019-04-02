@@ -64,14 +64,14 @@ pod 'react-native-carplay', path: '../node_modules/react-native-carplay'
 
 ## Usage
 
-Create one of the following templates
+[See full example](https://github.com/birkir/react-native-carplay/blob/master/example/src/App.tsx)
 
 ```jsx
 import { CarPlay, GridTemplate } from 'react-native-carplay';
 
-const template = new GridTemplate({ /* .. */ });
+const template = new GridTemplate();
 
-CarPlay.setRootTemplate(template, false);
+CarPlay.setRootTemplate(template);
 ```
 
 ### setRootTemplate
