@@ -1337,7 +1337,7 @@
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 5PD7JU2FJC;
 				HEADER_SEARCH_PATHS = (
-					"/Volumes/Data/Projects/birkir/react-native-carplay/ios/**",
+					"${SRCROOT}/../node_modules/react-native-carplay/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = example/Info.plist;
@@ -1363,7 +1363,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5PD7JU2FJC;
 				HEADER_SEARCH_PATHS = (
-					"/Volumes/Data/Projects/birkir/react-native-carplay/ios/**",
+					"${SRCROOT}/../node_modules/react-native-carplay/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = example/Info.plist;
