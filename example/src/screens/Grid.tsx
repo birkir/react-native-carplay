@@ -44,5 +44,5 @@ export function Grid() {
 }
 
 Grid.navigationOptions = {
-  headerTitle: 'List Template',
+  headerTitle: 'Grid Template',
 };
