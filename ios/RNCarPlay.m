@@ -403,7 +403,7 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
                 [self sendTemplateEventWithName:mapTemplate name:@"mapButtonPressed" json:@{ @"id": _id }];
             }]];
         }
-        [mapTemplate setMapButtons:mapButtons];
+        [mapTemplate setMapButtons:result];
     }
 
     if ([config objectForKey:@"automaticallyHidesNavigationBar"]) {
