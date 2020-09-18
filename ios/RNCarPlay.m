@@ -403,7 +403,7 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
                 [self sendTemplateEventWithName:mapTemplate name:@"mapButtonPressed" json:@{ @"id": _id }];
             }]];
         }
-        [mapTemplate setMapButtons:mapButtons];
+        [mapTemplate setMapButtons:result];
     }
 
     if ([config objectForKey:@"automaticallyHidesNavigationBar"]) {
@@ -585,8 +585,8 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     switch (panDirection) {
         case CPPanDirectionUp: return @"up";
         case CPPanDirectionRight: return @"right";
-        case CPPanDirectionDown: return @"right";
-        case CPPanDirectionLeft: return @"right";
+        case CPPanDirectionDown: return @"down";
+        case CPPanDirectionLeft: return @"left";
         case CPPanDirectionNone: return @"none";
     }
 }
