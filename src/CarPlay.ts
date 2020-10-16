@@ -1,13 +1,31 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
-import { Template } from './templates/Template';
+import { ActionSheetTemplate } from './templates/ActionSheetTemplate';
+import { AlertTemplate } from './templates/AlertTemplate';
+import { ContactTemplate } from './templates/ContactTemplate';
+import { GridTemplate } from './templates/GridTemplate';
+import { InformationTemplate } from './templates/InformationTemplate';
+import { ListTemplate } from './templates/ListTemplate';
+import { MapTemplate } from './templates/MapTemplate';
+import { PointOfInterestTemplate } from './templates/PointOfInterestTemplate';
+import { SearchTemplate } from './templates/SearchTemplate';
+import { VoiceControlTemplate } from './templates/VoiceControlTemplate';
 
 const { RNCarPlay } = NativeModules;
+
+type PushableTemplates =
+  | MapTemplate
+  | SearchTemplate
+  | GridTemplate
+  | PointOfInterestTemplate
+  | ListTemplate
+  | InformationTemplate
+  | ContactTemplate;
+type PresentableTemplates = AlertTemplate | ActionSheetTemplate | VoiceControlTemplate;
 
 /**
  * A controller that manages all user interface elements appearing on your map displayed on the CarPlay screen.
  */
 class CarPlayInterface {
-
   /**
    * React Native bridge to the CarPlay interface
    */
@@ -31,7 +49,7 @@ class CarPlayInterface {
       if (this.onDisconnectCallback) {
         this.onDisconnectCallback();
       }
-    })
+    });
   }
 
   /**
@@ -46,14 +64,14 @@ class CarPlayInterface {
    */
   public onDisconnect = (callback: () => void) => {
     this.onDisconnectCallback = callback;
-  }
+  };
 
   /**
    * Sets the root template, starting a new stack for the template navigation hierarchy.
    * @param rootTemplate The root template. Replaces the current rootTemplate, if one exists.
    * @param animated Set TRUE to animate the presentation of the root template; ignored if there isn't a current rootTemplate.
    */
-  public setRootTemplate(rootTemplate: Template<any>, animated = true) {
+  public setRootTemplate(rootTemplate: PushableTemplates, animated = true) {
     return this.bridge.setRootTemplate(rootTemplate.id, animated);
   }
 
@@ -62,7 +80,7 @@ class CarPlayInterface {
    * @param templateToPush The template to push onto the navigation stack.
    * @param animated Set TRUE to animate the presentation of the template.
    */
-  public pushTemplate(templateToPush: Template<any>, animated = true) {
+  public pushTemplate(templateToPush: PushableTemplates, animated = true) {
     return this.bridge.pushTemplate(templateToPush.id, animated);
   }
 
@@ -71,7 +89,7 @@ class CarPlayInterface {
    * @param targetTemplate The template that you want at the top of the stack. The template must be on the navigation stack before calling this method.
    * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
    */
-  public popToTemplate(targetTemplate: Template<any>, animated = true) {
+  public popToTemplate(targetTemplate: PushableTemplates, animated = true) {
     return this.bridge.popToTemplate(targetTemplate.id, animated);
   }
 
@@ -94,7 +112,7 @@ class CarPlayInterface {
   /**
    * @todo Not implemented yet
    */
-  public presentTemplate(templateToPresent: Template<any>, animated = true) {
+  public presentTemplate(templateToPresent: PresentableTemplates, animated = true) {
     return this.bridge.presentTemplate(templateToPresent.id, animated);
   }
 

@@ -30,7 +30,7 @@ interface ListTemplateConfig extends TemplateConfig {
  * Each item in the list view may include an icon, title, subtitle, and an optional disclosure indicator indicating the presence of a submenu. The depth of the menu hierarchy may not exceed 5 levels. Note that some cars limit the total number of items that may be shown in a list.
  */
 export class ListTemplate extends Template<ListTemplateConfig> {
-  get type() {
+  public get type(): string {
     return 'list';
   }
 

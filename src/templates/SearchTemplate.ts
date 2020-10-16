@@ -23,8 +23,7 @@ interface SearchTemplateConfig extends TemplateConfig {
 }
 
 export class SearchTemplate extends Template<SearchTemplateConfig> {
-
-  get type() {
+  public get type(): string {
     return 'search';
   }
 

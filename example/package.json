@@ -1,29 +1,35 @@
 {
-  "name": "example",
+  "name": "test2",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
   },
   "dependencies": {
-    "react": "16.8.3",
-    "react-native": "0.59.1",
-    "react-native-carplay": "^1.2.0",
-    "react-native-gesture-handler": "^1.1.0",
-    "react-navigation": "^3.6.0",
-    "traverse": "^0.6.6"
+    "@react-native-community/masked-view": "^0.1.10",
+    "@react-navigation/native": "^5.7.6",
+    "@react-navigation/stack": "^5.9.3",
+    "react": "16.13.1",
+    "react-native": "0.63.3",
+    "react-native-carplay": "./..",
+    "react-native-gesture-handler": "^1.8.0",
+    "react-native-reanimated": "^1.13.1",
+    "react-native-safe-area-context": "^3.1.8",
+    "react-native-screens": "^2.11.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.0",
-    "@babel/runtime": "^7.4.2",
-    "@react-native-community/eslint-config": "^0.0.3",
-    "babel-jest": "^24.5.0",
-    "eslint": "^5.15.3",
-    "jest": "^24.5.0",
-    "metro-react-native-babel-preset": "^0.53.1",
-    "react-test-renderer": "16.8.3"
+    "@babel/core": "^7.8.4",
+    "@babel/runtime": "^7.8.4",
+    "@react-native-community/eslint-config": "^1.1.0",
+    "babel-jest": "^25.1.0",
+    "eslint": "^6.5.1",
+    "jest": "^25.1.0",
+    "metro-react-native-babel-preset": "^0.59.0",
+    "react-test-renderer": "16.13.1"
   },
   "jest": {
     "preset": "react-native"

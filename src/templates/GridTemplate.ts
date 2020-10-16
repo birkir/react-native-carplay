@@ -29,7 +29,7 @@ interface GridTemplateConfig {
 }
 
 export class GridTemplate extends Template<GridTemplateConfig> {
-  get type() {
+  public get type(): string {
     return 'grid';
   }
 

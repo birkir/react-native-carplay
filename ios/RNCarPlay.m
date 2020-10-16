@@ -131,6 +131,24 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     } else if ([type isEqualToString:@"voice"]) {
         CPVoiceControlTemplate *voiceTemplate = [[CPVoiceControlTemplate alloc] initWithVoiceControlStates: [self parseVoiceControlStates:config[@"voiceControlStates"]]];
         template = voiceTemplate;
+    } else if ([type isEqualToString:@"nowplaying"]) {
+        NSCoder *myCoder = [[NSCoder alloc] init];
+        CPNowPlayingTemplate *nowPlayingTemplate = [[CPNowPlayingTemplate alloc] initWithCoder:myCoder];
+        
+        [nowPlayingTemplate setAlbumArtistButtonEnabled:YES];
+        [nowPlayingTemplate setUpNextTitle:@""];
+        [nowPlayingTemplate setUpNextButtonEnabled:YES];
+        // [nowPlayingTemplate updateNowPlayingButtons:@{}];
+        
+        template = nowPlayingTemplate;
+    } else if ([type isEqualToString:@"tabbar"]) {
+                
+        NSArray<CPTemplate*> *arr = [[NSArray alloc] init];
+
+        [arr arrayByAddingObject:[store findTemplateById:@"abc"]];
+        
+        CPTabBarTemplate *tabBarTemplate = [[CPTabBarTemplate alloc] initWithTemplates:arr];
+        template = tabBarTemplate;
     }
 
     [template setUserInfo:@{ @"templateId": templateId }];

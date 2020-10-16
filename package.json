@@ -9,12 +9,13 @@
     "ios",
     "react-native-carplay.podspec"
   ],
+  "podspecPath": "./react-native-carplay.podspec",
   "scripts": {
     "prepublish": "yarn run build",
     "prettier": "prettier --write '**/*.{json,md,js,jsx,ts,tsx}'",
     "tslint": "tslint --fix 'src/**/*.{ts,tsx}' -p .",
     "build": "tsc",
-    "build:dev": "tsc && cp -r lib example/node_modules/react-native-carplay",
+    "build:dev": "tsc && cp -r lib test2/node_modules/react-native-carplay",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

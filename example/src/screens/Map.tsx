@@ -9,7 +9,7 @@ function MapView() {
   );
 }
 
-export function Map() {
+export function Map({ navigation }) {
 
   const [navigationSession, setNavigationSession] = useState(null);
 
@@ -41,6 +41,10 @@ export function Map() {
     mapTemplate.dismissPanningInterface(true);
   };
 
+  const onShowPoiPress =() => {
+    return navigation.navigate('POI');
+  }
+
   const onStartNavigation = async () => {
 
     const trip = new Trip({
@@ -69,6 +73,7 @@ export function Map() {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button title="POI" onPress={onShowPoiPress} />
       <Button title="Show alert" onPress={onShowAlertPress} />
       <Button title="Dismiss alert" onPress={onDismissAlertPress} />
       <View style={{ height: 16 }} />

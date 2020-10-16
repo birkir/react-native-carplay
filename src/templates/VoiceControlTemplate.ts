@@ -15,8 +15,8 @@ interface VoiceControlTemplateConfig {
  * CarPlay navigation apps must show the voice control template during audio input.
  */
 export class VoiceControlTemplate extends Template<VoiceControlTemplateConfig> {
-  get type() {
-    return 'voice';
+  public get type(): string {
+    return 'voicecontrol';
   }
 
   public activateVoiceControlState(identifier: string) {

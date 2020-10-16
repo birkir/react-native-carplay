@@ -51,7 +51,7 @@ interface MapTemplateConfig {
  * Navigation apps enter panning mode, zoom in or out, and perform other functions by responding to user actions on these buttons.
  */
 export class MapTemplate extends Template<MapTemplateConfig> {
-  get type() {
+  public get type(): string {
     return 'map';
   }
 
