@@ -10,6 +10,14 @@ What if you could create CarPlay with React Native. Well, now you can.
 
 ![Search Template](.github/search-template.png)
 
+## CarPlay Entitlement and XCode Project Setup
+
+You need to request a CarPlay entitlement from Apple. The process usually takes a few days. Then you need to add the entitlement to your privisioning profile that you use for your app.
+
+You can go to ![this Apple CarPlay page](https://developer.apple.com/documentation/carplay/adding_carplay_support_to_your_navigation_app) to get additional information on the process. 
+
+To start a CarPlay simulator in XCode, within the Simulator window, go to the menu option IO->External Displays->CarPlay.
+
 ## Installing
 
 1. Install the library
