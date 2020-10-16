@@ -16,7 +16,7 @@
 typedef void(^SearchResultUpdateBlock)(NSArray<CPListItem *> * _Nonnull);
 typedef void(^SelectedResultBlock)(void);
 
-@interface RNCarPlay : RCTEventEmitter<RCTBridgeModule, CPInterfaceControllerDelegate, CPSearchTemplateDelegate, CPListTemplateDelegate, CPMapTemplateDelegate> {
+@interface RNCarPlay : RCTEventEmitter<RCTBridgeModule, CPInterfaceControllerDelegate, CPSearchTemplateDelegate, CPListTemplateDelegate, CPMapTemplateDelegate,  CPTabBarTemplateDelegate, CPPointOfInterestTemplateDelegate> {
     CPInterfaceController *interfaceController;
     CPWindow *window;
     SearchResultUpdateBlock searchResultBlock;

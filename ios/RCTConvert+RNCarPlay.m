@@ -44,7 +44,7 @@ RCT_ENUM_CONVERTER(CPPanDirection, (@{
     if ([json objectForKey:@"hidden"]) {
         [mapButton setHidden:[RCTConvert BOOL:json[@"hidden"]]];
     }
-    
+
     return mapButton;
 }
 
@@ -57,6 +57,28 @@ RCT_ENUM_CONVERTER(CPPanDirection, (@{
 
 + (CPRouteChoice*)CPRouteChoice:(id)json {
     return [[CPRouteChoice alloc] initWithSummaryVariants:[RCTConvert NSStringArray:json[@"additionalInformationVariants"]] additionalInformationVariants:[RCTConvert NSStringArray:json[@"selectionSummaryVariants"]] selectionSummaryVariants:[RCTConvert NSStringArray:json[@"summaryVariants"]]];
+}
+
++ (CPPointOfInterest*)CPPointOfInterest:(id)json {
+    MKMapItem *location = [RCTConvert MKMapItem:json[@"location"]];
+    NSString *title = [RCTConvert NSString:json[@"title"]];
+    NSString *subtitle = [RCTConvert NSString:json[@"subtitle"]];
+    NSString *summary = [RCTConvert NSString:json[@"summary"]];
+    NSString *detailTitle = [RCTConvert NSString:json[@"detailTitle"]];
+    NSString *detailSubtitle = [RCTConvert NSString:json[@"detailSubtitle"]];
+    NSString *detailSummary = [RCTConvert NSString:json[@"detailSummary"]];
+
+    CPPointOfInterest *poi = [[CPPointOfInterest alloc] initWithLocation:location title:title subtitle:subtitle summary:summary detailTitle:detailTitle detailSubtitle:detailSubtitle detailSummary:detailSummary pinImage:nil];
+    return poi;
+}
+
++ (CPAlertActionStyle)CPAlertActionStyle:(NSString*) json {
+    if ([json isEqualToString:@"cancel"]) {
+        return CPAlertActionStyleCancel;
+    } else if ([json isEqualToString:@"destructive"]) {
+        return CPAlertActionStyleDestructive;
+    }
+    return CPAlertActionStyleDefault;
 }
 
 @end
