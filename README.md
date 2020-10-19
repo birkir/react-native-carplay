@@ -12,11 +12,20 @@ What if you could create CarPlay with React Native. Well, now you can.
 
 ## CarPlay Entitlement and XCode Project Setup
 
-You need to request a CarPlay entitlement from Apple. The process usually takes a few days. Then you need to add the entitlement to your privisioning profile that you use for your app.
+#### Read this section if you are new to CarPlay!
 
-You can go to ![this Apple CarPlay page](https://developer.apple.com/documentation/carplay/adding_carplay_support_to_your_navigation_app) to get additional information on the process. 
+One of the most useful resources for undertanding the requirements, constraints and capabilities of CarPlay apps is the official [App Programming Guidelines](https://developer.apple.com/carplay/documentation/CarPlay-App-Programming-Guide.pdf) from Apple. It's a 50-page document that clearly lays out steps required and you are strongly encouraged to read it if you are new to CarPlay.
 
-To start a CarPlay simulator in XCode, within the Simulator window, go to the menu option IO->External Displays->CarPlay.
+*You can develop CarPlay capabilities with this project without waiting for Apple to send you back an entitlement, through the simulator.* 
+
+If you want to build and run your app on an iPhone or share it with others through the App Store Connect or TestFlight, you will need to request a CarPlay entitlement from Apple first. The process will take anywhere from a few days to weeks - your mileage will vary. This depends on the type of Entitlement you are requesting. If you are part of the MFi program, this may help speed things up too. You then need to add the entitlement to your privisioning profile or signing certificate that you use for signing your app in XCode.
+
+You can go to [this Apple CarPlay entitlement request page](https://developer.apple.com/contact/carplay/) to request a CarPlay Entitlement. You need to be logged in with an Apple Developer account.
+
+To start a CarPlay simulator in XCode, within the Simulator window, go to the menu option IO, click on External Displays, then select CarPlay.
+
+#### NB:
+Whether you are running through a simulator or building the app for distribution, you need to ensure that the correct entitlement key is added in your `Entitlements.plist` file. If you don't have an Entitlements.plist file, create one in your `iOS/` directory.
 
 ## Installing
 
@@ -201,13 +210,8 @@ CarPlay.setRootTemplate(songs, false);
 - [x] CPSearchTemplate
 - [x] CPMapTemplate
 - [x] CPVoiceControlTemplate
-- [x] CPTabBarTemplate
-- [x] CPContactTemplate (not working 14.0.2)
-- [x] CPPointOfInterestTemplate (not working 14.0.2)
-- [x] CPNowPlayingTemplate (not working 14.0.2)
-- [x] CPInformationTemplate
-- [x] CPAlertTemplate
-- [x] CPActionSheetTemplate
+- [ ] CPAlertTemplate
+- [ ] CPActionSheetTemplate
 
 ### Route Guidance
 
@@ -236,7 +240,6 @@ CarPlay.setRootTemplate(songs, false);
 
 - [ ] topTemplate
 - [ ] rootTemplate
-- [ ] templates
 
 ### Events
 
