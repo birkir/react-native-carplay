@@ -210,8 +210,8 @@ CarPlay.setRootTemplate(songs, false);
 - [x] CPSearchTemplate
 - [x] CPMapTemplate
 - [x] CPVoiceControlTemplate
-- [ ] CPAlertTemplate
-- [ ] CPActionSheetTemplate
+- [x] CPAlertTemplate
+- [x] CPActionSheetTemplate
 
 ### Route Guidance
 
