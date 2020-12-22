@@ -17,5 +17,5 @@ export interface GridButton {
    *
    * When creating a grid button, don't provide an animated image. If you do, the button uses the first image in the animation sequence.
    */
-  image?: null;
+  image: null;
 }
