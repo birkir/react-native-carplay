@@ -60,7 +60,6 @@ RCT_ENUM_CONVERTER(CPPanDirection, (@{
     return [[CPRouteChoice alloc] initWithSummaryVariants:[RCTConvert NSStringArray:json[@"additionalInformationVariants"]] additionalInformationVariants:[RCTConvert NSStringArray:json[@"selectionSummaryVariants"]] selectionSummaryVariants:[RCTConvert NSStringArray:json[@"summaryVariants"]]];
 }
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
 + (CPPointOfInterest*)CPPointOfInterest:(id)json {
     MKMapItem *location = [RCTConvert MKMapItem:json[@"location"]];
     NSString *title = [RCTConvert NSString:json[@"title"]];
@@ -73,7 +72,6 @@ RCT_ENUM_CONVERTER(CPPanDirection, (@{
     CPPointOfInterest *poi = [[CPPointOfInterest alloc] initWithLocation:location title:title subtitle:subtitle summary:summary detailTitle:detailTitle detailSubtitle:detailSubtitle detailSummary:detailSummary pinImage:nil];
     return poi;
 }
-#endif
 
 + (CPAlertActionStyle)CPAlertActionStyle:(NSString*) json {
     if ([json isEqualToString:@"cancel"]) {

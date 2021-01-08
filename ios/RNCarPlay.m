@@ -142,32 +142,26 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         template = voiceTemplate;
     } else if ([type isEqualToString:@"nowplaying"]) {
         if (@available(iOS 14.0, *)) {
-            #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
             CPNowPlayingTemplate *nowPlayingTemplate = [CPNowPlayingTemplate sharedTemplate];
             [nowPlayingTemplate setAlbumArtistButtonEnabled:[RCTConvert BOOL:config[@"albumArtistButton"]]];
             [nowPlayingTemplate setUpNextTitle:[RCTConvert NSString:config[@"upNextTitle"]]];
             [nowPlayingTemplate setUpNextButtonEnabled:[RCTConvert BOOL:config[@"upNextButton"]]];
             template = nowPlayingTemplate;
-            #endif
         }
     } else if ([type isEqualToString:@"tabbar"]) {
         if (@available(iOS 14.0, *)) {
-            #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
             CPTabBarTemplate *tabBarTemplate = [[CPTabBarTemplate alloc] initWithTemplates:[self parseTemplatesFrom:config]];
             tabBarTemplate.delegate = self;
             template = tabBarTemplate;
-            #endif
         }
     } else if ([type isEqualToString:@"contact"]) {
         if (@available(iOS 14.0, *)) {
-            #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
             CPContact *contact = [[CPContact alloc] init];
             [contact setName:config[@"name"]];
             [contact setSubtitle:config[@"subtitle"]];
             [contact setActions:[self parseButtons:config[@"actions"] templateId:templateId]];
             CPContactTemplate *contactTemplate = [[CPContactTemplate alloc] initWithContact:contact];
             template = contactTemplate;
-            #endif
         }
     } else if ([type isEqualToString:@"actionsheet"]) {
         NSString *title = [RCTConvert NSString:config[@"title"]];
@@ -196,7 +190,6 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         template = alertTemplate;
     } else if ([type isEqualToString:@"poi"]) {
         if (@available(iOS 14.0, *)) {
-            #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
             NSString *title = [RCTConvert NSString:config[@"title"]];
             NSMutableArray<__kindof CPPointOfInterest *> * items = [NSMutableArray new];
             NSUInteger selectedIndex = 0;
@@ -211,11 +204,9 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
             CPPointOfInterestTemplate *poiTemplate = [[CPPointOfInterestTemplate alloc] initWithTitle:title pointsOfInterest:items selectedIndex:selectedIndex];
             poiTemplate.pointOfInterestDelegate = self;
             template = poiTemplate;
-            #endif
         }
     } else if ([type isEqualToString:@"information"]) {
         if (@available(iOS 14.0, *)) {
-            #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
             NSString *title = [RCTConvert NSString:config[@"title"]];
             CPInformationTemplateLayout layout = [RCTConvert BOOL:config[@"leading"]] ? CPInformationTemplateLayoutLeading : CPInformationTemplateLayoutTwoColumn;
             NSMutableArray<__kindof CPInformationItem *> * items = [NSMutableArray new];
@@ -236,7 +227,6 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
 
             CPInformationTemplate *informationTemplate = [[CPInformationTemplate alloc] initWithTitle:title layout:layout items:items actions:actions];
             template = informationTemplate;
-            #endif
         }
     }
 
@@ -247,14 +237,12 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
 
 RCT_EXPORT_METHOD(updateTemplates:(NSString*)templateId config:(NSDictionary*)config) {
     if (@available(iOS 14.0, *)) {
-        #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
         RNCPStore *store = [RNCPStore sharedManager];
         CPTemplate *template = [store findTemplateById:templateId];
         if (template) {
             CPTabBarTemplate *tabBarTemplate = (CPTabBarTemplate*) template;
             [tabBarTemplate updateTemplates:[self parseTemplatesFrom:config]];
         }
-        #endif
     }
 }
 
@@ -360,12 +348,10 @@ RCT_EXPORT_METHOD(pushTemplate:(NSString *)templateId animated:(BOOL)animated) {
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
         if (@available(iOS 14.0, *)) {
-            #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
             [store.interfaceController pushTemplate:template animated:animated completion:^(BOOL done, NSError * _Nullable err) {
                 NSLog(@"error %@", err);
                 // noop
             }];
-            #endif
         } else {
             [store.interfaceController pushTemplate:template animated:animated];
         }
@@ -563,7 +549,6 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     return templates;
 }
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
 - (NSArray<CPButton*>*) parseButtons:(NSArray*)buttons templateId:(NSString *)templateId  API_AVAILABLE(ios(14.0)){
     NSMutableArray *result = [NSMutableArray array];
     for (NSDictionary *button in buttons) {
@@ -592,7 +577,6 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     }
     return result;
 }
-#endif
 
 - (NSArray<CPBarButton*>*) parseBarButtons:(NSArray*)barButtons templateId:(NSString *)templateId {
     NSMutableArray *result = [NSMutableArray array];
@@ -893,7 +877,6 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     self.selectedResultBlock = completionHandler;
 }
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
 # pragma TabBarTemplate
 - (void)tabBarTemplate:(CPTabBarTemplate *)tabBarTemplate didSelectTemplate:(__kindof CPTemplate *)selectedTemplate  API_AVAILABLE(ios(14.0)){
     NSString* selectedTemplateId = [[selectedTemplate userInfo] objectForKey:@"templateId"];
@@ -908,7 +891,6 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 -(void)pointOfInterestTemplate:(CPPointOfInterestTemplate *)pointOfInterestTemplate didSelectPointOfInterest:(CPPointOfInterest *)pointOfInterest  API_AVAILABLE(ios(14.0)){
     [self sendTemplateEventWithName:pointOfInterestTemplate name:@"didSelectPointOfInterest" json:[pointOfInterest userInfo]];
 }
-#endif
 
 # pragma InterfaceController
 

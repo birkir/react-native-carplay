@@ -9,7 +9,6 @@ export function Grid() {
   useEffect(() => {
     const gridTemplate = new GridTemplate({
       trailingNavigationBarButtons: [{
-        id: 'LEAD_1',
         type: 'text',
         title: 'Heyy',
       }, {
@@ -32,8 +31,13 @@ export function Grid() {
     });
 
     CarPlay.pushTemplate(gridTemplate, true);
+    // CarPlay.setRootTemplate(gridTemplate);
 
-    return () => CarPlay.popToRootTemplate(true);
+    // return () => { console.log('running') };
+
+    return () => {
+      CarPlay.popToRootTemplate(true);
+    }
   }, []);
 
   return (

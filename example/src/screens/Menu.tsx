@@ -39,7 +39,7 @@ export function Menu({ navigation }) {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <MenuButton title="TabBar" onPress={onTabBarPress} />
       <MenuButton title="List" onPress={onListPress} />
-      <MenuButton title="Grid" onPress={onGridPress} />
+      <MenuButton title="Gridsss" onPress={onGridPress} />
       <MenuButton title="Map" onPress={onMapPress} />
       <MenuButton title="Contact" onPress={onContactPress} />
       <MenuButton title="Search" onPress={onSearchPress} />
