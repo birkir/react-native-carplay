@@ -7,9 +7,9 @@ import { TimeRemainingColor } from '../interfaces/TimeRemainingColor';
 import { TravelEstimates } from '../interfaces/TravelEstimates';
 import { NavigationSession } from '../navigation/NavigationSession';
 import { Trip } from '../navigation/Trip';
-import { Template } from './Template';
+import { Template, TemplateConfig } from './Template';
 
-interface MapTemplateConfig {
+interface MapTemplateConfig extends TemplateConfig {
   guidanceBackgroundColor?: string;
   tripEstimateStyle?: 'dark' | 'light';
   /**
@@ -37,6 +37,13 @@ interface MapTemplateConfig {
    * @param e Event
    */
   onAlertActionPressed?(e: { secondary?: boolean; primary?: boolean }): void;
+
+  onMapButtonPressed?(e: { id: string, template: string }): void;
+
+  onPanWithDirection?(e: any): void;
+
+  onPanBeganWithDirection?(e: any): void;
+  onPanEndedDirection?(e: any): void;
 }
 
 /**
@@ -58,6 +65,10 @@ export class MapTemplate extends Template<MapTemplateConfig> {
   get eventMap() {
     return {
       alertActionPressed: 'onAlertActionPressed',
+      mapButtonPressed: 'onMapButtonPressed',
+      panWithDirection: 'onPanWithDirection',
+      panBeganWithDirection: 'onPanBeganWithDirection',
+      panEndedWithDirection: 'onPanEndedWithDirection'
     };
   }
 
