@@ -67,12 +67,12 @@ export interface TemplateConfig {
 export class Template<P> {
   public get type(): string {
     return 'unset';
-  };
+  }
   public id: string;
 
   public get eventMap() {
     return {};
-  };
+  }
 
   constructor(public config: TemplateConfig & P) {
     if (config.id) {

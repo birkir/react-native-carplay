@@ -2,7 +2,7 @@ export enum NavigationAlertActionStyle {
   Default = 0,
   Cancel = 1,
   Destructive = 2,
-};
+}
 
 export interface NavigationAlertAction {
   /**

@@ -10,7 +10,7 @@ interface ButtonPressedEvent extends BaseEvent {
   /**
    * Button Index
    */
-  index: number
+  index: number;
 }
 
 interface GridTemplateConfig {

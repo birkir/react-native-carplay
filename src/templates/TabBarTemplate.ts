@@ -17,7 +17,10 @@ interface TabBarTemplateConfig extends TemplateConfig {
    */
   templates: TabBarTemplates[];
 
-  onTemplateSelect(template: TabBarTemplates, e: { templateId: string; selectedTemplateId: string; }): void;
+  onTemplateSelect(
+    template: TabBarTemplates,
+    e: { templateId: string; selectedTemplateId: string },
+  ): void;
 }
 
 /**/

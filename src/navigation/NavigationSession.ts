@@ -6,7 +6,6 @@ import { MapTemplate } from '../templates/MapTemplate';
 import { Trip } from './Trip';
 
 export class NavigationSession {
-
   public maneuvers: Maneuver[];
 
   constructor(public id: string, public trip: Trip, public mapTemplate: MapTemplate) {}

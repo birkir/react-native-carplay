@@ -16,7 +16,7 @@ What if you could create CarPlay with React Native. Well, now you can.
 
 One of the most useful resources for undertanding the requirements, constraints and capabilities of CarPlay apps is the official [App Programming Guidelines](https://developer.apple.com/carplay/documentation/CarPlay-App-Programming-Guide.pdf) from Apple. It's a 50-page document that clearly lays out steps required and you are strongly encouraged to read it if you are new to CarPlay.
 
-*You can develop CarPlay capabilities with this project without waiting for Apple to send you back an entitlement, through the simulator.* 
+_You can develop CarPlay capabilities with this project without waiting for Apple to send you back an entitlement, through the simulator._
 
 If you want to build and run your app on an iPhone or share it with others through the App Store Connect or TestFlight, you will need to request a CarPlay entitlement from Apple first. The process will take anywhere from a few days to weeks - your mileage will vary. This depends on the type of Entitlement you are requesting. If you are part of the MFi program, this may help speed things up too. You then need to add the entitlement to your privisioning profile or signing certificate that you use for signing your app in XCode.
 
@@ -25,6 +25,7 @@ You can go to [this Apple CarPlay entitlement request page](https://developer.ap
 To start a CarPlay simulator in XCode, within the Simulator window, go to the menu option IO, click on External Displays, then select CarPlay.
 
 #### NB:
+
 Whether you are running through a simulator or building the app for distribution, you need to ensure that the correct entitlement key is added in your `Entitlements.plist` file. If you don't have an Entitlements.plist file, create one in your `iOS/` directory.
 
 ## Installing
@@ -36,9 +37,11 @@ yarn add react-native-carplay --save
 ```
 
 2. Link using normal or cocoapods method
+
 ```bash
 react-native link react-native-carplay
 ```
+
 ```ruby
 # in ios/Podfile:
 
@@ -46,7 +49,6 @@ pod 'react-native-carplay', path: '../node_modules/react-native-carplay'
 ```
 
 3. Edit your AppDelegate
-
 
 ```objc
 // AppDelegate.h
@@ -157,11 +159,13 @@ function CarPlayView() {
 const map = new MapTemplate({
   guidanceBackgroundColor: '#aeafaf',
   component: CarPlayView,
-  mapButtons: [{
-    id: 'test',
-    image: require('assets/images/test.png'),
-    focusedImage: require('assets/images/test-focused.png'),
-  }]
+  mapButtons: [
+    {
+      id: 'test',
+      image: require('assets/images/test.png'),
+      focusedImage: require('assets/images/test-focused.png'),
+    },
+  ],
 });
 
 CarPlay.setRootTemplate(map);
