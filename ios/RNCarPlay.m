@@ -337,7 +337,10 @@ RCT_EXPORT_METHOD(setRootTemplate:(NSString *)templateId animated:(BOOL)animated
     store.interfaceController.delegate = self;
 
     if (template) {
-        [store.interfaceController setRootTemplate:template animated:animated];
+        [store.interfaceController setRootTemplate:template animated:animated completion:^(BOOL done, NSError * _Nullable err) {
+            NSLog(@"error %@", err);
+            // noop
+        }];
     } else {
         NSLog(@"Failed to find template %@", template);
     }
@@ -353,7 +356,10 @@ RCT_EXPORT_METHOD(pushTemplate:(NSString *)templateId animated:(BOOL)animated) {
                 // noop
             }];
         } else {
-            [store.interfaceController pushTemplate:template animated:animated];
+            [store.interfaceController pushTemplate:template animated:animated completion:^(BOOL done, NSError * _Nullable err) {
+                NSLog(@"error %@", err);
+                // noop
+            }];
         }
     } else {
         NSLog(@"Failed to find template %@", template);
@@ -364,7 +370,10 @@ RCT_EXPORT_METHOD(popToTemplate:(NSString *)templateId animated:(BOOL)animated) 
     RNCPStore *store = [RNCPStore sharedManager];
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
-        [store.interfaceController popToTemplate:template animated:animated];
+        [store.interfaceController popToTemplate:template animated:animated completion:^(BOOL done, NSError * _Nullable err) {
+            NSLog(@"error %@", err);
+            // noop
+        }];
     } else {
         NSLog(@"Failed to find template %@", template);
     }
@@ -372,19 +381,28 @@ RCT_EXPORT_METHOD(popToTemplate:(NSString *)templateId animated:(BOOL)animated) 
 
 RCT_EXPORT_METHOD(popToRootTemplate:(BOOL)animated) {
     RNCPStore *store = [RNCPStore sharedManager];
-    [store.interfaceController popToRootTemplateAnimated:animated];
+    [store.interfaceController popToRootTemplateAnimated:animated completion:^(BOOL done, NSError * _Nullable err) {
+        NSLog(@"error %@", err);
+        // noop
+    }];
 }
 
 RCT_EXPORT_METHOD(popTemplate:(BOOL)animated) {
     RNCPStore *store = [RNCPStore sharedManager];
-    [store.interfaceController popTemplateAnimated:animated];
+    [store.interfaceController popTemplateAnimated:animated completion:^(BOOL done, NSError * _Nullable err) {
+        NSLog(@"error %@", err);
+        // noop
+    }];
 }
 
 RCT_EXPORT_METHOD(presentTemplate:(NSString *)templateId animated:(BOOL)animated) {
     RNCPStore *store = [RNCPStore sharedManager];
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
-        [store.interfaceController presentTemplate:template animated:animated];
+        [store.interfaceController presentTemplate:template animated:animated completion:^(BOOL done, NSError * _Nullable err) {
+            NSLog(@"error %@", err);
+            // noop
+        }];
     } else {
         NSLog(@"Failed to find template %@", template);
     }
