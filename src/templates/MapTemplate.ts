@@ -68,7 +68,10 @@ export class MapTemplate extends Template<MapTemplateConfig> {
       AppRegistry.registerComponent(this.id, () => config.component);
     }
 
-    CarPlay.bridge.createTemplate(this.id, this.parseConfig({ type: this.type, ...config, render: true }));
+    CarPlay.bridge.createTemplate(
+      this.id,
+      this.parseConfig({ type: this.type, ...config, render: true }),
+    );
   }
 
   /**
@@ -82,7 +85,11 @@ export class MapTemplate extends Template<MapTemplateConfig> {
     return new NavigationSession(res.navigationSessionId, trip, this);
   }
 
-  public updateTravelEstimates(trip: Trip, travelEstimates: TravelEstimates, timeRemainingColor: TimeRemainingColor = 'default') {
+  public updateTravelEstimates(
+    trip: Trip,
+    travelEstimates: TravelEstimates,
+    timeRemainingColor: TimeRemainingColor = 'default',
+  ) {
     CarPlay.bridge.updateTravelEstimates(this.id, trip.id, travelEstimates, timeRemainingColor);
   }
   /**
@@ -108,7 +115,7 @@ export class MapTemplate extends Template<MapTemplateConfig> {
   }
 
   public presentNavigationAlert(config: NavigationAlert, animated = true) {
-    CarPlay.bridge.presentNavigationAlert(this.id, config, animated)
+    CarPlay.bridge.presentNavigationAlert(this.id, config, animated);
   }
 
   public dismissNavigationAlert(animated = true) {

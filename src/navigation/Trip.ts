@@ -1,4 +1,4 @@
-import { CarPlay } from "../CarPlay";
+import { CarPlay } from '../CarPlay';
 
 export interface RouteChoice {
   additionalInformationVariants: string[];
