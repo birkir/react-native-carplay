@@ -73,6 +73,7 @@ RCT_EXPORT_MODULE();
              @"mapButtonPressed",
              @"didUpdatePanGestureWithTranslation",
              @"didEndPanGestureWithVelocity",
+             @"panBeganWithDirection",
              @"panEndedWithDirection",
              @"panWithDirection",
              @"didBeginPanGesture",
@@ -132,7 +133,8 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         CPMapTemplate *mapTemplate = [[CPMapTemplate alloc] init];
 
         [self applyConfigForMapTemplate:mapTemplate templateId:templateId config:config];
-
+        [mapTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
+        [mapTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
         [mapTemplate setUserInfo:@{ @"templateId": templateId }];
         mapTemplate.mapDelegate = self;
 
