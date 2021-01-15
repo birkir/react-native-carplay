@@ -893,7 +893,7 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 
 - (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)(void))completionHandler {
     NSNumber* index = [item.userInfo objectForKey:@"index"];
-    [self sendTemplateEventWithName:listTemplate name:@"didSelectListItem" json:@{ @"index": index }];
+    [self sendTemplateEventWithName:listTemplate name:@"didSelectListItem" json:@{ @"index": index, @:"item": item }];
     self.selectedResultBlock = completionHandler;
 }
 

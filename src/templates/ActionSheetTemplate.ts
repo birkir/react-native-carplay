@@ -1,11 +1,11 @@
 import { AlertAction } from '../interfaces/AlertAction';
 import { Template, TemplateConfig } from './Template';
 
-interface ActionSheetTemplateConfig extends TemplateConfig {
+export interface ActionSheetTemplateConfig extends TemplateConfig {
   title: string;
   message: string;
-  actions?: AlertAction[];
-  onActionButtonPressed?(e: any): void;
+  actions: AlertAction[];
+  onActionButtonPressed?(e: { id: string, template: string }): void;
 }
 
 export class ActionSheetTemplate extends Template<ActionSheetTemplateConfig> {
