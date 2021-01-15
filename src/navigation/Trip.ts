@@ -9,6 +9,7 @@ export interface RouteChoice {
 export interface TripPoint {
   latitude: number;
   longitude: number;
+  name: string;
 }
 
 export interface TripConfig {

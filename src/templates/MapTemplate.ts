@@ -44,6 +44,9 @@ interface MapTemplateConfig extends TemplateConfig {
 
   onPanBeganWithDirection?(e: any): void;
   onPanEndedDirection?(e: any): void;
+
+  onSelectedPreviewForTrip?(e: any): void;
+  onStartedTrip?(e: any): void;
 }
 
 /**
@@ -68,7 +71,9 @@ export class MapTemplate extends Template<MapTemplateConfig> {
       mapButtonPressed: 'onMapButtonPressed',
       panWithDirection: 'onPanWithDirection',
       panBeganWithDirection: 'onPanBeganWithDirection',
-      panEndedWithDirection: 'onPanEndedWithDirection'
+      panEndedWithDirection: 'onPanEndedWithDirection',
+      selectedPreviewForTrip: 'onSelectedPreviewForTrip',
+      startedTrip: 'onStartedTrip'
     };
   }
 
@@ -99,9 +104,9 @@ export class MapTemplate extends Template<MapTemplateConfig> {
   public updateTravelEstimates(
     trip: Trip,
     travelEstimates: TravelEstimates,
-    timeRemainingColor: TimeRemainingColor = 'default',
+    timeRemainingColor: TimeRemainingColor = 0,
   ) {
-    CarPlay.bridge.updateTravelEstimates(this.id, trip.id, travelEstimates, timeRemainingColor);
+    CarPlay.bridge.updateTravelEstimatesForTrip(this.id, trip.id, travelEstimates, timeRemainingColor);
   }
   /**
    * Update MapTemplate configuration

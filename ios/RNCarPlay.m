@@ -85,7 +85,9 @@ RCT_EXPORT_MODULE();
              @"didShowNavigationAlert",
              @"willShowNavigationAlert",
              @"didCancelNavigation",
-             @"alertActionPressed"
+             @"alertActionPressed",
+             @"selectedPreviewForTrip",
+             @"startedTrip"
              ];
 }
 
@@ -248,12 +250,28 @@ RCT_EXPORT_METHOD(updateTemplates:(NSString*)templateId config:(NSDictionary*)co
     }
 }
 
+//RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
+//    RNCPStore *store = [RNCPStore sharedManager];
+//    NSLog(@">>> Creating trip %@ from %@", tripId, config);
+//    CPTrip *trip = [self parseTrip:config];
+//    [store setTrip:tripId trip:trip];
+//    NSLog(@">>> Done creating trip %@", tripId);
+//}
+
 RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
     RNCPStore *store = [RNCPStore sharedManager];
-    NSLog(@">>> Creating trip %@ from %@", tripId, config);
     CPTrip *trip = [self parseTrip:config];
+    NSMutableDictionary *userInfo = trip.userInfo;
+    if (!userInfo) {
+        userInfo = [[NSMutableDictionary alloc] init];
+        trip.userInfo = userInfo;
+    }
+
+    [userInfo setValue:tripId forKey:@"id"];
+    NSLog(@"User info: %@", userInfo);
+//    [userInfo setObject:tripId forKey:@"id"];
+//    trip.userInfo = userInfo;
     [store setTrip:tripId trip:trip];
-    NSLog(@">>> Done creating trip %@", tripId);
 }
 
 RCT_EXPORT_METHOD(updateTravelEstimatesForTrip:(NSString*)templateId tripId:(NSString*)tripId travelEstimates:(NSDictionary*)travelEstimates timeRemainingColor:(NSUInteger*)timeRemainingColor) {
@@ -471,12 +489,21 @@ RCT_EXPORT_METHOD(hideTripPreviews:(NSString*)templateId) {
     }
 }
 
-RCT_EXPORT_METHOD(showTripPreviews:(NSString*)templateId tripPreviews:(NSArray*)tripPreviews tripConfiguration:(NSDictionary*)tripConfiguration) {
+RCT_EXPORT_METHOD(showTripPreviews:(NSString*)templateId tripIds:(NSArray*)tripIds tripConfiguration:(NSDictionary*)tripConfiguration) {
     CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
-    NSLog(@">>> Showing trip previews for %@", tripPreviews);
+    NSMutableArray *trips = [[NSMutableArray alloc] init];
+
+    for (NSString *tripId in tripIds) {
+        CPTrip *trip = [[RNCPStore sharedManager] findTripById:tripId];
+        if (trip) {
+            [trips addObject:trip];
+        }
+    }
+
+//    NSLog(@">>> Showing trip previews for %@", tripPreviews);
     if (template) {
         CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
-        [mapTemplate showTripPreviews:[self parseTrips:tripPreviews] textConfiguration:[self parseTripPreviewTextConfiguration:tripConfiguration]];
+        [mapTemplate showTripPreviews:trips textConfiguration:[self parseTripPreviewTextConfiguration:tripConfiguration]];
     }
     NSLog(@">>> Done showing trip previews");
 }
@@ -823,10 +850,14 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 # pragma MapTemplate
 
 - (void)mapTemplate:(CPMapTemplate *)mapTemplate selectedPreviewForTrip:(CPTrip *)trip usingRouteChoice:(CPRouteChoice *)routeChoice {
-    // @todo
+//    NSLog(@">>> Selected trip %@, route %@", trip.userInfo.id, routeChoice);
+    NSDictionary *userInfo = trip.userInfo;
+    NSString *tripId = [userInfo valueForKey:@"id"];
+        NSLog(@">>>> Selected trip %@, route %@", trip, routeChoice);
+    [self sendTemplateEventWithName:mapTemplate name:@"selectedPreviewForTrip" json:@{ @"trip": tripId, @"routeChoice": routeChoice}];
 }
 - (void)mapTemplate:(CPMapTemplate *)mapTemplate startedTrip:(CPTrip *)trip usingRouteChoice:(CPRouteChoice *)routeChoice {
-    // @todo
+    [self sendTemplateEventWithName:mapTemplate name:@"startedTrip" json:@{ @"trip": trip.destination.name, @"routeChoice": routeChoice}];
 }
 - (void)mapTemplateDidCancelNavigation:(CPMapTemplate *)mapTemplate {
     [self sendTemplateEventWithName:mapTemplate name:@"didCancelNavigation"];
