@@ -1,1 +1,1 @@
-export type TimeRemainingColor = 'default' | 'green' | 'orange' | 'red';
+export type TimeRemainingColor = 0 | 1 | 2 | 3;
