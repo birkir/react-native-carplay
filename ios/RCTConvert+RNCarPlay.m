@@ -51,8 +51,12 @@ RCT_ENUM_CONVERTER(CPPanDirection, (@{
 
 + (MKMapItem*)MKMapItem:(id)json {
     CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([RCTConvert double:json[@"latitude"]], [RCTConvert double:json[@"longitude"]]);
+    NSLog(@">>> Parsing mapItem %@", json);
+    NSString *name = [RCTConvert NSString:json[@"name"]];
     MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:coordinate];
     MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
+    mapItem.name = name;
+    NSLog(@">>> Set mapItem name to %@", name);
     return mapItem;
 }
 
