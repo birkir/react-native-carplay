@@ -250,18 +250,23 @@ RCT_EXPORT_METHOD(updateTemplates:(NSString*)templateId config:(NSDictionary*)co
 
 RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
     RNCPStore *store = [RNCPStore sharedManager];
+    NSLog(@">>> Creating trip %@ from %@", tripId, config);
     CPTrip *trip = [self parseTrip:config];
     [store setTrip:tripId trip:trip];
+    NSLog(@">>> Done creating trip %@", tripId);
 }
 
 RCT_EXPORT_METHOD(updateTravelEstimatesForTrip:(NSString*)templateId tripId:(NSString*)tripId travelEstimates:(NSDictionary*)travelEstimates timeRemainingColor:(NSUInteger*)timeRemainingColor) {
+    NSLog(@">>> Updating travel estimates for %@, %@", templateId, tripId);
     RNCPStore *store = [RNCPStore sharedManager];
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
         CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
         CPTrip *trip = [[RNCPStore sharedManager] findTripById:tripId];
         if (trip) {
-            [mapTemplate updateTravelEstimates:[self parseTravelEstimates:travelEstimates] forTrip:trip withTimeRemainingColor:(CPTimeRemainingColor) timeRemainingColor];
+            CPTravelEstimates *estimates = [self parseTravelEstimates:travelEstimates];
+            NSLog(@">>> Updating travel estimates with %@ for %@", estimates, trip);
+            [mapTemplate updateTravelEstimates:estimates forTrip:trip withTimeRemainingColor:(CPTimeRemainingColor) timeRemainingColor];
         }
     }
 }
@@ -468,10 +473,12 @@ RCT_EXPORT_METHOD(hideTripPreviews:(NSString*)templateId) {
 
 RCT_EXPORT_METHOD(showTripPreviews:(NSString*)templateId tripPreviews:(NSArray*)tripPreviews tripConfiguration:(NSDictionary*)tripConfiguration) {
     CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
+    NSLog(@">>> Showing trip previews for %@", tripPreviews);
     if (template) {
         CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
         [mapTemplate showTripPreviews:[self parseTrips:tripPreviews] textConfiguration:[self parseTripPreviewTextConfiguration:tripConfiguration]];
     }
+    NSLog(@">>> Done showing trip previews");
 }
 
 RCT_EXPORT_METHOD(presentNavigationAlert:(NSString*)templateId json:(NSDictionary*)json animated:(BOOL)animated) {
@@ -712,6 +719,10 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 }
 
 - (CPTrip*)parseTrip:(NSDictionary*)config {
+    if ([config objectForKey:@"config"]) {
+        config = [config objectForKey:@"config"];
+    }
+    NSLog(@">>> Parsing trip: %@", config);
     MKMapItem *origin = [RCTConvert MKMapItem:config[@"origin"]];
     MKMapItem *destination = [RCTConvert MKMapItem:config[@"destination"]];
     NSMutableArray *routeChoices = [NSMutableArray array];
@@ -725,9 +736,11 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 
 - (NSArray<CPTrip*>*)parseTrips:(NSArray*)trips {
     NSMutableArray<CPTrip*>* res = [NSMutableArray array];
+    NSLog(@">>> Parsing trips");
     for (NSDictionary *trip in trips) {
         [res addObject:[self parseTrip:trip]];
     }
+    NSLog(@">>> Done parsing trips");
     return res;
 }
 
@@ -893,7 +906,7 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 
 - (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)(void))completionHandler {
     NSNumber* index = [item.userInfo objectForKey:@"index"];
-    [self sendTemplateEventWithName:listTemplate name:@"didSelectListItem" json:@{ @"index": index, @:"item": item }];
+    [self sendTemplateEventWithName:listTemplate name:@"didSelectListItem" json:@{ @"index": index }];
     self.selectedResultBlock = completionHandler;
 }
 
