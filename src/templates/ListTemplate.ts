@@ -1,4 +1,5 @@
 import { CarPlay } from '../CarPlay';
+import { ListItem } from '../interfaces/ListItem';
 import { ListSection } from '../interfaces/ListSection';
 import { Template, TemplateConfig } from './Template';
 
@@ -17,7 +18,7 @@ interface ListTemplateConfig extends TemplateConfig {
    * When the returned promise is resolved the spinner will hide.
    * @param item Object with the selected index
    */
-  onItemSelect?(item: any): Promise<void>;
+  onItemSelect?(item: { index: number }): Promise<void>;
 }
 
 /**
