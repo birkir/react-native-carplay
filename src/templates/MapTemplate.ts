@@ -45,8 +45,8 @@ interface MapTemplateConfig extends TemplateConfig {
   onPanBeganWithDirection?(e: any): void;
   onPanEndedDirection?(e: any): void;
 
-  onSelectedPreviewForTrip?(e: any): void;
-  onStartedTrip?(e: any): void;
+  onSelectedPreviewForTrip?(e: { tripId: string; routeIndex: number }): void;
+  onStartedTrip?(e: { tripId: string; routeIndex: number }): void;
 }
 
 /**
@@ -106,6 +106,9 @@ export class MapTemplate extends Template<MapTemplateConfig> {
     travelEstimates: TravelEstimates,
     timeRemainingColor: TimeRemainingColor = 0,
   ) {
+    if (!travelEstimates.distanceUnits) {
+      travelEstimates.distanceUnits = 'kilometers';
+    }
     CarPlay.bridge.updateTravelEstimatesForTrip(this.id, trip.id, travelEstimates, timeRemainingColor);
   }
   /**

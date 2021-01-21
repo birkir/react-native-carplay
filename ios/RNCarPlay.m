@@ -250,14 +250,6 @@ RCT_EXPORT_METHOD(updateTemplates:(NSString*)templateId config:(NSDictionary*)co
     }
 }
 
-//RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
-//    RNCPStore *store = [RNCPStore sharedManager];
-//    NSLog(@">>> Creating trip %@ from %@", tripId, config);
-//    CPTrip *trip = [self parseTrip:config];
-//    [store setTrip:tripId trip:trip];
-//    NSLog(@">>> Done creating trip %@", tripId);
-//}
-
 RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
     RNCPStore *store = [RNCPStore sharedManager];
     CPTrip *trip = [self parseTrip:config];
@@ -268,9 +260,6 @@ RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
     }
 
     [userInfo setValue:tripId forKey:@"id"];
-    NSLog(@"User info: %@", userInfo);
-//    [userInfo setObject:tripId forKey:@"id"];
-//    trip.userInfo = userInfo;
     [store setTrip:tripId trip:trip];
 }
 
@@ -754,21 +743,20 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     MKMapItem *destination = [RCTConvert MKMapItem:config[@"destination"]];
     NSMutableArray *routeChoices = [NSMutableArray array];
     if ([config objectForKey:@"routeChoices"]) {
+        NSInteger index = 0;
         for (NSDictionary *routeChoice in [RCTConvert NSArray:config[@"routeChoices"]]) {
-            [routeChoices addObject:[RCTConvert CPRouteChoice:routeChoice]];
+            CPRouteChoice *cpRouteChoice = [RCTConvert CPRouteChoice:routeChoice];
+            NSMutableDictionary *userInfo = cpRouteChoice.userInfo;
+            if (!userInfo) {
+                userInfo = [[NSMutableDictionary alloc] init];
+                cpRouteChoice.userInfo = userInfo;
+            }
+            [userInfo setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+            [routeChoices addObject:cpRouteChoice];
+            index++;
         }
     }
     return [[CPTrip alloc] initWithOrigin:origin destination:destination routeChoices:routeChoices];
-}
-
-- (NSArray<CPTrip*>*)parseTrips:(NSArray*)trips {
-    NSMutableArray<CPTrip*>* res = [NSMutableArray array];
-    NSLog(@">>> Parsing trips");
-    for (NSDictionary *trip in trips) {
-        [res addObject:[self parseTrip:trip]];
-    }
-    NSLog(@">>> Done parsing trips");
-    return res;
 }
 
 - (CPNavigationAlert*)parseNavigationAlert:(NSDictionary*)json templateId:(NSString*)templateId {
@@ -853,12 +841,23 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 //    NSLog(@">>> Selected trip %@, route %@", trip.userInfo.id, routeChoice);
     NSDictionary *userInfo = trip.userInfo;
     NSString *tripId = [userInfo valueForKey:@"id"];
-        NSLog(@">>>> Selected trip %@, route %@", trip, routeChoice);
-    [self sendTemplateEventWithName:mapTemplate name:@"selectedPreviewForTrip" json:@{ @"trip": tripId, @"routeChoice": routeChoice}];
+
+    NSDictionary *routeUserInfo = routeChoice.userInfo;
+    NSString *routeIndex = [routeUserInfo valueForKey:@"index"];
+        NSLog(@">>>> Selected trip %@, route %@", trip, routeIndex);
+    [self sendTemplateEventWithName:mapTemplate name:@"selectedPreviewForTrip" json:@{ @"trip": tripId, @"routeChoice": routeIndex}];
 }
+
 - (void)mapTemplate:(CPMapTemplate *)mapTemplate startedTrip:(CPTrip *)trip usingRouteChoice:(CPRouteChoice *)routeChoice {
-    [self sendTemplateEventWithName:mapTemplate name:@"startedTrip" json:@{ @"trip": trip.destination.name, @"routeChoice": routeChoice}];
+    NSDictionary *userInfo = trip.userInfo;
+    NSString *tripId = [userInfo valueForKey:@"id"];
+
+    NSDictionary *routeUserInfo = routeChoice.userInfo;
+    NSString *routeIndex = [routeUserInfo valueForKey:@"index"];
+
+    [self sendTemplateEventWithName:mapTemplate name:@"startedTrip" json:@{ @"trip": tripId, @"routeChoice": routeIndex}];
 }
+
 - (void)mapTemplateDidCancelNavigation:(CPMapTemplate *)mapTemplate {
     [self sendTemplateEventWithName:mapTemplate name:@"didCancelNavigation"];
 }
