@@ -8,7 +8,7 @@ import { Trip } from './Trip';
 export class NavigationSession {
   public maneuvers: Maneuver[];
 
-  constructor(public id: string, public trip: Trip, public mapTemplate: MapTemplate) {}
+  constructor(public id: string, public trip: Trip, public mapTemplate: MapTemplate) { }
 
   public updateManeuvers(maneuvers: Maneuver[]) {
     this.maneuvers = maneuvers;
@@ -17,6 +17,9 @@ export class NavigationSession {
   }
 
   public updateTravelEstimates(maneuverIndex: number, travelEstimates: TravelEstimates) {
+    if (!travelEstimates.distanceUnits) {
+      travelEstimates.distanceUnits = 'kilometers';
+    }
     CarPlay.bridge.updateTravelEstimates(this.id, maneuverIndex, travelEstimates);
   }
 
