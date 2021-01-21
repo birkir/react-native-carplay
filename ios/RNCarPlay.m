@@ -699,10 +699,26 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 }
 
 - (CPTravelEstimates*)parseTravelEstimates: (NSDictionary*)json {
-    NSUnit *unitKilometer = [NSUnitLength kilometers];
+    NSString *units = [RCTConvert NSString:json[@"distanceUnits"]];
     double value = [RCTConvert double:json[@"distanceRemaining"]];
-    NSMeasurement *distance = [[NSMeasurement alloc] initWithDoubleValue:value unit:unitKilometer];
+
+    NSUnit *unit = [NSUnitLength kilometers];
+    if (units && [units isEqualToString: @"meters"]) {
+        unit = [NSUnitLength meters];
+    }
+    else if (units && [units isEqualToString: @"miles"]) {
+        unit = [NSUnitLength miles];
+    }
+    else if (units && [units isEqualToString: @"feet"]) {
+        unit = [NSUnitLength feet];
+    }
+    else if (units && [units isEqualToString: @"yards"]) {
+        unit = [NSUnitLength yards];
+    }
+
+    NSMeasurement *distance = [[NSMeasurement alloc] initWithDoubleValue:value unit:unit];
     double time = [RCTConvert double:json[@"timeRemaining"]];
+
     return [[CPTravelEstimates alloc] initWithDistanceRemaining:distance timeRemaining:time];
 }
 
@@ -845,7 +861,7 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     NSDictionary *routeUserInfo = routeChoice.userInfo;
     NSString *routeIndex = [routeUserInfo valueForKey:@"index"];
         NSLog(@">>>> Selected trip %@, route %@", trip, routeIndex);
-    [self sendTemplateEventWithName:mapTemplate name:@"selectedPreviewForTrip" json:@{ @"trip": tripId, @"routeChoice": routeIndex}];
+    [self sendTemplateEventWithName:mapTemplate name:@"selectedPreviewForTrip" json:@{ @"tripId": tripId, @"routeIndex": routeIndex}];
 }
 
 - (void)mapTemplate:(CPMapTemplate *)mapTemplate startedTrip:(CPTrip *)trip usingRouteChoice:(CPRouteChoice *)routeChoice {
@@ -855,7 +871,7 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     NSDictionary *routeUserInfo = routeChoice.userInfo;
     NSString *routeIndex = [routeUserInfo valueForKey:@"index"];
 
-    [self sendTemplateEventWithName:mapTemplate name:@"startedTrip" json:@{ @"trip": tripId, @"routeChoice": routeIndex}];
+    [self sendTemplateEventWithName:mapTemplate name:@"startedTrip" json:@{ @"tripId": tripId, @"routeIndex": routeIndex}];
 }
 
 - (void)mapTemplateDidCancelNavigation:(CPMapTemplate *)mapTemplate {
