@@ -96,6 +96,20 @@ RCT_EXPORT_MODULE();
     return dispatch_get_main_queue();
 }
 
+
+-(UIImage *)imageWithTint:(UIImage *)image andTintColor:(UIColor *)tintColor {
+    UIImage *imageNew = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:imageNew];
+    imageView.tintColor = tintColor;
+
+    UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, NO, 0.0);
+    [imageView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *tintedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return tintedImage;
+}
+
 RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config) {
     RNCPStore *store = [RNCPStore sharedManager];
 
@@ -726,7 +740,8 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     CPManeuver* maneuver = [[CPManeuver alloc] init];
 
     if ([json objectForKey:@"junctionImage"]) {
-        [maneuver setJunctionImage:[RCTConvert UIImage:json[@"junctionImage"]]];
+        UIImage *junctionImage = [RCTConvert UIImage:json[@"junctionImage"]];
+        [maneuver setJunctionImage:[self imageWithTint:junctionImage andTintColor:[UIColor whiteColor]]];
     }
 
     if ([json objectForKey:@"initialTravelEstimates"]) {
@@ -734,9 +749,9 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
         [maneuver setInitialTravelEstimates:travelEstimates];
     }
 
-    if ([json objectForKey:@"symbolLight"] && [json objectForKey:@"symbolDark"]) {
-        CPImageSet *symbolSet = [[CPImageSet alloc] initWithLightContentImage:[RCTConvert UIImage:json[@"symbolLight"]] darkContentImage:[RCTConvert UIImage:json[@"symbolDark"]]];
-        [maneuver setSymbolSet:symbolSet];
+    if ([json objectForKey:@"symbolImage"]) {
+        UIImage *symbolImage = [RCTConvert UIImage:json[@"symbolImage"]];
+        [maneuver setSymbolImage:[self imageWithTint:symbolImage andTintColor:[UIColor whiteColor]]];
     }
 
     if ([json objectForKey:@"instructionVariants"]) {
