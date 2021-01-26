@@ -6,14 +6,13 @@ import { TravelEstimates } from './TravelEstimates';
 export interface Maneuver {
   junctionImage?: any;
   initialTravelEstimates?: TravelEstimates;
-  symbolDark?: any;
-  symbolLight?: any;
+  symbolImage?: any;
 
   instructionVariants: string[];
 
   // not yet implemented
   dashboardInstructionVariants?: string[];
   notificationInstructionVariants?: string[];
-  junctionDark?: any;
-  junctionLight?: any;
+  // junctionDark?: any;
+  // junctionLight?: any;
 }

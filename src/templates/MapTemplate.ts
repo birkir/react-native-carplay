@@ -126,7 +126,7 @@ export class MapTemplate extends Template<MapTemplateConfig> {
   }
 
   public showTripPreviews(tripPreviews: Trip[], textConfiguration: TextConfiguration = {}) {
-    CarPlay.bridge.showTripPreviews(this.id, tripPreviews, textConfiguration);
+    CarPlay.bridge.showTripPreviews(this.id, tripPreviews.map(trip => trip.id), textConfiguration);
   }
 
   public showRouteChoicesPreviewForTrip(trip: Trip, textConfiguration: TextConfiguration = {}) {
