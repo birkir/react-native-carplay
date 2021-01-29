@@ -706,6 +706,8 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
         CPGridButton *_button = [[CPGridButton alloc] initWithTitleVariants:_titleVariants image:_image handler:^(CPGridButton * _Nonnull barButton) {
             [self sendEventWithName:@"gridButtonPressed" body:@{@"id": _id, @"templateId":templateId, @"index": @(index) }];
         }];
+        BOOL _disabled = [button objectForKey:@"disabled"];
+        [_button setEnabled:!_disabled];
         [result addObject:_button];
         index = index + 1;
     }
