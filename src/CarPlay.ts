@@ -31,6 +31,8 @@ class CarPlayInterface {
    */
   public bridge = RNCarPlay;
 
+  public connected = false;
+
   /**
    * CarPlay Event Emitter
    */
@@ -41,11 +43,13 @@ class CarPlayInterface {
 
   constructor() {
     this.emitter.addListener('didConnect', () => {
+      this.connected = true;
       if (this.onConnectCallback) {
         this.onConnectCallback();
       }
     });
     this.emitter.addListener('didDisconnect', () => {
+      this.connected = false;
       if (this.onDisconnectCallback) {
         this.onDisconnectCallback();
       }

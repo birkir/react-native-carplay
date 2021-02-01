@@ -22,17 +22,17 @@
     store.interfaceController = interfaceController;
     store.window = window;
 
-//    RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
-//    if (cp.bridge) {
-//        [cp sendEventWithName:@"didConnect" body:@{}];
-//    }
+   RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
+   if (cp.bridge) {
+       [cp sendEventWithName:@"didConnect" body:@{}];
+   }
 }
 
 + (void) disconnect {
-//    RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
-//    if (cp.bridge) {
-//        [cp sendEventWithName:@"didDisconnect" body:@{}];
-//    }
+   RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
+   if (cp.bridge) {
+       [cp sendEventWithName:@"didDisconnect" body:@{}];
+   }
 }
 
 RCT_EXPORT_MODULE();

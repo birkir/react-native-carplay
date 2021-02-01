@@ -34,6 +34,9 @@ export class SearchTemplate extends Template<SearchTemplateConfig> {
   }
 
   constructor(public config: SearchTemplateConfig) {
+    // parse out any images in the results
+
+
     super(config);
 
     CarPlay.emitter.addListener('updatedSearchText', e => {
