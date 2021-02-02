@@ -107,9 +107,7 @@ export class Template<P> {
 
   public parseConfig(config: any) {
     const result = traverse(config).map(function node(x) {
-      console.log(`in traverse, x: ${x}, key: ${this.key}`);
       if (String(this.key).match(/[Ii]mage$/)) {
-        console.log('found an image!!');
         this.update(resolveAssetSource(x));
       }
     });
