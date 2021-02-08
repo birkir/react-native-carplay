@@ -38,37 +38,48 @@ class CarPlayInterface {
    */
   public emitter = new NativeEventEmitter(RNCarPlay);
 
-  private onConnectCallback: () => void;
-  private onDisconnectCallback: () => void;
+  private onConnectCallbacks = new Set<() => void>();
+  private onDisconnectCallbacks = new Set<() => void>();
+
+  // private onConnectCallback: () => void;
+  // private onDisconnectCallback: () => void;
 
   constructor() {
     this.emitter.addListener('didConnect', () => {
       this.connected = true;
-      if (this.onConnectCallback) {
-        this.onConnectCallback();
-      }
+      this.onConnectCallbacks.forEach((callback) => {
+        callback();
+      });
     });
     this.emitter.addListener('didDisconnect', () => {
       this.connected = false;
-      if (this.onDisconnectCallback) {
-        this.onDisconnectCallback();
-      }
+      this.onDisconnectCallbacks.forEach((callback) => {
+        callback();
+      });
     });
   }
 
   /**
    * Fired when CarPlay is connected to the device.
    */
-  public onConnect = (callback: () => void) => {
-    this.onConnectCallback = callback;
+  public registerOnConnect = (callback: () => void) => {
+    this.onConnectCallbacks.add(callback);
   };
+
+  public unregisterOnConnect = (callback: () => void) => {
+    this.onConnectCallbacks.delete(callback);
+  }
 
   /**
    * Fired when CarPlay is disconnected from the device.
    */
-  public onDisconnect = (callback: () => void) => {
-    this.onDisconnectCallback = callback;
+  public registerOnDisconnect = (callback: () => void) => {
+    this.onDisconnectCallbacks.add(callback);
   };
+
+  public unregisterOnDisconnect = (callback: () => void) => {
+    this.onDisconnectCallbacks.delete(callback);
+  }
 
   /**
    * Sets the root template, starting a new stack for the template navigation hierarchy.
