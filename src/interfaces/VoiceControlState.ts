@@ -1,6 +1,6 @@
 export interface VoiceControlState {
   identifier: string;
-  image: any;
+  image?: any;
   repeats: boolean;
   titleVariants: string[];
 }
