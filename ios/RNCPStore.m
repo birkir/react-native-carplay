@@ -12,6 +12,7 @@
     NSMutableDictionary* _templatesStore;
     NSMutableDictionary* _navigationSessionsStore;
     NSMutableDictionary* _tripsStore;
+    Boolean _connected;
 }
 
 @synthesize window;
@@ -22,8 +23,9 @@
         _templatesStore = [[NSMutableDictionary alloc] init];
         _navigationSessionsStore = [[NSMutableDictionary alloc] init];
         _tripsStore = [[NSMutableDictionary alloc] init];
+        _connected = false;
     }
-    
+
     return self;
 }
 
@@ -34,6 +36,14 @@
         shared = [[self alloc] init];
     });
     return shared;
+}
+
+- (void) setConnected:(Boolean) isConnected {
+    _connected = isConnected;
+}
+
+- (Boolean) isConnected {
+    return _connected;
 }
 
 - (CPTemplate*) findTemplateById:(NSString*)templateId {

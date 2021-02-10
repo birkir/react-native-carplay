@@ -21,6 +21,7 @@
     RNCPStore * store = [RNCPStore sharedManager];
     store.interfaceController = interfaceController;
     store.window = window;
+    [store setConnected:true];
 
    RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
    if (cp.bridge) {
@@ -30,6 +31,9 @@
 
 + (void) disconnect {
    RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
+    RNCPStore *store = [RNCPStore sharedManager];
+    [store setConnected:false];
+
    if (cp.bridge) {
        [cp sendEventWithName:@"didDisconnect" body:@{}];
    }
@@ -108,6 +112,13 @@ RCT_EXPORT_MODULE();
     UIGraphicsEndImageContext();
 
     return tintedImage;
+}
+
+RCT_EXPORT_METHOD(checkForConnection) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    if ([store isConnected]) {
+        [self sendEventWithName:@"didConnect" body:@{}];
+    }
 }
 
 RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config) {

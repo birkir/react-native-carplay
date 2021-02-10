@@ -57,6 +57,9 @@ class CarPlayInterface {
         callback();
       });
     });
+
+    // check if already connected
+    this.bridge.checkForConnection();
   }
 
   /**
