@@ -25,5 +25,7 @@
 - (NSString*) setTrip:(NSString*)tripId trip:(CPTrip*)trip;
 - (CPNavigationSession*) findNavigationSessionById:(NSString*)navigationSessionId;
 - (NSString*) setNavigationSession:(NSString*)navigationSessionId navigationSession:(CPNavigationSession*)navigationSession;
+- (Boolean) isConnected;
+- (void) setConnected:(Boolean) isConnected;
 
 @end
