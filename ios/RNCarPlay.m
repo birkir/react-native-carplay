@@ -475,6 +475,15 @@ RCT_EXPORT_METHOD(updateMapTemplateConfig:(NSString *)templateId config:(NSDicti
     }
 }
 
+RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString *)templateId mapButtons:(NSArray*)mapButtonConfig) {
+    CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
+    if (template) {
+        [self setMapButtons:mapButtonConfig template:template];
+    } else {
+        NSLog(@"Failed to find template %@", template);
+    }
+}
+
 RCT_EXPORT_METHOD(showPanningInterface:(NSString *)templateId animated:(BOOL)animated) {
     CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
     if (template) {
@@ -579,14 +588,7 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 
     if ([config objectForKey:@"mapButtons"]) {
         NSArray *mapButtons = [RCTConvert NSArray:config[@"mapButtons"]];
-        NSMutableArray *result = [NSMutableArray array];
-        for (NSDictionary *mapButton in mapButtons) {
-            NSString *_id = [mapButton objectForKey:@"id"];
-            [result addObject:[RCTConvert CPMapButton:mapButton withHandler:^(CPMapButton * _Nonnull mapButton) {
-                [self sendTemplateEventWithName:mapTemplate name:@"mapButtonPressed" json:@{ @"id": _id }];
-            }]];
-        }
-        [mapTemplate setMapButtons:result];
+        [self setMapButtons:mapButtons template:mapTemplate];
     }
 
     if ([config objectForKey:@"automaticallyHidesNavigationBar"]) {
@@ -615,6 +617,17 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
         [templates addObject:templ];
     }
     return templates;
+}
+
+- setMapButtons:(NSArray*)mapButtons template:(CPMapTemplate *)mapTemplate {
+    NSMutableArray *result = [NSMutableArray array];
+    for (NSDictionary *mapButton in mapButtons) {
+        NSString *_id = [mapButton objectForKey:@"id"];
+        [result addObject:[RCTConvert CPMapButton:mapButton withHandler:^(CPMapButton * _Nonnull mapButton) {
+            [self sendTemplateEventWithName:mapTemplate name:@"mapButtonPressed" json:@{ @"id": _id }];
+        }]];
+    }
+    [mapTemplate setMapButtons:result];
 }
 
 - (NSArray<CPButton*>*) parseButtons:(NSArray*)buttons templateId:(NSString *)templateId  API_AVAILABLE(ios(14.0)){

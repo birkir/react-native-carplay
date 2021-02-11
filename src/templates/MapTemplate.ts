@@ -118,6 +118,10 @@ export class MapTemplate extends Template<MapTemplateConfig> {
     CarPlay.bridge.updateMapTemplateConfig(this.id, this.parseConfig(config));
   }
 
+  public updateMapButtons(mapButtons: MapButton[]) {
+    CarPlay.bridge.updateMapTemplateMapButtons(this.id, this.parseConfig(mapButtons));
+  }
+
   /**
    * Hides the display of trip previews.
    */
