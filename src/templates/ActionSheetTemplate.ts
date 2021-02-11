@@ -3,7 +3,7 @@ import { Template, TemplateConfig } from './Template';
 
 export interface ActionSheetTemplateConfig extends TemplateConfig {
   title: string;
-  message: string;
+  message?: string;
   actions: AlertAction[];
   onActionButtonPressed?(e: { id: string, template: string }): void;
 }
