@@ -9,7 +9,7 @@ import { NavigationSession } from '../navigation/NavigationSession';
 import { Trip } from '../navigation/Trip';
 import { Template, TemplateConfig } from './Template';
 
-interface MapTemplateConfig extends TemplateConfig {
+export interface MapTemplateConfig extends TemplateConfig {
   guidanceBackgroundColor?: string;
   tripEstimateStyle?: 'dark' | 'light';
   /**
@@ -40,10 +40,10 @@ interface MapTemplateConfig extends TemplateConfig {
 
   onMapButtonPressed?(e: { id: string, template: string }): void;
 
-  onPanWithDirection?(e: any): void;
+  onPanWithDirection?({ direction: string }): void;
 
-  onPanBeganWithDirection?(e: any): void;
-  onPanEndedDirection?(e: any): void;
+  onPanBeganWithDirection?({ direction: string }): void;
+  onPanEndedDirection?({ direction: string }): void;
 
   onSelectedPreviewForTrip?(e: { tripId: string; routeIndex: number }): void;
   onStartedTrip?(e: { tripId: string; routeIndex: number }): void;

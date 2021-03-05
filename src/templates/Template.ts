@@ -21,10 +21,6 @@ export interface TemplateConfig {
    */
   id?: string;
   /**
-   * Show back button
-   */
-  backButton?: boolean;
-  /**
    * An array of bar buttons to display on the leading side of the navigation bar.
    *
    * The navigation bar displays up to two buttons in the leading space. When including more than two buttons in the array, the system displays only the first two buttons.
