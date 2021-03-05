@@ -19,6 +19,8 @@ interface ListTemplateConfig extends TemplateConfig {
    * @param item Object with the selected index
    */
   onItemSelect?(item: { index: number }): Promise<void>;
+
+  onBackButtonPressed?(): void;
 }
 
 /**
@@ -35,6 +37,12 @@ export class ListTemplate extends Template<ListTemplateConfig> {
     return 'list';
   }
 
+  get eventMap() {
+    return {
+      backButtonPressed: 'onBackButtonPressed'
+    };
+  }
+
   constructor(public config: ListTemplateConfig) {
     super(config);
 
@@ -46,7 +54,7 @@ export class ListTemplate extends Template<ListTemplateConfig> {
     });
   }
 
-  public updateSections = sections => {
+  public updateSections = (sections: ListSection[]) => {
     return CarPlay.bridge.updateListTemplateSections(this.id, this.parseConfig(sections));
   };
 }

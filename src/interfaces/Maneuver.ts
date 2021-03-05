@@ -7,6 +7,9 @@ export interface Maneuver {
   junctionImage?: any;
   initialTravelEstimates?: TravelEstimates;
   symbolImage?: any;
+  resizeSymbolImage?: 'primary' | 'secondary';
+  // HEX VALUE ie. #FFFFFF
+  tintSymbolImage?: string;
 
   instructionVariants: string[];
 

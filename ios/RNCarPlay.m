@@ -57,6 +57,7 @@ RCT_EXPORT_MODULE();
              @"didDisconnect",
              // interface
              @"barButtonPressed",
+             @"backButtonPressed",
              @"didAppear",
              @"didDisappear",
              @"willAppear",
@@ -105,13 +106,27 @@ RCT_EXPORT_MODULE();
     UIImage *imageNew = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:imageNew];
     imageView.tintColor = tintColor;
-
     UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, NO, 0.0);
     [imageView.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *tintedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-
     return tintedImage;
+}
+
+- (UIImage *)imageWithSize:(UIImage *)image convertToSize:(CGSize)size {
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *destImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return destImage;
+}
+
+- (UIColor *)colorFromHexString:(NSString *)hexString {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
 RCT_EXPORT_METHOD(checkForConnection) {
@@ -153,6 +168,11 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         CPListTemplate *listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections];
         [listTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
         [listTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
+        CPBarButton *backButton = [[CPBarButton alloc] initWithTitle:@" Back" handler:^(CPBarButton * _Nonnull barButton) {
+            [self sendEventWithName:@"backButtonPressed" body:@{@"templateId":templateId}];
+            [self popTemplate:false];
+        }];
+        [listTemplate setBackButton:backButton];
         listTemplate.delegate = self;
         template = listTemplate;
     }
@@ -475,15 +495,6 @@ RCT_EXPORT_METHOD(updateMapTemplateConfig:(NSString *)templateId config:(NSDicti
     }
 }
 
-RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString *)templateId mapButtons:(NSArray*)mapButtonConfig) {
-    CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
-    if (template) {
-        [self setMapButtons:mapButtonConfig template:template];
-    } else {
-        NSLog(@"Failed to find template %@", template);
-    }
-}
-
 RCT_EXPORT_METHOD(showPanningInterface:(NSString *)templateId animated:(BOOL)animated) {
     CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
     if (template) {
@@ -573,6 +584,22 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
     }
 }
 
+RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:(NSArray*) mapButtonConfig) {
+    CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
+    if (template) {
+        CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
+        NSArray *mapButtons = [RCTConvert NSArray:mapButtonConfig];
+        NSMutableArray *result = [NSMutableArray array];
+        for (NSDictionary *mapButton in mapButtons) {
+            NSString *_id = [mapButton objectForKey:@"id"];
+            [result addObject:[RCTConvert CPMapButton:mapButton withHandler:^(CPMapButton * _Nonnull mapButton) {
+                [self sendTemplateEventWithName:mapTemplate name:@"mapButtonPressed" json:@{ @"id": _id }];
+            }]];
+        }
+        [mapTemplate setMapButtons:result];
+    }
+}
+
 # pragma parsers
 
 - (void) applyConfigForMapTemplate:(CPMapTemplate*)mapTemplate templateId:(NSString*)templateId config:(NSDictionary*)config {
@@ -588,7 +615,14 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 
     if ([config objectForKey:@"mapButtons"]) {
         NSArray *mapButtons = [RCTConvert NSArray:config[@"mapButtons"]];
-        [self setMapButtons:mapButtons template:mapTemplate];
+        NSMutableArray *result = [NSMutableArray array];
+        for (NSDictionary *mapButton in mapButtons) {
+            NSString *_id = [mapButton objectForKey:@"id"];
+            [result addObject:[RCTConvert CPMapButton:mapButton withHandler:^(CPMapButton * _Nonnull mapButton) {
+                [self sendTemplateEventWithName:mapTemplate name:@"mapButtonPressed" json:@{ @"id": _id }];
+            }]];
+        }
+        [mapTemplate setMapButtons:result];
     }
 
     if ([config objectForKey:@"automaticallyHidesNavigationBar"]) {
@@ -617,17 +651,6 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
         [templates addObject:templ];
     }
     return templates;
-}
-
-- setMapButtons:(NSArray*)mapButtons template:(CPMapTemplate *)mapTemplate {
-    NSMutableArray *result = [NSMutableArray array];
-    for (NSDictionary *mapButton in mapButtons) {
-        NSString *_id = [mapButton objectForKey:@"id"];
-        [result addObject:[RCTConvert CPMapButton:mapButton withHandler:^(CPMapButton * _Nonnull mapButton) {
-            [self sendTemplateEventWithName:mapTemplate name:@"mapButtonPressed" json:@{ @"id": _id }];
-        }]];
-    }
-    [mapTemplate setMapButtons:result];
 }
 
 - (NSArray<CPButton*>*) parseButtons:(NSArray*)buttons templateId:(NSString *)templateId  API_AVAILABLE(ios(14.0)){
@@ -777,7 +800,26 @@ RCT_EXPORT_METHOD(reactToSelectedResult:(BOOL)status) {
 
     if ([json objectForKey:@"symbolImage"]) {
         UIImage *symbolImage = [RCTConvert UIImage:json[@"symbolImage"]];
-        [maneuver setSymbolImage:[self imageWithTint:symbolImage andTintColor:[UIColor whiteColor]]];
+
+        BOOL shouldTint = [RCTConvert BOOL:json[@"tintSymbolImage"]];
+        if ([json objectForKey:@"tintSymbolImage"]) {
+            NSString *hexCode = [RCTConvert NSString:json[@"tintSymbolImage"]];
+            symbolImage = [self imageWithTint:symbolImage andTintColor:[self colorFromHexString:hexCode]];
+        }
+
+
+        if ([json objectForKey:@"resizeSymbolImage"]) {
+            NSString *resizeType = [RCTConvert NSString:json[@"resizeSymbolImage"]];
+            if ([resizeType isEqualToString: @"primary"]) {
+                symbolImage = [self imageWithSize:symbolImage convertToSize:CGSizeMake(100, 100)];
+            }
+            if ([resizeType isEqualToString: @"secondary"]) {
+                symbolImage = [self imageWithSize:symbolImage convertToSize:CGSizeMake(50, 50)];
+            }
+        }
+
+
+        [maneuver setSymbolImage:symbolImage];
     }
 
     if ([json objectForKey:@"instructionVariants"]) {
