@@ -22,8 +22,6 @@
 + (CPMapButton*)CPMapButton:(id)json withHandler:(void (^)(CPMapButton * _Nonnull mapButton))handler;
 + (CPRouteChoice*)CPRouteChoice:(id)json;
 + (MKMapItem*)MKMapItem:(id)json;
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 140000
 + (CPPointOfInterest*)CPPointOfInterest:(id)json;
-#endif
 + (CPAlertActionStyle)CPAlertActionStyle:(id)json;
 @end

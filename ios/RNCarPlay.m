@@ -190,28 +190,22 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         CPVoiceControlTemplate *voiceTemplate = [[CPVoiceControlTemplate alloc] initWithVoiceControlStates: [self parseVoiceControlStates:config[@"voiceControlStates"]]];
         template = voiceTemplate;
     } else if ([type isEqualToString:@"nowplaying"]) {
-        if (@available(iOS 14.0, *)) {
-            CPNowPlayingTemplate *nowPlayingTemplate = [CPNowPlayingTemplate sharedTemplate];
-            [nowPlayingTemplate setAlbumArtistButtonEnabled:[RCTConvert BOOL:config[@"albumArtistButton"]]];
-            [nowPlayingTemplate setUpNextTitle:[RCTConvert NSString:config[@"upNextTitle"]]];
-            [nowPlayingTemplate setUpNextButtonEnabled:[RCTConvert BOOL:config[@"upNextButton"]]];
-            template = nowPlayingTemplate;
-        }
+        CPNowPlayingTemplate *nowPlayingTemplate = [CPNowPlayingTemplate sharedTemplate];
+        [nowPlayingTemplate setAlbumArtistButtonEnabled:[RCTConvert BOOL:config[@"albumArtistButton"]]];
+        [nowPlayingTemplate setUpNextTitle:[RCTConvert NSString:config[@"upNextTitle"]]];
+        [nowPlayingTemplate setUpNextButtonEnabled:[RCTConvert BOOL:config[@"upNextButton"]]];
+        template = nowPlayingTemplate;
     } else if ([type isEqualToString:@"tabbar"]) {
-        if (@available(iOS 14.0, *)) {
-            CPTabBarTemplate *tabBarTemplate = [[CPTabBarTemplate alloc] initWithTemplates:[self parseTemplatesFrom:config]];
-            tabBarTemplate.delegate = self;
-            template = tabBarTemplate;
-        }
+        CPTabBarTemplate *tabBarTemplate = [[CPTabBarTemplate alloc] initWithTemplates:[self parseTemplatesFrom:config]];
+        tabBarTemplate.delegate = self;
+        template = tabBarTemplate;
     } else if ([type isEqualToString:@"contact"]) {
-        if (@available(iOS 14.0, *)) {
-            CPContact *contact = [[CPContact alloc] init];
-            [contact setName:config[@"name"]];
-            [contact setSubtitle:config[@"subtitle"]];
-            [contact setActions:[self parseButtons:config[@"actions"] templateId:templateId]];
-            CPContactTemplate *contactTemplate = [[CPContactTemplate alloc] initWithContact:contact];
-            template = contactTemplate;
-        }
+        CPContact *contact = [[CPContact alloc] init];
+        [contact setName:config[@"name"]];
+        [contact setSubtitle:config[@"subtitle"]];
+        [contact setActions:[self parseButtons:config[@"actions"] templateId:templateId]];
+        CPContactTemplate *contactTemplate = [[CPContactTemplate alloc] initWithContact:contact];
+        template = contactTemplate;
     } else if ([type isEqualToString:@"actionsheet"]) {
         NSString *title = [RCTConvert NSString:config[@"title"]];
         NSString *message = [RCTConvert NSString:config[@"message"]];
@@ -238,45 +232,41 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         CPAlertTemplate *alertTemplate = [[CPAlertTemplate alloc] initWithTitleVariants:titleVariants actions:actions];
         template = alertTemplate;
     } else if ([type isEqualToString:@"poi"]) {
-        if (@available(iOS 14.0, *)) {
-            NSString *title = [RCTConvert NSString:config[@"title"]];
-            NSMutableArray<__kindof CPPointOfInterest *> * items = [NSMutableArray new];
-            NSUInteger selectedIndex = 0;
+        NSString *title = [RCTConvert NSString:config[@"title"]];
+        NSMutableArray<__kindof CPPointOfInterest *> * items = [NSMutableArray new];
+        NSUInteger selectedIndex = 0;
 
-            NSArray<NSDictionary*> *_items = [RCTConvert NSDictionaryArray:config[@"items"]];
-            for (NSDictionary *_item in _items) {
-                CPPointOfInterest *poi = [RCTConvert CPPointOfInterest:_item];
-                [poi setUserInfo:_item];
-                [items addObject:poi];
-            }
-
-            CPPointOfInterestTemplate *poiTemplate = [[CPPointOfInterestTemplate alloc] initWithTitle:title pointsOfInterest:items selectedIndex:selectedIndex];
-            poiTemplate.pointOfInterestDelegate = self;
-            template = poiTemplate;
+        NSArray<NSDictionary*> *_items = [RCTConvert NSDictionaryArray:config[@"items"]];
+        for (NSDictionary *_item in _items) {
+            CPPointOfInterest *poi = [RCTConvert CPPointOfInterest:_item];
+            [poi setUserInfo:_item];
+            [items addObject:poi];
         }
+
+        CPPointOfInterestTemplate *poiTemplate = [[CPPointOfInterestTemplate alloc] initWithTitle:title pointsOfInterest:items selectedIndex:selectedIndex];
+        poiTemplate.pointOfInterestDelegate = self;
+        template = poiTemplate;
     } else if ([type isEqualToString:@"information"]) {
-        if (@available(iOS 14.0, *)) {
-            NSString *title = [RCTConvert NSString:config[@"title"]];
-            CPInformationTemplateLayout layout = [RCTConvert BOOL:config[@"leading"]] ? CPInformationTemplateLayoutLeading : CPInformationTemplateLayoutTwoColumn;
-            NSMutableArray<__kindof CPInformationItem *> * items = [NSMutableArray new];
-            NSMutableArray<__kindof CPTextButton *> * actions = [NSMutableArray new];
+        NSString *title = [RCTConvert NSString:config[@"title"]];
+        CPInformationTemplateLayout layout = [RCTConvert BOOL:config[@"leading"]] ? CPInformationTemplateLayoutLeading : CPInformationTemplateLayoutTwoColumn;
+        NSMutableArray<__kindof CPInformationItem *> * items = [NSMutableArray new];
+        NSMutableArray<__kindof CPTextButton *> * actions = [NSMutableArray new];
 
-            NSArray<NSDictionary*> *_items = [RCTConvert NSDictionaryArray:config[@"items"]];
-            for (NSDictionary *_item in _items) {
-                [items addObject:[[CPInformationItem alloc] initWithTitle:_item[@"title"] detail:_item[@"detail"]]];
-            }
-
-            NSArray<NSDictionary*> *_actions = [RCTConvert NSDictionaryArray:config[@"actions"]];
-            for (NSDictionary *_action in _actions) {
-                CPTextButton *action = [[CPTextButton alloc] initWithTitle:_action[@"title"] textStyle:CPTextButtonStyleNormal handler:^(__kindof CPTextButton * _Nonnull contactButton) {
-                    [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": _action[@"id"] }];
-                }];
-                [actions addObject:action];
-            }
-
-            CPInformationTemplate *informationTemplate = [[CPInformationTemplate alloc] initWithTitle:title layout:layout items:items actions:actions];
-            template = informationTemplate;
+        NSArray<NSDictionary*> *_items = [RCTConvert NSDictionaryArray:config[@"items"]];
+        for (NSDictionary *_item in _items) {
+            [items addObject:[[CPInformationItem alloc] initWithTitle:_item[@"title"] detail:_item[@"detail"]]];
         }
+
+        NSArray<NSDictionary*> *_actions = [RCTConvert NSDictionaryArray:config[@"actions"]];
+        for (NSDictionary *_action in _actions) {
+            CPTextButton *action = [[CPTextButton alloc] initWithTitle:_action[@"title"] textStyle:CPTextButtonStyleNormal handler:^(__kindof CPTextButton * _Nonnull contactButton) {
+                [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": _action[@"id"] }];
+            }];
+            [actions addObject:action];
+        }
+
+        CPInformationTemplate *informationTemplate = [[CPInformationTemplate alloc] initWithTitle:title layout:layout items:items actions:actions];
+        template = informationTemplate;
     }
 
     [template setUserInfo:@{ @"templateId": templateId }];
@@ -285,13 +275,11 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
 }
 
 RCT_EXPORT_METHOD(updateTemplates:(NSString*)templateId config:(NSDictionary*)config) {
-    if (@available(iOS 14.0, *)) {
-        RNCPStore *store = [RNCPStore sharedManager];
-        CPTemplate *template = [store findTemplateById:templateId];
-        if (template) {
-            CPTabBarTemplate *tabBarTemplate = (CPTabBarTemplate*) template;
-            [tabBarTemplate updateTemplates:[self parseTemplatesFrom:config]];
-        }
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPTabBarTemplate *tabBarTemplate = (CPTabBarTemplate*) template;
+        [tabBarTemplate updateTemplates:[self parseTemplatesFrom:config]];
     }
 }
 
@@ -409,17 +397,10 @@ RCT_EXPORT_METHOD(pushTemplate:(NSString *)templateId animated:(BOOL)animated) {
     RNCPStore *store = [RNCPStore sharedManager];
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
-        if (@available(iOS 14.0, *)) {
-            [store.interfaceController pushTemplate:template animated:animated completion:^(BOOL done, NSError * _Nullable err) {
-                NSLog(@"error %@", err);
-                // noop
-            }];
-        } else {
-            [store.interfaceController pushTemplate:template animated:animated completion:^(BOOL done, NSError * _Nullable err) {
-                NSLog(@"error %@", err);
-                // noop
-            }];
-        }
+        [store.interfaceController pushTemplate:template animated:animated completion:^(BOOL done, NSError * _Nullable err) {
+            NSLog(@"error %@", err);
+            // noop
+        }];
     } else {
         NSLog(@"Failed to find template %@", template);
     }
@@ -653,7 +634,7 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     return templates;
 }
 
-- (NSArray<CPButton*>*) parseButtons:(NSArray*)buttons templateId:(NSString *)templateId  API_AVAILABLE(ios(14.0)){
+- (NSArray<CPButton*>*) parseButtons:(NSArray*)buttons templateId:(NSString *)templateId){
     NSMutableArray *result = [NSMutableArray array];
     for (NSDictionary *button in buttons) {
         CPButton *_button;
@@ -1040,17 +1021,17 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 }
 
 # pragma TabBarTemplate
-- (void)tabBarTemplate:(CPTabBarTemplate *)tabBarTemplate didSelectTemplate:(__kindof CPTemplate *)selectedTemplate  API_AVAILABLE(ios(14.0)){
+- (void)tabBarTemplate:(CPTabBarTemplate *)tabBarTemplate didSelectTemplate:(__kindof CPTemplate *)selectedTemplate){
     NSString* selectedTemplateId = [[selectedTemplate userInfo] objectForKey:@"templateId"];
     [self sendTemplateEventWithName:tabBarTemplate name:@"didSelectTemplate" json:@{@"selectedTemplateId":selectedTemplateId}];
 }
 
 # pragma PointOfInterest
--(void)pointOfInterestTemplate:(CPPointOfInterestTemplate *)pointOfInterestTemplate didChangeMapRegion:(MKCoordinateRegion)region  API_AVAILABLE(ios(14.0)){
+-(void)pointOfInterestTemplate:(CPPointOfInterestTemplate *)pointOfInterestTemplate didChangeMapRegion:(MKCoordinateRegion)region){
     // noop
 }
 
--(void)pointOfInterestTemplate:(CPPointOfInterestTemplate *)pointOfInterestTemplate didSelectPointOfInterest:(CPPointOfInterest *)pointOfInterest  API_AVAILABLE(ios(14.0)){
+-(void)pointOfInterestTemplate:(CPPointOfInterestTemplate *)pointOfInterestTemplate didSelectPointOfInterest:(CPPointOfInterest *)pointOfInterest){
     [self sendTemplateEventWithName:pointOfInterestTemplate name:@"didSelectPointOfInterest" json:[pointOfInterest userInfo]];
 }
 
