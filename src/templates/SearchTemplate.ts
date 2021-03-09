@@ -3,7 +3,7 @@ import { ListItem } from '../interfaces/ListItem';
 import { BaseEvent, Template, TemplateConfig } from './Template';
 import { Image } from 'react-native'
 
-interface SearchTemplateConfig extends TemplateConfig {
+export interface SearchTemplateConfig extends TemplateConfig {
   /**
    * Fired when search input is changed.
    * Must return list of items to show.

@@ -10,7 +10,7 @@ interface InformationAction {
   title: string;
 }
 
-interface InformationTemplateConfig extends TemplateConfig {
+export interface InformationTemplateConfig extends TemplateConfig {
   title: string;
   leading?: boolean;
   items: InformationItem[];

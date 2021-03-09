@@ -3,7 +3,7 @@ import { ListItem } from '../interfaces/ListItem';
 import { ListSection } from '../interfaces/ListSection';
 import { Template, TemplateConfig } from './Template';
 
-interface ListTemplateConfig extends TemplateConfig {
+export interface ListTemplateConfig extends TemplateConfig {
   /**
    * The title displayed in the navigation bar while the list template is visible.
    */
