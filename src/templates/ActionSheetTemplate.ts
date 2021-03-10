@@ -5,7 +5,7 @@ export interface ActionSheetTemplateConfig extends TemplateConfig {
   title: string;
   message?: string;
   actions: AlertAction[];
-  onActionButtonPressed?(e: { id: string, template: string }): void;
+  onActionButtonPressed?(e: { id: string, templateId: string }): void;
 }
 
 export class ActionSheetTemplate extends Template<ActionSheetTemplateConfig> {

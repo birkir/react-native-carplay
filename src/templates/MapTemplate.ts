@@ -37,14 +37,10 @@ export interface MapTemplateConfig extends TemplateConfig {
    * @param e Event
    */
   onAlertActionPressed?(e: { secondary?: boolean; primary?: boolean }): void;
-
   onMapButtonPressed?(e: { id: string, template: string }): void;
-
   onPanWithDirection?({ direction: string }): void;
-
   onPanBeganWithDirection?({ direction: string }): void;
   onPanEndedDirection?({ direction: string }): void;
-
   onSelectedPreviewForTrip?(e: { tripId: string; routeIndex: number }): void;
   onStartedTrip?(e: { tripId: string; routeIndex: number }): void;
 }

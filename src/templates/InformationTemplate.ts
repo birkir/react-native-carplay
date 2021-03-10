@@ -15,7 +15,7 @@ export interface InformationTemplateConfig extends TemplateConfig {
   leading?: boolean;
   items: InformationItem[];
   actions: InformationAction[];
-  onActionButtonPressed(e: any): void;
+  onActionButtonPressed(e: { id: string, templateId: string }): void;
 }
 
 export class InformationTemplate extends Template<InformationTemplateConfig> {

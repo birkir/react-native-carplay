@@ -31,6 +31,9 @@ class CarPlayInterface {
    */
   public bridge = RNCarPlay;
 
+  /**
+   * Boolean to denote if carplay is currently connected.
+   */
   public connected = false;
 
   /**
@@ -40,9 +43,6 @@ class CarPlayInterface {
 
   private onConnectCallbacks = new Set<() => void>();
   private onDisconnectCallbacks = new Set<() => void>();
-
-  // private onConnectCallback: () => void;
-  // private onDisconnectCallback: () => void;
 
   constructor() {
     this.emitter.addListener('didConnect', () => {
@@ -58,7 +58,8 @@ class CarPlayInterface {
       });
     });
 
-    // check if already connected
+    // check if already connected this will fire any 'didConnect' events
+    // if a connected is already present.
     this.bridge.checkForConnection();
   }
 
@@ -128,14 +129,17 @@ class CarPlayInterface {
   }
 
   /**
-   * @todo Not implemented yet
+   * presents a presentable template, alert / action / voice
+   * @param templateToPresent The presentable template to present
+   * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
    */
   public presentTemplate(templateToPresent: PresentableTemplates, animated = true) {
     return this.bridge.presentTemplate(templateToPresent.id, animated);
   }
 
   /**
-   * @todo Not implemented yet
+   * Dismisses the current presented template
+   * * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
    */
   public dismissTemplate(animated = true) {
     return this.bridge.dismissTemplate(animated);

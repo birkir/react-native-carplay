@@ -20,6 +20,9 @@ export interface ListTemplateConfig extends TemplateConfig {
    */
   onItemSelect?(item: { index: number }): Promise<void>;
 
+  /**
+   * Fired when the back button is pressed
+   */
   onBackButtonPressed?(): void;
 }
 

@@ -11,6 +11,10 @@ interface ButtonPressedEvent extends BaseEvent {
    * Button Index
    */
   index: number;
+  /**
+   * template ID
+   */
+  templateId: string;
 }
 
 export interface GridTemplateConfig extends TemplateConfig {
