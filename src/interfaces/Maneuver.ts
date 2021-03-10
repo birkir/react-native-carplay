@@ -7,15 +7,26 @@ export interface Maneuver {
   junctionImage?: any;
   initialTravelEstimates?: TravelEstimates;
   symbolImage?: any;
+  /**
+   * Allows the supplied symbol image to be resized
+   * to the suitable scal for it's use as a primary
+   * or secondary image. This functionality would usually
+   * be available via the `<Image>` tag but carplay
+   * requires an image asset, so this resizing is done
+   * on the native side.
+   */
   resizeSymbolImage?: 'primary' | 'secondary';
-  // HEX VALUE ie. #FFFFFF
+  /**
+   * Allows the supplied symbol image to be tinted
+   * via a 6 digit color hex value, ie. '#CDCDCD'. This
+   * functionality would usually be available via the `<Image>`
+   * tag but carplay requires an image asset to this tinting
+   * is done on the native side.
+   */
   tintSymbolImage?: string;
-
   instructionVariants: string[];
 
   // not yet implemented
   dashboardInstructionVariants?: string[];
   notificationInstructionVariants?: string[];
-  // junctionDark?: any;
-  // junctionLight?: any;
 }
