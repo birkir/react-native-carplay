@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { CarPlay, ActionSheetTemplate } from 'react-native-carplay';
 
-export function ActionSheet() {
+export function ActionSheet({ navigation }) {
   useEffect(() => {
     const template = new ActionSheetTemplate({
       title: 'Example',
@@ -24,7 +24,7 @@ export function ActionSheet() {
         },
       ],
       onActionButtonPressed(e) {
-        console.log('e', e);
+        navigation.navigate('Menu');
       },
     });
     CarPlay.presentTemplate(template);

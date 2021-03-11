@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -60,6 +60,8 @@ export const App = () => {
       </Stack.Navigator>
     </NavigationContainer>
   ) : (
-    <Text>Please connect Car Play</Text>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Please connect Car Play and open the test app</Text>
+    </View>
   );
 };

@@ -20,7 +20,6 @@ export function TabBar() {
           items: [{ text: 'Hello world 3' }, { text: 'Hello world 4' }],
         },
       ],
-      // buttons:[{ titleVariants:["foo"]}],
       title: 'BB',
     });
 

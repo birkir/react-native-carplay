@@ -8,11 +8,7 @@ export function Grid() {
   useEffect(() => {
     const gridTemplate = new GridTemplate({
       trailingNavigationBarButtons: [
-        {
-          type: 'text',
-          title: 'Heyy',
-        },
-        {
+       {
           id: 'LEAD_2',
           type: 'image',
           image: require('../images/star.png'),
@@ -20,7 +16,7 @@ export function Grid() {
       ],
       buttons: Array.from({ length: 8 }).map((_, i) => ({
         id: `BUTTON_${i}`,
-        image: require('../images/cat.jpg'),
+        image: require('../images/click.png'),
         titleVariants: [`Item ${i}`],
       })),
       title: 'Grid Template',

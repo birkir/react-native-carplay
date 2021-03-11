@@ -8,6 +8,7 @@ import { ListTemplate } from './templates/ListTemplate';
 import { MapTemplate } from './templates/MapTemplate';
 import { PointOfInterestTemplate } from './templates/PointOfInterestTemplate';
 import { SearchTemplate } from './templates/SearchTemplate';
+import { TabBarTemplate } from './templates/TabBarTemplate';
 import { VoiceControlTemplate } from './templates/VoiceControlTemplate';
 
 const { RNCarPlay } = NativeModules;
@@ -90,7 +91,7 @@ class CarPlayInterface {
    * @param rootTemplate The root template. Replaces the current rootTemplate, if one exists.
    * @param animated Set TRUE to animate the presentation of the root template; ignored if there isn't a current rootTemplate.
    */
-  public setRootTemplate(rootTemplate: PushableTemplates, animated = true) {
+  public setRootTemplate(rootTemplate: PushableTemplates | TabBarTemplate, animated = true) {
     return this.bridge.setRootTemplate(rootTemplate.id, animated);
   }
 

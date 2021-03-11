@@ -20,7 +20,6 @@ export function List() {
       async onItemSelect(e) {
         const { index } = e;
         setSelected(index);
-        return;
       },
     });
 

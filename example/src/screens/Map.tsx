@@ -1,23 +1,83 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Text, View } from 'react-native';
-import { CarPlay, MapTemplate, Trip } from 'react-native-carplay';
+import React, { useEffect, useState, useRef } from 'react';
+import { Button, Text, View, Image } from 'react-native';
+import { CarPlay, MapTemplate, Trip, NavigationSession, MapTemplateConfig } from 'react-native-carplay';
+import { Maneuver } from 'react-native-carplay/lib/interfaces/Maneuver';
+import { PauseReason } from 'react-native-carplay/lib/interfaces/PauseReason';
+import { TimeRemainingColor } from 'react-native-carplay/lib/interfaces/TimeRemainingColor';
+import { TravelEstimates } from 'react-native-carplay/lib/interfaces/TravelEstimates';
 
 function MapView() {
-  return <View style={{ height: 100, width: 100, backgroundColor: 'green' }} />;
+  return <View style={{ flex: 1 }} >
+    <Image style={{flex: 1, width: '100%', height: '100%'}} source={require('../images/map/map.jpg')} />
+  </View>;
+}
+
+const trip = new Trip({
+  origin: {
+    name: 'Home',
+    latitude: 64,
+    longitude: -21,
+  },
+  destination: {
+    name: 'Disney Land',
+    latitude: 64.5,
+    longitude: -21.5,
+  },
+  routeChoices: [
+    {
+      additionalInformationVariants: [],
+      selectionSummaryVariants: ['What a great trip'],
+      summaryVariants: [],
+    },
+  ],
+});
+
+function getTravelEstimates(): TravelEstimates {
+  const distanceUnits = Math.random() > 0.5 ? 'miles' : 'feet';
+  return {
+    distanceRemaining: Math.floor(Math.random() * 100),
+    timeRemaining: Math.floor(Math.random() * 1500),
+    distanceUnits
+  }
+}
+
+const maneuvers: Maneuver[] = [{
+  instructionVariants: ['Wrong Way Dummy'],
+  initialTravelEstimates: {
+    distanceRemaining: 100,
+    distanceUnits: 'meters',
+    timeRemaining: 20
+  },
+  symbolImage: require('../images/map/uturn.png')},
+  {
+    instructionVariants: ['Fork Left'],
+    initialTravelEstimates: {
+      distanceRemaining: 2,
+      distanceUnits: 'miles',
+      timeRemaining: 300
+    },
+    symbolImage: require('../images/map/fork.png')},
+    {
+      instructionVariants: ['Right down 16th st'],
+      initialTravelEstimates: {
+        distanceRemaining: 3,
+        distanceUnits: 'feet',
+        timeRemaining: 50
+      },
+      symbolImage: require('../images/map/right.png')}];
+
+function getRandomManeuver(): Maneuver {
+  const randomIndex = Math.floor(Math.random() * maneuvers.length);
+  return {...maneuvers[randomIndex]};
 }
 
 export function Map({ navigation }) {
-  const [navigationSession, setNavigationSession] = useState(null);
+  const [navigationSession, setNavigationSession] = useState<NavigationSession>(null);
 
-  const mapTemplate = new MapTemplate({
-    component: MapView,
-    onAlertActionPressed(e) {
-      console.log(e);
-    },
-  });
+  const mapTemplate = useRef<MapTemplate>();
 
   const onShowAlertPress = () => {
-    mapTemplate.presentNavigationAlert({
+    mapTemplate.current.presentNavigationAlert({
       titleVariants: ['Test 1'],
       primaryAction: { title: 'Test 2' },
       secondaryAction: { title: 'Test 3' },
@@ -26,51 +86,49 @@ export function Map({ navigation }) {
   };
 
   const onDismissAlertPress = () => {
-    mapTemplate.dismissNavigationAlert(true);
+    mapTemplate.current.dismissNavigationAlert(true);
   };
 
   const onShowPanningPress = () => {
-    mapTemplate.showPanningInterface(true);
+    mapTemplate.current.showPanningInterface(true);
   };
 
   const onDismissPanningPress = () => {
-    mapTemplate.dismissPanningInterface(true);
-  };
-
-  const onShowPoiPress = () => {
-    return navigation.navigate('POI');
+    mapTemplate.current.dismissPanningInterface(true);
   };
 
   const onStartNavigation = async () => {
-    const trip = new Trip({
-      origin: {
-        latitude: 64,
-        longitude: -21,
-      },
-      destination: {
-        latitude: 64.5,
-        longitude: -21.5,
-      },
-      routeChoices: [
-        {
-          additionalInformationVariants: ['a'],
-          selectionSummaryVariants: ['b'],
-          summaryVariants: ['c'],
-        },
-      ],
-    });
-
-    setNavigationSession(await mapTemplate.startNavigationSession(trip));
+    mapTemplate.current.hideTripPreviews();
+    const newNavigationSession = await mapTemplate.current.startNavigationSession(trip);
+    newNavigationSession.updateManeuvers([getRandomManeuver()]);
+    mapTemplate.current.updateTravelEstimates(trip, getTravelEstimates(), Math.floor(Math.random() * 4) as TimeRemainingColor);
+    setNavigationSession(newNavigationSession);
   };
 
   useEffect(() => {
-    CarPlay.pushTemplate(mapTemplate, false);
+    const mapConfig: MapTemplateConfig = {
+      component: MapView,
+      onAlertActionPressed(e) {
+        console.log(e);
+      },
+      onStartedTrip() {
+        onStartNavigation();
+      }, };
+
+    if (!mapTemplate.current) {
+      mapTemplate.current = new MapTemplate(
+      mapConfig);
+    } else {
+      mapTemplate.current.updateConfig(mapConfig);
+    }
+
+    CarPlay.pushTemplate(mapTemplate.current, false);
+    mapTemplate.current.showTripPreviews([trip]);
     return () => CarPlay.popToRootTemplate(true);
   }, []);
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="POI" onPress={onShowPoiPress} />
       <Button title="Show alert" onPress={onShowAlertPress} />
       <Button title="Dismiss alert" onPress={onDismissAlertPress} />
       <View style={{ height: 16 }} />
@@ -81,8 +139,38 @@ export function Map({ navigation }) {
         <>
           <Text>Navigation:</Text>
           <Button
-            title="Pause"
-            onPress={() => navigationSession.pause(1, 'Paused')}
+            title="Custom Pause"
+            onPress={() => navigationSession.pause(PauseReason.Loading, 'Custom Pause')}
+          />
+          <Button
+            title="Re-routing"
+            onPress={() => navigationSession.pause(PauseReason.Rerouting,)}
+          />
+          <Button
+            title="Change Maneuver"
+            onPress={() => {
+              navigationSession.updateManeuvers([
+                getRandomManeuver()]);
+          }}
+          />
+          <Button
+            title="Show Two Maneuvers"
+            onPress={() => {
+              navigationSession.updateManeuvers([
+                getRandomManeuver(), getRandomManeuver()]);
+          }}
+          />
+          <Button
+            title="Change Manuever Estimate"
+            onPress={() => {
+              navigationSession.updateTravelEstimates(0, getTravelEstimates());
+          }}
+          />
+          <Button
+            title="Change Trip Estimates"
+            onPress={() => {
+              mapTemplate.current.updateTravelEstimates(trip, getTravelEstimates(), Math.floor(Math.random() * 4) as TimeRemainingColor);
+          }}
           />
           <Button
             title="Cancel"

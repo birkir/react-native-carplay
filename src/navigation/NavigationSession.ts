@@ -40,7 +40,7 @@ export class NavigationSession {
     CarPlay.bridge.finishNavigationSession(this.id);
   }
 
-  public pause(reason: PauseReason, description: string) {
+  public pause(reason: PauseReason, description?: string) {
     CarPlay.bridge.pauseNavigationSession(this.id, reason, description);
   }
 }
