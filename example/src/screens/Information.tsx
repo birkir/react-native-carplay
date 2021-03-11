@@ -6,22 +6,22 @@ export function Information() {
   useEffect(() => {
     const template = new InformationTemplate({
       title: 'Information',
-      items: Array.from({ length: 30}).fill({ title: 'foo', detail: 'bar' }),
+      items: Array.from({ length: 30 }).fill({ title: 'foo', detail: 'bar' }),
       actions: [{ id: 'x', title: 'demo' }],
-      onActionButtonPressed(e){
+      onActionButtonPressed(e) {
         console.log('pressed', e);
-      }
+      },
     });
 
     CarPlay.pushTemplate(template);
-    return () => {}
+    return () => { };
   }, []);
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Information</Text>
     </View>
-  )
+  );
 }
 
 Information.navigationOptions = {

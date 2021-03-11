@@ -4,17 +4,16 @@ import { CarPlay, NowPlayingTemplate } from 'react-native-carplay';
 
 export function NowPlaying() {
   useEffect(() => {
-    const template = new NowPlayingTemplate({
-    });
+    const template = new NowPlayingTemplate({});
     CarPlay.pushTemplate(template);
-    return () => {}
+    return () => { };
   }, []);
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Now Playing</Text>
     </View>
-  )
+  );
 }
 
 NowPlaying.navigationOptions = {

@@ -6,33 +6,37 @@ export function Alert() {
   useEffect(() => {
     const template = new AlertTemplate({
       titleVariants: ['Hello world', 'Mega stuff'],
-      actions: [{
-        id: 'ok',
-        title: 'Ok'
-      },{
-        id: 'cancel',
-        title: 'Cancel',
-        style: 'cancel'
-      }, {
-        id: 'remove',
-        title: 'Remove',
-        style: 'destructive',
-      }],
+      actions: [
+        {
+          id: 'ok',
+          title: 'Ok',
+        },
+        {
+          id: 'cancel',
+          title: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          id: 'remove',
+          title: 'Remove',
+          style: 'destructive',
+        },
+      ],
       onActionButtonPressed(e) {
         console.log('e', e);
-      }
+      },
     });
     CarPlay.presentTemplate(template);
     return () => {
       CarPlay.dismissTemplate();
-    }
+    };
   }, []);
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Alert</Text>
     </View>
-  )
+  );
 }
 
 Alert.navigationOptions = {

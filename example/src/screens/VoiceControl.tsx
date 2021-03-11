@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
-import { CarPlay, SearchTemplate, VoiceControlTemplate } from 'react-native-carplay';
+import { CarPlay, VoiceControlTemplate } from 'react-native-carplay';
 
 export function VoiceControl() {
-
   useEffect(() => {
     const voiceControlTemplate = new VoiceControlTemplate({
-      voiceControlStates: [{
-        identifier: 'TEST',
-        image: require('../images/cat.jpg'),
-        repeats: true,
-        titleVariants: ['Searching...'],
-      }]
+      voiceControlStates: [
+        {
+          identifier: 'TEST',
+          image: require('../images/cat.jpg'),
+          repeats: true,
+          titleVariants: ['Searching...'],
+        },
+      ],
     });
 
     CarPlay.presentTemplate(voiceControlTemplate, true);
@@ -23,7 +24,7 @@ export function VoiceControl() {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Voice</Text>
     </View>
-  )
+  );
 }
 
 VoiceControl.navigationOptions = {
