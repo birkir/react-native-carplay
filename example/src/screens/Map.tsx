@@ -106,6 +106,9 @@ export function Map({ navigation }) {
   };
 
   useEffect(() => {
+    // change underlying component here
+    // within this useEffect based on
+    // changing dependencies
     const mapConfig: MapTemplateConfig = {
       component: MapView,
       onAlertActionPressed(e) {
