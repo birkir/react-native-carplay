@@ -48,13 +48,13 @@ class CarPlayInterface {
   constructor() {
     this.emitter.addListener('didConnect', () => {
       this.connected = true;
-      this.onConnectCallbacks.forEach((callback) => {
+      this.onConnectCallbacks.forEach(callback => {
         callback();
       });
     });
     this.emitter.addListener('didDisconnect', () => {
       this.connected = false;
-      this.onDisconnectCallbacks.forEach((callback) => {
+      this.onDisconnectCallbacks.forEach(callback => {
         callback();
       });
     });
@@ -73,7 +73,7 @@ class CarPlayInterface {
 
   public unregisterOnConnect = (callback: () => void) => {
     this.onConnectCallbacks.delete(callback);
-  }
+  };
 
   /**
    * Fired when CarPlay is disconnected from the device.
@@ -84,7 +84,7 @@ class CarPlayInterface {
 
   public unregisterOnDisconnect = (callback: () => void) => {
     this.onDisconnectCallbacks.delete(callback);
-  }
+  };
 
   /**
    * Sets the root template, starting a new stack for the template navigation hierarchy.

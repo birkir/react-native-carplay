@@ -4,7 +4,7 @@ import { Template, TemplateConfig } from './Template';
 export interface AlertTemplateConfig extends TemplateConfig {
   titleVariants: string[];
   actions?: AlertAction[];
-  onActionButtonPressed?(e: { id: string, templateId: string }): void;
+  onActionButtonPressed?(e: { id: string; templateId: string }): void;
 }
 
 export class AlertTemplate extends Template<AlertTemplateConfig> {

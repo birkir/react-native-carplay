@@ -37,7 +37,7 @@ export interface MapTemplateConfig extends TemplateConfig {
    * @param e Event
    */
   onAlertActionPressed?(e: { secondary?: boolean; primary?: boolean }): void;
-  onMapButtonPressed?(e: { id: string, template: string }): void;
+  onMapButtonPressed?(e: { id: string; template: string }): void;
   onPanWithDirection?({ direction: string }): void;
   onPanBeganWithDirection?({ direction: string }): void;
   onPanEndedDirection?({ direction: string }): void;
@@ -69,7 +69,7 @@ export class MapTemplate extends Template<MapTemplateConfig> {
       panBeganWithDirection: 'onPanBeganWithDirection',
       panEndedWithDirection: 'onPanEndedWithDirection',
       selectedPreviewForTrip: 'onSelectedPreviewForTrip',
-      startedTrip: 'onStartedTrip'
+      startedTrip: 'onStartedTrip',
     };
   }
 
@@ -105,7 +105,12 @@ export class MapTemplate extends Template<MapTemplateConfig> {
     if (!travelEstimates.distanceUnits) {
       travelEstimates.distanceUnits = 'kilometers';
     }
-    CarPlay.bridge.updateTravelEstimatesForTrip(this.id, trip.id, travelEstimates, timeRemainingColor);
+    CarPlay.bridge.updateTravelEstimatesForTrip(
+      this.id,
+      trip.id,
+      travelEstimates,
+      timeRemainingColor,
+    );
   }
   /**
    * Update MapTemplate configuration

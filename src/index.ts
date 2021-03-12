@@ -10,6 +10,10 @@ export { ActionSheetTemplate, ActionSheetTemplateConfig } from './templates/Acti
 export { AlertTemplate, AlertTemplateConfig } from './templates/AlertTemplate';
 export { InformationTemplate, InformationTemplateConfig } from './templates/InformationTemplate';
 export { NowPlayingTemplate } from './templates/NowPlayingTemplate';
-export { PointOfInterestTemplate, PointOfInterestTemplateConfig, PointOfInterestItem } from './templates/PointOfInterestTemplate';
+export {
+  PointOfInterestTemplate,
+  PointOfInterestTemplateConfig,
+  PointOfInterestItem,
+} from './templates/PointOfInterestTemplate';
 export { Trip, TripConfig, TripPoint } from './navigation/Trip';
 export { CarPlay } from './CarPlay';

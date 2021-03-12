@@ -42,7 +42,7 @@ export class ListTemplate extends Template<ListTemplateConfig> {
 
   get eventMap() {
     return {
-      backButtonPressed: 'onBackButtonPressed'
+      backButtonPressed: 'onBackButtonPressed',
     };
   }
 

@@ -1,7 +1,7 @@
 import { CarPlay } from '../CarPlay';
 import { ListItem } from '../interfaces/ListItem';
 import { BaseEvent, Template, TemplateConfig } from './Template';
-import { Image } from 'react-native'
+import { Image } from 'react-native';
 
 export interface SearchTemplateConfig extends TemplateConfig {
   /**
@@ -37,7 +37,6 @@ export class SearchTemplate extends Template<SearchTemplateConfig> {
   constructor(public config: SearchTemplateConfig) {
     // parse out any images in the results
 
-
     super(config);
 
     CarPlay.emitter.addListener('updatedSearchText', e => {
@@ -47,9 +46,9 @@ export class SearchTemplate extends Template<SearchTemplateConfig> {
         Promise.resolve(x).then((result = []) => {
           const parsedResults = result.map(item => ({
             ...item,
-            image: item.image ? Image.resolveAssetSource(item.image) : undefined
-          }))
-          CarPlay.bridge.reactToUpdatedSearchText(parsedResults)
+            image: item.image ? Image.resolveAssetSource(item.image) : undefined,
+          }));
+          CarPlay.bridge.reactToUpdatedSearchText(parsedResults);
         });
       }
     });

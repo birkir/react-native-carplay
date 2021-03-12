@@ -4,25 +4,28 @@ import { PauseReason } from '../interfaces/PauseReason';
 import { TravelEstimates } from '../interfaces/TravelEstimates';
 import { MapTemplate } from '../templates/MapTemplate';
 import { Trip } from './Trip';
-import { Image } from 'react-native'
+import { Image } from 'react-native';
 
 export class NavigationSession {
   public maneuvers: Maneuver[];
 
-  constructor(public id: string, public trip: Trip, public mapTemplate: MapTemplate) { }
+  constructor(public id: string, public trip: Trip, public mapTemplate: MapTemplate) {}
 
   public updateManeuvers(maneuvers: Maneuver[]) {
     this.maneuvers = maneuvers;
 
-    CarPlay.bridge.updateManeuversNavigationSession(this.id, maneuvers.map(maneuver => {
-      if (maneuver.symbolImage) {
-        maneuver.symbolImage = Image.resolveAssetSource(maneuver.symbolImage);
-      }
-      if (maneuver.junctionImage) {
-        maneuver.junctionImage = Image.resolveAssetSource(maneuver.junctionImage);
-      }
-      return maneuver;
-    }));
+    CarPlay.bridge.updateManeuversNavigationSession(
+      this.id,
+      maneuvers.map(maneuver => {
+        if (maneuver.symbolImage) {
+          maneuver.symbolImage = Image.resolveAssetSource(maneuver.symbolImage);
+        }
+        if (maneuver.junctionImage) {
+          maneuver.junctionImage = Image.resolveAssetSource(maneuver.junctionImage);
+        }
+        return maneuver;
+      }),
+    );
   }
 
   public updateTravelEstimates(maneuverIndex: number, travelEstimates: TravelEstimates) {

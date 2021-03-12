@@ -34,6 +34,6 @@ interface BarButtonImage extends BarButtonBase {
 }
 
 /**
-* A button in a navigation bar.
-*/
+ * A button in a navigation bar.
+ */
 export type BarButton = BarButtonImage | BarButtonText;

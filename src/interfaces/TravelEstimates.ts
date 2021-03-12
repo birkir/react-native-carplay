@@ -10,8 +10,8 @@ export interface TravelEstimates {
    */
   timeRemaining: number;
   /**
-     * unit of measurement for the
-     * distance, defaults to kilometer
-     */
+   * unit of measurement for the
+   * distance, defaults to kilometer
+   */
   distanceUnits?: DistanceUnits;
 }
