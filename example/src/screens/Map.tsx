@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Text, View, Image } from 'react-native';
+import { Button, Text, View, Image, processColor } from 'react-native';
 import { CarPlay, MapTemplate, Trip, NavigationSession, MapTemplateConfig } from 'react-native-carplay';
 import { Maneuver } from 'react-native-carplay/lib/interfaces/Maneuver';
 import { PauseReason } from 'react-native-carplay/lib/interfaces/PauseReason';
@@ -42,6 +42,7 @@ function getTravelEstimates(): TravelEstimates {
 }
 
 const maneuvers: Maneuver[] = [{
+  tintSymbolImage: 'yellow',
   instructionVariants: ['Wrong Way Dummy'],
   initialTravelEstimates: {
     distanceRemaining: 100,
@@ -50,6 +51,7 @@ const maneuvers: Maneuver[] = [{
   },
   symbolImage: require('../images/map/uturn.png')},
   {
+    tintSymbolImage: processColor('pink'),
     instructionVariants: ['Fork Left'],
     initialTravelEstimates: {
       distanceRemaining: 2,
@@ -58,6 +60,7 @@ const maneuvers: Maneuver[] = [{
     },
     symbolImage: require('../images/map/fork.png')},
     {
+      tintSymbolImage: '#ffaa00',
       instructionVariants: ['Right down 16th st'],
       initialTravelEstimates: {
         distanceRemaining: 3,

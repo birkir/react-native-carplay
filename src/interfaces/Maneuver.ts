@@ -18,12 +18,13 @@ export interface Maneuver {
   resizeSymbolImage?: 'primary' | 'secondary';
   /**
    * Allows the supplied symbol image to be tinted
-   * via a 6 digit color hex value, ie. '#CDCDCD'. This
-   * functionality would usually be available via the `<Image>`
-   * tag but carplay requires an image asset to this tinting
-   * is done on the native side.
+   * via a color, ie. 'red'. This functionality would usually
+   * be available via the `<Image>` tag but carplay requires
+   * an image asset to this tinting is done on the native side.
+   * If a string is supplied, it will be passed to `processColor`.
+   * You may also use `processColor` yourself.
    */
-  tintSymbolImage?: string;
+  tintSymbolImage?: string | number;
   instructionVariants: string[];
 
   // not yet implemented

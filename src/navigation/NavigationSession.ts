@@ -4,7 +4,7 @@ import { PauseReason } from '../interfaces/PauseReason';
 import { TravelEstimates } from '../interfaces/TravelEstimates';
 import { MapTemplate } from '../templates/MapTemplate';
 import { Trip } from './Trip';
-import { Image } from 'react-native';
+import { Image, processColor } from 'react-native';
 
 export class NavigationSession {
   public maneuvers: Maneuver[];
@@ -22,6 +22,9 @@ export class NavigationSession {
         }
         if (maneuver.junctionImage) {
           maneuver.junctionImage = Image.resolveAssetSource(maneuver.junctionImage);
+        }
+        if (maneuver.tintSymbolImage && typeof maneuver.tintSymbolImage === 'string') {
+          maneuver.tintSymbolImage = processColor(maneuver.tintSymbolImage);
         }
         return maneuver;
       }),

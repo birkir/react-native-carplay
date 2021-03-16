@@ -121,14 +121,6 @@ RCT_EXPORT_MODULE();
     return destImage;
 }
 
-- (UIColor *)colorFromHexString:(NSString *)hexString {
-    unsigned rgbValue = 0;
-    NSScanner *scanner = [NSScanner scannerWithString:hexString];
-    [scanner setScanLocation:1]; // bypass '#' character
-    [scanner scanHexInt:&rgbValue];
-    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
-}
-
 RCT_EXPORT_METHOD(checkForConnection) {
     RNCPStore *store = [RNCPStore sharedManager];
     if ([store isConnected]) {
@@ -143,11 +135,6 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     NSString *title = [RCTConvert NSString:config[@"title"]];
     NSArray *leadingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"leadingNavigationBarButtons"]] templateId:templateId];
     NSArray *trailingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"trailingNavigationBarButtons"]] templateId:templateId];
-
-    NSLog(@"id: %@", templateId);
-    NSLog(@"type: %@", type);
-    NSLog(@"title %@", title);
-    NSLog(@"config %@", config);
 
     CPTemplate *template = [[CPTemplate alloc] init];
 
@@ -297,7 +284,6 @@ RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
 }
 
 RCT_EXPORT_METHOD(updateTravelEstimatesForTrip:(NSString*)templateId tripId:(NSString*)tripId travelEstimates:(NSDictionary*)travelEstimates timeRemainingColor:(NSUInteger*)timeRemainingColor) {
-    NSLog(@">>> Updating travel estimates for %@, %@", templateId, tripId);
     RNCPStore *store = [RNCPStore sharedManager];
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
@@ -305,7 +291,6 @@ RCT_EXPORT_METHOD(updateTravelEstimatesForTrip:(NSString*)templateId tripId:(NSS
         CPTrip *trip = [[RNCPStore sharedManager] findTripById:tripId];
         if (trip) {
             CPTravelEstimates *estimates = [self parseTravelEstimates:travelEstimates];
-            NSLog(@">>> Updating travel estimates with %@ for %@", estimates, trip);
             [mapTemplate updateTravelEstimates:estimates forTrip:trip withTimeRemainingColor:(CPTimeRemainingColor) timeRemainingColor];
         }
     }
@@ -515,12 +500,10 @@ RCT_EXPORT_METHOD(showTripPreviews:(NSString*)templateId tripIds:(NSArray*)tripI
         }
     }
 
-//    NSLog(@">>> Showing trip previews for %@", tripPreviews);
     if (template) {
         CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
         [mapTemplate showTripPreviews:trips textConfiguration:[self parseTripPreviewTextConfiguration:tripConfiguration]];
     }
-    NSLog(@">>> Done showing trip previews");
 }
 
 RCT_EXPORT_METHOD(presentNavigationAlert:(NSString*)templateId json:(NSDictionary*)json animated:(BOOL)animated) {
@@ -784,8 +767,8 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 
         BOOL shouldTint = [RCTConvert BOOL:json[@"tintSymbolImage"]];
         if ([json objectForKey:@"tintSymbolImage"]) {
-            NSString *hexCode = [RCTConvert NSString:json[@"tintSymbolImage"]];
-            symbolImage = [self imageWithTint:symbolImage andTintColor:[self colorFromHexString:hexCode]];
+            UIColor *tintColor = [RCTConvert UIColor:json[@"tintSymbolImage"]];
+            symbolImage = [self imageWithTint:symbolImage andTintColor:tintColor];
         }
 
 
@@ -818,7 +801,6 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     if ([config objectForKey:@"config"]) {
         config = [config objectForKey:@"config"];
     }
-    NSLog(@">>> Parsing trip: %@", config);
     MKMapItem *origin = [RCTConvert MKMapItem:config[@"origin"]];
     MKMapItem *destination = [RCTConvert MKMapItem:config[@"destination"]];
     NSMutableArray *routeChoices = [NSMutableArray array];
@@ -918,13 +900,11 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 # pragma MapTemplate
 
 - (void)mapTemplate:(CPMapTemplate *)mapTemplate selectedPreviewForTrip:(CPTrip *)trip usingRouteChoice:(CPRouteChoice *)routeChoice {
-//    NSLog(@">>> Selected trip %@, route %@", trip.userInfo.id, routeChoice);
     NSDictionary *userInfo = trip.userInfo;
     NSString *tripId = [userInfo valueForKey:@"id"];
 
     NSDictionary *routeUserInfo = routeChoice.userInfo;
     NSString *routeIndex = [routeUserInfo valueForKey:@"index"];
-        NSLog(@">>>> Selected trip %@, route %@", trip, routeIndex);
     [self sendTemplateEventWithName:mapTemplate name:@"selectedPreviewForTrip" json:@{ @"tripId": tripId, @"routeIndex": routeIndex}];
 }
 
