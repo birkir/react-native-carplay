@@ -10,10 +10,14 @@ export function Search({ navigation }) {
     const searchTemplate = new SearchTemplate({
       async onSearch(q: string) {
         setQuery(q);
-        return q && [{
-          text: q,
-          image: require('../images/item.png')
-        }]
+        return (
+          q && [
+            {
+              text: q,
+              image: require('../images/item.png'),
+            },
+          ]
+        );
       },
       async onItemSelect(e) {
         setSelected(e.index);
@@ -22,7 +26,7 @@ export function Search({ navigation }) {
         // on search button pressed, should display
         // list template with results
         navigation.navigate('List');
-      }
+      },
     });
 
     CarPlay.pushTemplate(searchTemplate, true);

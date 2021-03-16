@@ -17,7 +17,7 @@ export function Contact() {
     });
     CarPlay.pushTemplate(contactTemplate);
 
-    return () => { };
+    return () => {};
   }, []);
 
   return (

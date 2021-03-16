@@ -7,41 +7,48 @@ const gridItemImage = require('../images/go.png');
 export function Menu({ navigation }) {
   useEffect(() => {
     const gridTemplate = new GridTemplate({
-      buttons: [{
-        id: 'List',
-        titleVariants: ['List'],
-        image: gridItemImage
-      },{
-        id: 'Grid',
-        titleVariants: ['Grid'],
-        image: gridItemImage
-      },
-      {
-        id: 'Map',
-        titleVariants: ['Map'],
-        image: gridItemImage
-      },
-      {
-        id: 'Search',
-        titleVariants: ['Search'],
-        image: gridItemImage
-      },{
-        id: 'Information',
-        titleVariants: ['Information'],
-        image: gridItemImage
-      },{
-        id: 'VoiceControl',
-        titleVariants: ['Voice'],
-        image: gridItemImage
-      },{
-        id: 'Alert',
-        titleVariants: ['Alert'],
-        image: gridItemImage
-      },{
-        id: 'ActionSheet',
-        titleVariants: ['ActionSheet'],
-        image: gridItemImage
-      }],
+      buttons: [
+        {
+          id: 'List',
+          titleVariants: ['List'],
+          image: gridItemImage,
+        },
+        {
+          id: 'Grid',
+          titleVariants: ['Grid'],
+          image: gridItemImage,
+        },
+        {
+          id: 'Map',
+          titleVariants: ['Map'],
+          image: gridItemImage,
+        },
+        {
+          id: 'Search',
+          titleVariants: ['Search'],
+          image: gridItemImage,
+        },
+        {
+          id: 'Information',
+          titleVariants: ['Information'],
+          image: gridItemImage,
+        },
+        {
+          id: 'VoiceControl',
+          titleVariants: ['Voice'],
+          image: gridItemImage,
+        },
+        {
+          id: 'Alert',
+          titleVariants: ['Alert'],
+          image: gridItemImage,
+        },
+        {
+          id: 'ActionSheet',
+          titleVariants: ['ActionSheet'],
+          image: gridItemImage,
+        },
+      ],
       onButtonPressed: ({ id }) => {
         navigation.navigate(id);
       },
@@ -77,7 +84,10 @@ export function Menu({ navigation }) {
       <Button title="Action Sheet" onPress={onActionSheetPress} />
       <Button title="Alert" onPress={onAlertPress} />
       <Button title="Information" onPress={onInformationPress} />
-      <Button title="TabBar (Will overwrite root template)" onPress={onTabBarPress} />
+      <Button
+        title="TabBar (Will overwrite root template)"
+        onPress={onTabBarPress}
+      />
       <Button title="Contact (Broken)" onPress={onContactPress} />
       <Button title="Now Playing (Broken)" onPress={onNowPlayingPress} />
       <Button title="Point Of Interest (Broken)" onPress={onPOIPress} />

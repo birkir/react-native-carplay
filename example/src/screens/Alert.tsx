@@ -3,7 +3,6 @@ import { Text, View } from 'react-native';
 import { CarPlay, AlertTemplate } from 'react-native-carplay';
 
 export function Alert() {
-
   const [buttonClicked, setButtonClicked] = useState<string>();
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export function Alert() {
           style: 'destructive',
         },
       ],
-      onActionButtonPressed({id}) {
+      onActionButtonPressed({ id }) {
         setButtonClicked(id);
         if (id === 'remove') {
           CarPlay.dismissTemplate();

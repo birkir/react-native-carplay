@@ -28,7 +28,7 @@ export function ActionSheet({ navigation }) {
       },
     });
     CarPlay.presentTemplate(template);
-    return () => { };
+    return () => {};
   }, []);
 
   return (

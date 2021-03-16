@@ -14,7 +14,7 @@ export function Information() {
     });
 
     CarPlay.pushTemplate(template);
-    return () => { };
+    return () => {};
   }, []);
 
   return (

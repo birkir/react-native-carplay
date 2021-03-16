@@ -8,7 +8,7 @@ export function Grid() {
   useEffect(() => {
     const gridTemplate = new GridTemplate({
       trailingNavigationBarButtons: [
-       {
+        {
           id: 'LEAD_2',
           type: 'image',
           image: require('../images/star.png'),

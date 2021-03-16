@@ -32,7 +32,7 @@ export function TabBar() {
 
     CarPlay.setRootTemplate(tabBarTemplate);
 
-    return () => { };
+    return () => {};
   }, []);
 
   return (

@@ -6,7 +6,7 @@ export function NowPlaying() {
   useEffect(() => {
     const template = new NowPlayingTemplate({});
     CarPlay.pushTemplate(template);
-    return () => { };
+    return () => {};
   }, []);
 
   return (

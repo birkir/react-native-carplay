@@ -16,7 +16,7 @@ export function POI() {
       ],
     });
     CarPlay.pushTemplate(template, false);
-    return () => { };
+    return () => {};
   }, []);
 
   return (

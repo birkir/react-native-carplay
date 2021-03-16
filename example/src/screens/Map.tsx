@@ -1,15 +1,26 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Text, View, Image, processColor } from 'react-native';
-import { CarPlay, MapTemplate, Trip, NavigationSession, MapTemplateConfig } from 'react-native-carplay';
+import {
+  CarPlay,
+  MapTemplate,
+  Trip,
+  NavigationSession,
+  MapTemplateConfig,
+} from 'react-native-carplay';
 import { Maneuver } from 'react-native-carplay/lib/interfaces/Maneuver';
 import { PauseReason } from 'react-native-carplay/lib/interfaces/PauseReason';
 import { TimeRemainingColor } from 'react-native-carplay/lib/interfaces/TimeRemainingColor';
 import { TravelEstimates } from 'react-native-carplay/lib/interfaces/TravelEstimates';
 
 function MapView() {
-  return <View style={{ flex: 1 }} >
-    <Image style={{flex: 1, width: '100%', height: '100%'}} source={require('../images/map/map.jpg')} />
-  </View>;
+  return (
+    <View style={{ flex: 1 }}>
+      <Image
+        style={{ flex: 1, width: '100%', height: '100%' }}
+        source={require('../images/map/map.jpg')}
+      />
+    </View>
+  );
 }
 
 const trip = new Trip({
@@ -37,45 +48,52 @@ function getTravelEstimates(): TravelEstimates {
   return {
     distanceRemaining: Math.floor(Math.random() * 100),
     timeRemaining: Math.floor(Math.random() * 1500),
-    distanceUnits
-  }
+    distanceUnits,
+  };
 }
 
-const maneuvers: Maneuver[] = [{
-  tintSymbolImage: 'yellow',
-  instructionVariants: ['Wrong Way Dummy'],
-  initialTravelEstimates: {
-    distanceRemaining: 100,
-    distanceUnits: 'meters',
-    timeRemaining: 20
+const maneuvers: Maneuver[] = [
+  {
+    tintSymbolImage: 'yellow',
+    instructionVariants: ['Wrong Way Dummy'],
+    initialTravelEstimates: {
+      distanceRemaining: 100,
+      distanceUnits: 'meters',
+      timeRemaining: 20,
+    },
+    symbolImage: require('../images/map/uturn.png'),
   },
-  symbolImage: require('../images/map/uturn.png')},
   {
     tintSymbolImage: processColor('pink'),
     instructionVariants: ['Fork Left'],
     initialTravelEstimates: {
       distanceRemaining: 2,
       distanceUnits: 'miles',
-      timeRemaining: 300
+      timeRemaining: 300,
     },
-    symbolImage: require('../images/map/fork.png')},
-    {
-      tintSymbolImage: '#ffaa00',
-      instructionVariants: ['Right down 16th st'],
-      initialTravelEstimates: {
-        distanceRemaining: 3,
-        distanceUnits: 'feet',
-        timeRemaining: 50
-      },
-      symbolImage: require('../images/map/right.png')}];
+    symbolImage: require('../images/map/fork.png'),
+  },
+  {
+    tintSymbolImage: '#ffaa00',
+    instructionVariants: ['Right down 16th st'],
+    initialTravelEstimates: {
+      distanceRemaining: 3,
+      distanceUnits: 'feet',
+      timeRemaining: 50,
+    },
+    symbolImage: require('../images/map/right.png'),
+  },
+];
 
 function getRandomManeuver(): Maneuver {
   const randomIndex = Math.floor(Math.random() * maneuvers.length);
-  return {...maneuvers[randomIndex]};
+  return { ...maneuvers[randomIndex] };
 }
 
 export function Map({ navigation }) {
-  const [navigationSession, setNavigationSession] = useState<NavigationSession>(null);
+  const [navigationSession, setNavigationSession] = useState<NavigationSession>(
+    null,
+  );
 
   const mapTemplate = useRef<MapTemplate>();
 
@@ -102,9 +120,15 @@ export function Map({ navigation }) {
 
   const onStartNavigation = async () => {
     mapTemplate.current.hideTripPreviews();
-    const newNavigationSession = await mapTemplate.current.startNavigationSession(trip);
+    const newNavigationSession = await mapTemplate.current.startNavigationSession(
+      trip,
+    );
     newNavigationSession.updateManeuvers([getRandomManeuver()]);
-    mapTemplate.current.updateTravelEstimates(trip, getTravelEstimates(), Math.floor(Math.random() * 4) as TimeRemainingColor);
+    mapTemplate.current.updateTravelEstimates(
+      trip,
+      getTravelEstimates(),
+      Math.floor(Math.random() * 4) as TimeRemainingColor,
+    );
     setNavigationSession(newNavigationSession);
   };
 
@@ -119,11 +143,11 @@ export function Map({ navigation }) {
       },
       onStartedTrip() {
         onStartNavigation();
-      }, };
+      },
+    };
 
     if (!mapTemplate.current) {
-      mapTemplate.current = new MapTemplate(
-      mapConfig);
+      mapTemplate.current = new MapTemplate(mapConfig);
     } else {
       mapTemplate.current.updateConfig(mapConfig);
     }
@@ -146,37 +170,44 @@ export function Map({ navigation }) {
           <Text>Navigation:</Text>
           <Button
             title="Custom Pause"
-            onPress={() => navigationSession.pause(PauseReason.Loading, 'Custom Pause')}
+            onPress={() =>
+              navigationSession.pause(PauseReason.Loading, 'Custom Pause')
+            }
           />
           <Button
             title="Re-routing"
-            onPress={() => navigationSession.pause(PauseReason.Rerouting,)}
+            onPress={() => navigationSession.pause(PauseReason.Rerouting)}
           />
           <Button
             title="Change Maneuver"
             onPress={() => {
-              navigationSession.updateManeuvers([
-                getRandomManeuver()]);
-          }}
+              navigationSession.updateManeuvers([getRandomManeuver()]);
+            }}
           />
           <Button
             title="Show Two Maneuvers"
             onPress={() => {
               navigationSession.updateManeuvers([
-                getRandomManeuver(), getRandomManeuver()]);
-          }}
+                getRandomManeuver(),
+                getRandomManeuver(),
+              ]);
+            }}
           />
           <Button
             title="Change Manuever Estimate"
             onPress={() => {
               navigationSession.updateTravelEstimates(0, getTravelEstimates());
-          }}
+            }}
           />
           <Button
             title="Change Trip Estimates"
             onPress={() => {
-              mapTemplate.current.updateTravelEstimates(trip, getTravelEstimates(), Math.floor(Math.random() * 4) as TimeRemainingColor);
-          }}
+              mapTemplate.current.updateTravelEstimates(
+                trip,
+                getTravelEstimates(),
+                Math.floor(Math.random() * 4) as TimeRemainingColor,
+              );
+            }}
           />
           <Button
             title="Cancel"

@@ -8,4 +8,4 @@ import { App } from './src/App';
 //   )
 // }
 
-AppRegistry.registerComponent("test2", () => App);
+AppRegistry.registerComponent('test2', () => App);
