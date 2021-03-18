@@ -7,9 +7,9 @@ import { TimeRemainingColor } from '../interfaces/TimeRemainingColor';
 import { TravelEstimates } from '../interfaces/TravelEstimates';
 import { NavigationSession } from '../navigation/NavigationSession';
 import { Trip } from '../navigation/Trip';
-import { Template } from './Template';
+import { Template, TemplateConfig } from './Template';
 
-interface MapTemplateConfig {
+export interface MapTemplateConfig extends TemplateConfig {
   guidanceBackgroundColor?: string;
   tripEstimateStyle?: 'dark' | 'light';
   /**
@@ -37,6 +37,12 @@ interface MapTemplateConfig {
    * @param e Event
    */
   onAlertActionPressed?(e: { secondary?: boolean; primary?: boolean }): void;
+  onMapButtonPressed?(e: { id: string; template: string }): void;
+  onPanWithDirection?({ direction: string }): void;
+  onPanBeganWithDirection?({ direction: string }): void;
+  onPanEndedDirection?({ direction: string }): void;
+  onSelectedPreviewForTrip?(e: { tripId: string; routeIndex: number }): void;
+  onStartedTrip?(e: { tripId: string; routeIndex: number }): void;
 }
 
 /**
@@ -58,6 +64,12 @@ export class MapTemplate extends Template<MapTemplateConfig> {
   get eventMap() {
     return {
       alertActionPressed: 'onAlertActionPressed',
+      mapButtonPressed: 'onMapButtonPressed',
+      panWithDirection: 'onPanWithDirection',
+      panBeganWithDirection: 'onPanBeganWithDirection',
+      panEndedWithDirection: 'onPanEndedWithDirection',
+      selectedPreviewForTrip: 'onSelectedPreviewForTrip',
+      startedTrip: 'onStartedTrip',
     };
   }
 
@@ -68,7 +80,10 @@ export class MapTemplate extends Template<MapTemplateConfig> {
       AppRegistry.registerComponent(this.id, () => config.component);
     }
 
-    CarPlay.bridge.createTemplate(this.id, this.parseConfig({ type: this.type, ...config, render: true }));
+    CarPlay.bridge.createTemplate(
+      this.id,
+      this.parseConfig({ type: this.type, ...config, render: true }),
+    );
   }
 
   /**
@@ -82,14 +97,30 @@ export class MapTemplate extends Template<MapTemplateConfig> {
     return new NavigationSession(res.navigationSessionId, trip, this);
   }
 
-  public updateTravelEstimates(trip: Trip, travelEstimates: TravelEstimates, timeRemainingColor: TimeRemainingColor = 'default') {
-    CarPlay.bridge.updateTravelEstimates(this.id, trip.id, travelEstimates, timeRemainingColor);
+  public updateTravelEstimates(
+    trip: Trip,
+    travelEstimates: TravelEstimates,
+    timeRemainingColor: TimeRemainingColor = 0,
+  ) {
+    if (!travelEstimates.distanceUnits) {
+      travelEstimates.distanceUnits = 'kilometers';
+    }
+    CarPlay.bridge.updateTravelEstimatesForTrip(
+      this.id,
+      trip.id,
+      travelEstimates,
+      timeRemainingColor,
+    );
   }
   /**
    * Update MapTemplate configuration
    */
   public updateConfig(config: MapTemplateConfig) {
     CarPlay.bridge.updateMapTemplateConfig(this.id, this.parseConfig(config));
+  }
+
+  public updateMapButtons(mapButtons: MapButton[]) {
+    CarPlay.bridge.updateMapTemplateMapButtons(this.id, this.parseConfig(mapButtons));
   }
 
   /**
@@ -100,7 +131,7 @@ export class MapTemplate extends Template<MapTemplateConfig> {
   }
 
   public showTripPreviews(tripPreviews: Trip[], textConfiguration: TextConfiguration = {}) {
-    CarPlay.bridge.showTripPreviews(this.id, tripPreviews, textConfiguration);
+    CarPlay.bridge.showTripPreviews(this.id, tripPreviews.map(trip => trip.id), textConfiguration);
   }
 
   public showRouteChoicesPreviewForTrip(trip: Trip, textConfiguration: TextConfiguration = {}) {
@@ -108,7 +139,7 @@ export class MapTemplate extends Template<MapTemplateConfig> {
   }
 
   public presentNavigationAlert(config: NavigationAlert, animated = true) {
-    CarPlay.bridge.presentNavigationAlert(this.id, config, animated)
+    CarPlay.bridge.presentNavigationAlert(this.id, config, animated);
   }
 
   public dismissNavigationAlert(animated = true) {

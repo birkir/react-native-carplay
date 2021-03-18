@@ -1,6 +1,6 @@
 import { Template, TemplateConfig } from './Template';
 
-interface PointOfInterestItem {
+export interface PointOfInterestItem {
   id: string;
   location: {
     latitude: number;
@@ -14,7 +14,7 @@ interface PointOfInterestItem {
   detailSummary?: string;
 }
 
-interface PointOfInterestTemplateConfig extends TemplateConfig {
+export interface PointOfInterestTemplateConfig extends TemplateConfig {
   title: string;
   items: PointOfInterestItem[];
 }

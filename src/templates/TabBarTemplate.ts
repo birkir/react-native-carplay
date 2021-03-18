@@ -7,7 +7,7 @@ import { Template, TemplateConfig } from './Template';
 
 type TabBarTemplates = ListTemplate | GridTemplate | InformationTemplate | PointOfInterestTemplate;
 
-interface TabBarTemplateConfig extends TemplateConfig {
+export interface TabBarTemplateConfig extends TemplateConfig {
   /**
    * The title displayed in the navigation bar while the tab bar template is visible.
    */
@@ -17,7 +17,10 @@ interface TabBarTemplateConfig extends TemplateConfig {
    */
   templates: TabBarTemplates[];
 
-  onTemplateSelect(template: TabBarTemplates, e: { templateId: string; selectedTemplateId: string; }): void;
+  onTemplateSelect(
+    template: TabBarTemplates,
+    e: { templateId: string; selectedTemplateId: string },
+  ): void;
 }
 
 /**/

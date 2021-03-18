@@ -19,7 +19,7 @@ interface ContactActionMessage extends ContactActionBase {
 
 type ContactAction = ContactActionBase | ContactActionMessage;
 
-interface ContactTemplateConfig extends TemplateConfig {
+export interface ContactTemplateConfig extends TemplateConfig {
   name: string;
   subtitle?: string;
   actions?: ContactAction[];

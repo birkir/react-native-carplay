@@ -1,6 +1,6 @@
 import { CarPlay } from '../CarPlay';
 import { GridButton } from '../interfaces/GridButton';
-import { BaseEvent, Template } from './Template';
+import { BaseEvent, Template, TemplateConfig } from './Template';
 
 interface ButtonPressedEvent extends BaseEvent {
   /**
@@ -10,10 +10,14 @@ interface ButtonPressedEvent extends BaseEvent {
   /**
    * Button Index
    */
-  index: number
+  index: number;
+  /**
+   * template ID
+   */
+  templateId: string;
 }
 
-interface GridTemplateConfig {
+export interface GridTemplateConfig extends TemplateConfig {
   /**
    * The title displayed in the navigation bar while the list template is visible.
    */

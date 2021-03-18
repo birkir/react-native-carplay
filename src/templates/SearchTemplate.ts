@@ -1,8 +1,9 @@
 import { CarPlay } from '../CarPlay';
 import { ListItem } from '../interfaces/ListItem';
 import { BaseEvent, Template, TemplateConfig } from './Template';
+import { Image } from 'react-native';
 
-interface SearchTemplateConfig extends TemplateConfig {
+export interface SearchTemplateConfig extends TemplateConfig {
   /**
    * Fired when search input is changed.
    * Must return list of items to show.
@@ -34,12 +35,21 @@ export class SearchTemplate extends Template<SearchTemplateConfig> {
   }
 
   constructor(public config: SearchTemplateConfig) {
+    // parse out any images in the results
+
     super(config);
 
     CarPlay.emitter.addListener('updatedSearchText', e => {
       if (config.onSearch && e.templateId === this.id) {
         const x = config.onSearch(e.searchText);
-        Promise.resolve(x).then(result => CarPlay.bridge.reactToUpdatedSearchText(result));
+
+        Promise.resolve(x).then((result = []) => {
+          const parsedResults = result.map(item => ({
+            ...item,
+            image: item.image ? Image.resolveAssetSource(item.image) : undefined,
+          }));
+          CarPlay.bridge.reactToUpdatedSearchText(parsedResults);
+        });
       }
     });
 

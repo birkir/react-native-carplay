@@ -1,8 +1,9 @@
 import { CarPlay } from '../CarPlay';
+import { ListItem } from '../interfaces/ListItem';
 import { ListSection } from '../interfaces/ListSection';
 import { Template, TemplateConfig } from './Template';
 
-interface ListTemplateConfig extends TemplateConfig {
+export interface ListTemplateConfig extends TemplateConfig {
   /**
    * The title displayed in the navigation bar while the list template is visible.
    */
@@ -17,7 +18,12 @@ interface ListTemplateConfig extends TemplateConfig {
    * When the returned promise is resolved the spinner will hide.
    * @param item Object with the selected index
    */
-  onItemSelect?(item: any): Promise<void>;
+  onItemSelect?(item: { index: number }): Promise<void>;
+
+  /**
+   * Fired when the back button is pressed
+   */
+  onBackButtonPressed?(): void;
 }
 
 /**
@@ -34,6 +40,12 @@ export class ListTemplate extends Template<ListTemplateConfig> {
     return 'list';
   }
 
+  get eventMap() {
+    return {
+      backButtonPressed: 'onBackButtonPressed',
+    };
+  }
+
   constructor(public config: ListTemplateConfig) {
     super(config);
 
@@ -45,7 +57,7 @@ export class ListTemplate extends Template<ListTemplateConfig> {
     });
   }
 
-  public updateSections = sections => {
+  public updateSections = (sections: ListSection[]) => {
     return CarPlay.bridge.updateListTemplateSections(this.id, this.parseConfig(sections));
   };
 }

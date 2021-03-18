@@ -1,24 +1,64 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { View, Button } from 'react-native';
 import { CarPlay, GridTemplate } from 'react-native-carplay';
-import { MenuButton } from '../components/MenuButton';
+
+const gridItemImage = require('../images/go.png');
 
 export function Menu({ navigation }) {
-
   useEffect(() => {
-    const helloWorld = new GridTemplate({
-      buttons: [],
-      title: 'Hello world',
+    const gridTemplate = new GridTemplate({
+      buttons: [
+        {
+          id: 'List',
+          titleVariants: ['List'],
+          image: gridItemImage,
+        },
+        {
+          id: 'Grid',
+          titleVariants: ['Grid'],
+          image: gridItemImage,
+        },
+        {
+          id: 'Map',
+          titleVariants: ['Map'],
+          image: gridItemImage,
+        },
+        {
+          id: 'Search',
+          titleVariants: ['Search'],
+          image: gridItemImage,
+        },
+        {
+          id: 'Information',
+          titleVariants: ['Information'],
+          image: gridItemImage,
+        },
+        {
+          id: 'VoiceControl',
+          titleVariants: ['Voice'],
+          image: gridItemImage,
+        },
+        {
+          id: 'Alert',
+          titleVariants: ['Alert'],
+          image: gridItemImage,
+        },
+        {
+          id: 'ActionSheet',
+          titleVariants: ['ActionSheet'],
+          image: gridItemImage,
+        },
+      ],
+      onButtonPressed: ({ id }) => {
+        navigation.navigate(id);
+      },
+      onWillAppear: () => {
+        navigation.navigate('Menu');
+      },
+      title: 'Hello, world',
     });
 
-    CarPlay.onConnect(() => {
-      console.log('connected to carplay');
-    })
-    CarPlay.onDisconnect(() => {
-      console.log('disconnected to carplay');
-    })
-
-    CarPlay.setRootTemplate(helloWorld);
+    CarPlay.setRootTemplate(gridTemplate);
   }, []);
 
   const onTabBarPress = () => navigation.navigate('TabBar');
@@ -34,21 +74,23 @@ export function Menu({ navigation }) {
   const onNowPlayingPress = () => navigation.navigate('NowPlaying');
   const onPOIPress = () => navigation.navigate('POI');
 
-
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <MenuButton title="TabBar" onPress={onTabBarPress} />
-      <MenuButton title="List" onPress={onListPress} />
-      <MenuButton title="Grid" onPress={onGridPress} />
-      <MenuButton title="Map" onPress={onMapPress} />
-      <MenuButton title="Contact" onPress={onContactPress} />
-      <MenuButton title="Search" onPress={onSearchPress} />
-      <MenuButton title="Voice Control" onPress={onVoiceControlPress} />
-      <MenuButton title="Action Sheet" onPress={onActionSheetPress} />
-      <MenuButton title="Alert" onPress={onAlertPress} />
-      <MenuButton title="Information" onPress={onInformationPress} />
-      <MenuButton title="Now Playing" onPress={onNowPlayingPress} />
-      <MenuButton title="Point Of Interest" onPress={onPOIPress} />
+      <Button title="List" onPress={onListPress} />
+      <Button title="Grid" onPress={onGridPress} />
+      <Button title="Map" onPress={onMapPress} />
+      <Button title="Search" onPress={onSearchPress} />
+      <Button title="Voice Control" onPress={onVoiceControlPress} />
+      <Button title="Action Sheet" onPress={onActionSheetPress} />
+      <Button title="Alert" onPress={onAlertPress} />
+      <Button title="Information" onPress={onInformationPress} />
+      <Button
+        title="TabBar (Will overwrite root template)"
+        onPress={onTabBarPress}
+      />
+      <Button title="Contact (Broken)" onPress={onContactPress} />
+      <Button title="Now Playing (Broken)" onPress={onNowPlayingPress} />
+      <Button title="Point Of Interest (Broken)" onPress={onPOIPress} />
     </View>
   );
 }

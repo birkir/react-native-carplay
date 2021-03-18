@@ -1,4 +1,4 @@
-import { CarPlay } from "../CarPlay";
+import { CarPlay } from '../CarPlay';
 
 export interface RouteChoice {
   additionalInformationVariants: string[];
@@ -9,6 +9,7 @@ export interface RouteChoice {
 export interface TripPoint {
   latitude: number;
   longitude: number;
+  name: string;
 }
 
 export interface TripConfig {

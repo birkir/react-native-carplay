@@ -10,12 +10,12 @@ interface InformationAction {
   title: string;
 }
 
-interface InformationTemplateConfig extends TemplateConfig {
+export interface InformationTemplateConfig extends TemplateConfig {
   title: string;
   leading?: boolean;
   items: InformationItem[];
   actions: InformationAction[];
-  onActionButtonPressed(e: any): void;
+  onActionButtonPressed(e: { id: string; templateId: string }): void;
 }
 
 export class InformationTemplate extends Template<InformationTemplateConfig> {

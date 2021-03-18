@@ -8,6 +8,7 @@ import { ListTemplate } from './templates/ListTemplate';
 import { MapTemplate } from './templates/MapTemplate';
 import { PointOfInterestTemplate } from './templates/PointOfInterestTemplate';
 import { SearchTemplate } from './templates/SearchTemplate';
+import { TabBarTemplate } from './templates/TabBarTemplate';
 import { VoiceControlTemplate } from './templates/VoiceControlTemplate';
 
 const { RNCarPlay } = NativeModules;
@@ -32,38 +33,57 @@ class CarPlayInterface {
   public bridge = RNCarPlay;
 
   /**
+   * Boolean to denote if carplay is currently connected.
+   */
+  public connected = false;
+
+  /**
    * CarPlay Event Emitter
    */
   public emitter = new NativeEventEmitter(RNCarPlay);
 
-  private onConnectCallback: () => void;
-  private onDisconnectCallback: () => void;
+  private onConnectCallbacks = new Set<() => void>();
+  private onDisconnectCallbacks = new Set<() => void>();
 
   constructor() {
     this.emitter.addListener('didConnect', () => {
-      if (this.onConnectCallback) {
-        this.onConnectCallback();
-      }
+      this.connected = true;
+      this.onConnectCallbacks.forEach(callback => {
+        callback();
+      });
     });
     this.emitter.addListener('didDisconnect', () => {
-      if (this.onDisconnectCallback) {
-        this.onDisconnectCallback();
-      }
+      this.connected = false;
+      this.onDisconnectCallbacks.forEach(callback => {
+        callback();
+      });
     });
+
+    // check if already connected this will fire any 'didConnect' events
+    // if a connected is already present.
+    this.bridge.checkForConnection();
   }
 
   /**
    * Fired when CarPlay is connected to the device.
    */
-  public onConnect = (callback: () => void) => {
-    this.onConnectCallback = callback;
+  public registerOnConnect = (callback: () => void) => {
+    this.onConnectCallbacks.add(callback);
+  };
+
+  public unregisterOnConnect = (callback: () => void) => {
+    this.onConnectCallbacks.delete(callback);
   };
 
   /**
    * Fired when CarPlay is disconnected from the device.
    */
-  public onDisconnect = (callback: () => void) => {
-    this.onDisconnectCallback = callback;
+  public registerOnDisconnect = (callback: () => void) => {
+    this.onDisconnectCallbacks.add(callback);
+  };
+
+  public unregisterOnDisconnect = (callback: () => void) => {
+    this.onDisconnectCallbacks.delete(callback);
   };
 
   /**
@@ -71,7 +91,7 @@ class CarPlayInterface {
    * @param rootTemplate The root template. Replaces the current rootTemplate, if one exists.
    * @param animated Set TRUE to animate the presentation of the root template; ignored if there isn't a current rootTemplate.
    */
-  public setRootTemplate(rootTemplate: PushableTemplates, animated = true) {
+  public setRootTemplate(rootTemplate: PushableTemplates | TabBarTemplate, animated = true) {
     return this.bridge.setRootTemplate(rootTemplate.id, animated);
   }
 
@@ -110,14 +130,17 @@ class CarPlayInterface {
   }
 
   /**
-   * @todo Not implemented yet
+   * presents a presentable template, alert / action / voice
+   * @param templateToPresent The presentable template to present
+   * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
    */
   public presentTemplate(templateToPresent: PresentableTemplates, animated = true) {
     return this.bridge.presentTemplate(templateToPresent.id, animated);
   }
 
   /**
-   * @todo Not implemented yet
+   * Dismisses the current presented template
+   * * @param animated A Boolean value that indicates whether the system animates the display of transitioning templates.
    */
   public dismissTemplate(animated = true) {
     return this.bridge.dismissTemplate(animated);

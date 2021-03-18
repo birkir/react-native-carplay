@@ -1,4 +1,15 @@
-export interface BarButtonText {
+interface BarButtonBase {
+  /**
+   * Button ID
+   */
+  id: string;
+  /**
+   * A Boolean value that enables and disables the bar button.
+   */
+  disabled?: boolean;
+}
+
+interface BarButtonText extends BarButtonBase {
   /**
    * A text style bar button.
    */
@@ -9,7 +20,7 @@ export interface BarButtonText {
   title: string;
 }
 
-export interface BarButtonImage {
+interface BarButtonImage extends BarButtonBase {
   /**
    * An image style bar button.
    */
@@ -25,15 +36,4 @@ export interface BarButtonImage {
 /**
  * A button in a navigation bar.
  */
-export type BarButton =
-  | BarButtonText
-  | BarButtonImage & {
-      /**
-       * Button ID
-       */
-      id: string;
-      /**
-       * A Boolean value that enables and disables the bar button.
-       */
-      disabled?: boolean;
-    };
+export type BarButton = BarButtonImage | BarButtonText;
