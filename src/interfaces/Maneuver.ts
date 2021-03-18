@@ -1,4 +1,5 @@
 import { TravelEstimates } from './TravelEstimates';
+import { ProcessedColorValue } from 'react-native';
 
 /**
  * Navigation instructions and distance from the previous maneuver.
@@ -24,7 +25,7 @@ export interface Maneuver {
    * If a string is supplied, it will be passed to `processColor`.
    * You may also use `processColor` yourself.
    */
-  tintSymbolImage?: string | number;
+  tintSymbolImage?: ProcessedColorValue;
   instructionVariants: string[];
 
   // not yet implemented
