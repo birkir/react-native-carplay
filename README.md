@@ -447,6 +447,10 @@ yarn start
 
 5. start xcode and run the project on your simulator or device
 
+## Image Size and Resolution
+
+Quirks observed where PNG image resolutions should be specfied with scale factor of 3.0 (i.e. append with `@3x`) with ListTemplate image sizing suggested around 80 x 80 px per [Issue #6](https://github.com/birkir/react-native-carplay/issues/6)
+
 ## Not working / In progress
 
 ### UI Elements
