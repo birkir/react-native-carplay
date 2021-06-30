@@ -10,6 +10,7 @@ import { PointOfInterestTemplate } from './templates/PointOfInterestTemplate';
 import { SearchTemplate } from './templates/SearchTemplate';
 import { TabBarTemplate } from './templates/TabBarTemplate';
 import { VoiceControlTemplate } from './templates/VoiceControlTemplate';
+import { NowPlayingTemplate } from './templates/NowPlayingTemplate';
 
 const { RNCarPlay } = NativeModules;
 
@@ -20,7 +21,8 @@ type PushableTemplates =
   | PointOfInterestTemplate
   | ListTemplate
   | InformationTemplate
-  | ContactTemplate;
+  | ContactTemplate
+  | NowPlayingTemplate;
 type PresentableTemplates = AlertTemplate | ActionSheetTemplate | VoiceControlTemplate;
 
 /**
@@ -161,6 +163,14 @@ class CarPlayInterface {
   public get topTemplate(): Promise<string> {
     return Promise.resolve('');
   }
+
+  /**
+   * Control now playing template state
+   * * @param enable A Boolean value that indicates whether the system use now playing template.
+  */
+     public enableNowPlaying(enable = true) {
+      return this.bridge.enableNowPlaying(enable);
+    }
 }
 
 export const CarPlay = new CarPlayInterface();
