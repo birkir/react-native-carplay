@@ -1,8 +1,7 @@
 import { CarPlay } from '../CarPlay';
-import { ListItem } from '../interfaces/ListItem';
+import { ListItemUpdate } from '../interfaces/ListItemUpdate';
 import { ListSection } from '../interfaces/ListSection';
 import { Template, TemplateConfig } from './Template';
-
 export interface ListTemplateConfig extends TemplateConfig {
   /**
    * The title displayed in the navigation bar while the list template is visible.
@@ -12,6 +11,28 @@ export interface ListTemplateConfig extends TemplateConfig {
    * The sections displayed in the list.
    */
   sections: ListSection[];
+  /**
+   *  An optional array of strings, ordered from most to least preferred.
+   *  The variant strings should be provided as localized, displayable content.
+   *  The system will select the first variant that fits the available space.
+   *  If the list template does not contain any items (itemCount == 0), then
+   *  the template will display an empty view with a title and subtitle to indicate
+   *  that the template has no list items.
+   *  If the list template is updated to contain items, the empty view will be automatically
+   *  removed.
+   */
+  emptyViewTitleVariants?: string[];
+  /**
+   *  An optional array of strings, ordered from most to least preferred.
+   *  The variant strings should be provided as localized, displayable content.
+   *  The system will select the first variant that fits the available space.
+   *  If the list template does not contain any items (itemCount == 0), then
+   *  the template will display an empty view with a title and subtitle to indicate
+   *  that the template has no list items.
+   *  If the list template is updated to contain items, the empty view will be automatically
+   *  removed.
+   */
+  emptyViewSubtitleVariants?: string[];
   /**
    * Fired when list item is selected.
    * Spinner shows by default.
@@ -59,5 +80,9 @@ export class ListTemplate extends Template<ListTemplateConfig> {
 
   public updateSections = (sections: ListSection[]) => {
     return CarPlay.bridge.updateListTemplateSections(this.id, this.parseConfig(sections));
+  };
+
+  public updateListTemplateItem = (config: ListItemUpdate) => {
+    return CarPlay.bridge.updateListTemplateItem(this.id, this.parseConfig(config));
   };
 }
