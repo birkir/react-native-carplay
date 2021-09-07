@@ -48,7 +48,7 @@ class CarPlayInterface {
   private onDisconnectCallbacks = new Set<() => void>();
 
   constructor() {
-    if (Platform.OS != 'ios') {
+    if (Platform.OS !== 'ios') {
       return
     }
     
