@@ -42,6 +42,7 @@ export interface MapTemplateConfig extends TemplateConfig {
   onPanBeganWithDirection?({ direction: string }): void;
   onPanEndedDirection?({ direction: string }): void;
   onSelectedPreviewForTrip?(e: { tripId: string; routeIndex: number }): void;
+  onDidCancelNavigation?(e:{}): void;
   onStartedTrip?(e: { tripId: string; routeIndex: number }): void;
 }
 
@@ -69,6 +70,7 @@ export class MapTemplate extends Template<MapTemplateConfig> {
       panBeganWithDirection: 'onPanBeganWithDirection',
       panEndedWithDirection: 'onPanEndedWithDirection',
       selectedPreviewForTrip: 'onSelectedPreviewForTrip',
+      didCancelNavigation: 'onDidCancelNavigation',
       startedTrip: 'onStartedTrip',
     };
   }
