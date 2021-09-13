@@ -4,6 +4,10 @@ What if you could create CarPlay with React Native. Well, now you can.
 
 ![Animated Demo](https://media.giphy.com/media/Ffa4hukA3YMLh6U8fl/giphy.gif)
 
+## Discord Channel
+
+Come join us on our discord channel: https://discord.gg/b235pv6QHM
+
 ## Support
 
 This version of `react-native-carplay` supports iOS 14. If you need support for versions before this please refer to version 1.3.1 of this package.
