@@ -1,11 +1,3 @@
-//
-//  RCTConvert+RNCarPlay.m
-//  RNCarPlay
-//
-//  Created by Birkir Gudjonsson on 3/27/19.
-//  Copyright © 2019 SOLID Mobile. All rights reserved.
-//
-
 #import "RCTConvert+RNCarPlay.h"
 #import <React/RCTConvert+CoreLocation.h>
 #import <Availability.h>
