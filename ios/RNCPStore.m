@@ -1,11 +1,3 @@
-//
-//  RNCPStore.m
-//  RNCarPlay
-//
-//  Created by Birkir Gudjonsson on 3/25/19.
-//  Copyright © 2019 SOLID Mobile. All rights reserved.
-//
-
 #import "RNCPStore.h"
 
 @implementation RNCPStore {
