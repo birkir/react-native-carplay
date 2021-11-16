@@ -655,6 +655,16 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         [mapTemplate setTripEstimateStyle:[RCTConvert CPTripEstimateStyle:config[@"tripEstimateStyle"]]];
     }
 
+    if ([config objectForKey:@"leadingNavigationBarButtons"]){
+        NSArray *leadingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"leadingNavigationBarButtons"]] templateId:templateId];
+        [mapTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
+    }
+  
+    if ([config objectForKey:@"trailingNavigationBarButtons"]){
+        NSArray *trailingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"trailingNavigationBarButtons"]] templateId:templateId];
+        [mapTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
+    }
+
     if ([config objectForKey:@"mapButtons"]) {
         NSArray *mapButtons = [RCTConvert NSArray:config[@"mapButtons"]];
         NSMutableArray *result = [NSMutableArray array];
