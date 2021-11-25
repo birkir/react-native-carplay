@@ -175,8 +175,8 @@ export function Map({ navigation }) {
       <Button title="Show alert" onPress={onShowAlertPress} />
       <Button title="Dismiss alert" onPress={onDismissAlertPress} />
 
-      <Button title="Show ROUTE CHOICES Preview" onPress={onShowRouteChoicesPreviewPress} />
-      <Button title="Dismiss ROUTE CHOICES Preview" onPress={onDismissRouteChoicesPreviewPress} />
+      <Button title="Show route choices" onPress={onShowRouteChoicesPreviewPress} />
+      <Button title="Dismiss route choices" onPress={onDismissRouteChoicesPreviewPress} />
 
       <View style={{ height: 16 }} />
       <Button title="Show panning" onPress={onShowPanningPress} />
