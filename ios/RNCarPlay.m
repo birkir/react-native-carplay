@@ -584,6 +584,16 @@ RCT_EXPORT_METHOD(showTripPreviews:(NSString*)templateId tripIds:(NSArray*)tripI
     }
 }
 
+RCT_EXPORT_METHOD(showRouteChoicesPreviewForTrip:(NSString*)templateId tripId:(NSString*)tripId tripConfiguration:(NSDictionary*)tripConfiguration) {
+    CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
+    CPTrip *trip = [[RNCPStore sharedManager] findTripById:tripId];
+
+    if (template) {
+        CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
+        [mapTemplate showRouteChoicesPreviewForTrip:trip textConfiguration:[self parseTripPreviewTextConfiguration:tripConfiguration]];
+    }
+}
+
 RCT_EXPORT_METHOD(presentNavigationAlert:(NSString*)templateId json:(NSDictionary*)json animated:(BOOL)animated) {
     CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
     if (template) {
