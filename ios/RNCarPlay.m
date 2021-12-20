@@ -150,7 +150,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         [listTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
         CPBarButton *backButton = [[CPBarButton alloc] initWithTitle:@" Back" handler:^(CPBarButton * _Nonnull barButton) {
             [self sendEventWithName:@"backButtonPressed" body:@{@"templateId":templateId}];
-            [self popTemplate:false];
+            [self popTemplate:true];
         }];
         [listTemplate setBackButton:backButton];
         if (config[@"emptyViewTitleVariants"]) {
