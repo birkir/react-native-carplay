@@ -49,9 +49,9 @@ class CarPlayInterface {
 
   constructor() {
     if (Platform.OS !== 'ios') {
-      return
+      return;
     }
-    
+
     this.emitter.addListener('didConnect', () => {
       this.connected = true;
       this.onConnectCallbacks.forEach(callback => {
@@ -170,11 +170,11 @@ class CarPlayInterface {
 
   /**
    * Control now playing template state
-   * * @param enable A Boolean value that indicates whether the system use now playing template.
-  */
-     public enableNowPlaying(enable = true) {
-      return this.bridge.enableNowPlaying(enable);
-    }
+   * @param enable A Boolean value that indicates whether the system use now playing template.
+   */
+  public enableNowPlaying(enable = true) {
+    return this.bridge.enableNowPlaying(enable);
+  }
 }
 
 export const CarPlay = new CarPlayInterface();

@@ -2,7 +2,7 @@ import { ListItem } from './ListItem';
 /**
  * A list item update payload.
  */
- export interface ListItemUpdate extends ListItem {
+export interface ListItemUpdate extends ListItem {
   /**
    * The section of item.
    */
