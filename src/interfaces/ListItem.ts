@@ -14,7 +14,7 @@ export interface ListItem {
    * The image displayed on the leading edge of the list item cell.
    */
   image?: null;
-   /**
+  /**
    * The image from file system displayed on the leading edge of the list item cell.
    */
   imgUrl?: null;
