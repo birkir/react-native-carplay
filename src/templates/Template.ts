@@ -1,8 +1,9 @@
+import { Image } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { BarButton } from '../interfaces/BarButton';
 
 const traverse = require('traverse'); // tslint:disable-line no-var-requires
-const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource'); // tslint:disable-line no-var-requires
+// const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource'); // tslint:disable-line no-var-requires
 
 export interface BaseEvent {
   /**
@@ -116,7 +117,7 @@ export class Template<P> {
   public parseConfig(config: any) {
     const result = traverse(config).map(function node(x) {
       if (String(this.key).match(/[Ii]mage$/)) {
-        this.update(resolveAssetSource(x));
+        this.update(Image.resolveAssetSource(x));
       }
     });
     return JSON.parse(JSON.stringify(result));
