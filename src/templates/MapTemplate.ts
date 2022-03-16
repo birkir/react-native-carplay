@@ -1,4 +1,4 @@
-import { AppRegistry } from 'react-native';
+import { AppRegistry, ProcessedColorValue } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { MapButton } from '../interfaces/MapButton';
 import { NavigationAlert } from '../interfaces/NavigationAlert';
@@ -10,7 +10,7 @@ import { Trip } from '../navigation/Trip';
 import { Template, TemplateConfig } from './Template';
 
 export interface MapTemplateConfig extends TemplateConfig {
-  guidanceBackgroundColor?: string;
+  guidanceBackgroundColor?: ProcessedColorValue;
   tripEstimateStyle?: 'dark' | 'light';
   /**
    * Your component to render inside CarPlay
