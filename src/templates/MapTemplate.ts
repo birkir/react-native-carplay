@@ -2,6 +2,7 @@ import { AppRegistry, ProcessedColorValue } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { MapButton } from '../interfaces/MapButton';
 import { NavigationAlert } from '../interfaces/NavigationAlert';
+import { PanGestureWithTranslationEvent } from '../interfaces/PanGestureWithTranslationEvent';
 import { TextConfiguration } from '../interfaces/TextConfiguration';
 import { TimeRemainingColor } from '../interfaces/TimeRemainingColor';
 import { TravelEstimates } from '../interfaces/TravelEstimates';
@@ -41,6 +42,7 @@ export interface MapTemplateConfig extends TemplateConfig {
   onPanWithDirection?(e: { direction: string }): void;
   onPanBeganWithDirection?(e: { direction: string }): void;
   onPanEndedWithDirection?(e: { direction: string }): void;
+  onDidUpdatePanGestureWithTranslation?(e: PanGestureWithTranslationEvent): void;
   onSelectedPreviewForTrip?(e: { tripId: string; routeIndex: number }): void;
   onDidCancelNavigation?(e: {}): void;
   onStartedTrip?(e: { tripId: string; routeIndex: number }): void;
@@ -69,6 +71,7 @@ export class MapTemplate extends Template<MapTemplateConfig> {
       panWithDirection: 'onPanWithDirection',
       panBeganWithDirection: 'onPanBeganWithDirection',
       panEndedWithDirection: 'onPanEndedWithDirection',
+      didUpdatePanGestureWithTranslation: 'onDidUpdatePanGestureWithTranslation',
       selectedPreviewForTrip: 'onSelectedPreviewForTrip',
       didCancelNavigation: 'onDidCancelNavigation',
       startedTrip: 'onStartedTrip',

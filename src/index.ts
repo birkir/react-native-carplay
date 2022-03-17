@@ -16,4 +16,5 @@ export {
   PointOfInterestItem,
 } from './templates/PointOfInterestTemplate';
 export { Trip, TripConfig, TripPoint } from './navigation/Trip';
+export { PanGestureWithTranslationEvent } from './interfaces/PanGestureWithTranslationEvent';
 export { CarPlay } from './CarPlay';
