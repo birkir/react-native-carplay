@@ -26,6 +26,15 @@ export interface Maneuver {
    * You may also use `processColor` yourself.
    */
   tintSymbolImage?: ProcessedColorValue;
+  /**
+   * Allows the supplied symbol image to be tinted
+   * via a color used in dark mode, ie. 'red'. This functionality would usually
+   * be available via the `<Image>` tag but carplay requires
+   * an image asset to this tinting is done on the native side.
+   * If a string is supplied, it will be passed to `processColor`.
+   * You may also use `processColor` yourself.
+   */
+  tintSymbolImageDarkMode?: ProcessedColorValue;
   instructionVariants: string[];
 
   // not yet implemented

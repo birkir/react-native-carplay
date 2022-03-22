@@ -864,7 +864,6 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     if ([json objectForKey:@"symbolImage"]) {
         UIImage *symbolImage = [RCTConvert UIImage:json[@"symbolImage"]];
 
-        BOOL shouldTint = [RCTConvert BOOL:json[@"tintSymbolImage"]];
         if ([json objectForKey:@"tintSymbolImage"]) {
             UIColor *tintColor = [RCTConvert UIColor:json[@"tintSymbolImage"]];
             symbolImage = [self imageWithTint:symbolImage andTintColor:tintColor];
@@ -881,6 +880,27 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
             }
         }
 
+        if(@available(iOS 13.0, *)) {
+            if ([json objectForKey:@"tintSymbolImageDarkMode"]) {
+                UIColor *tintColor = [RCTConvert UIColor:json[@"tintSymbolImageDarkMode"]];
+                UIImage *symbolImageDark = [self imageWithTint:symbolImage andTintColor:tintColor];
+                
+                UIImageAsset* imageAseset = [[UIImageAsset alloc]init];
+                //light mode
+                UITraitCollection* lightImageTrateCollection = [UITraitCollection traitCollectionWithTraitsFromCollections:
+                @[[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight],
+                  [UITraitCollection traitCollectionWithDisplayScale:symbolImage.scale]]];
+                [imageAseset registerImage:symbolImage withTraitCollection:lightImageTrateCollection];
+            
+                //dark mode
+                UITraitCollection* darkImageTrateCollection = [UITraitCollection traitCollectionWithTraitsFromCollections:
+                @[[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleDark],
+                  [UITraitCollection traitCollectionWithDisplayScale:symbolImageDark.scale]]];
+                [imageAseset registerImage:symbolImageDark withTraitCollection:darkImageTrateCollection];
+                
+                symbolImage = [imageAseset imageWithTraitCollection:[UITraitCollection currentTraitCollection]];
+            }
+        }
 
         [maneuver setSymbolImage:symbolImage];
     }
