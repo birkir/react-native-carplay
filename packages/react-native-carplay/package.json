@@ -1,0 +1,83 @@
+{
+  "name": "react-native-carplay",
+  "version": "3.0.0",
+  "description": "CarPlay for React Native",
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "typecheck": "tsc --project ./tsconfig.json --noEmit",
+    "build": "rimraf --no-glob ./lib && cross-env NODE_ENV=production microbundle --tsconfig ./tsconfig.json -f cjs,es --no-compress",
+    "fix-all-files": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/birkir/react-native-carplay.git",
+    "directory": "packages/react-native-carplay"
+  },
+  "keywords": [
+    "react",
+    "native",
+    "carplay",
+    "navigation",
+    "car",
+    "auto"
+  ],
+  "author": "Birkir Gudjonsson <birkir.gudjonsson@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/birkir/react-native-carplay/issues"
+  },
+  "homepage": "https://github.com/birkir/react-native-carplay#readme",
+  "files": [
+    "src",
+    "lib",
+    "ios",
+    "react-native-carplay.podspec"
+  ],
+  "podspecPath": "./react-native-carplay.podspec",
+  "sideEffects": false,
+  "react-native": "src/index.ts",
+  "source": "src/index.ts",
+  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
+  "types": "lib/index.d.ts",
+  "peerDependencies": {
+    "react": "^17.0.2 || ^18.0.0",
+    "react-native": "^0.60.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "17.0.25",
+    "@types/react": "18.0.6",
+    "@types/react-native": "0.67.5",
+    "@typescript-eslint/eslint-plugin": "5.20.0",
+    "@typescript-eslint/parser": "5.20.0",
+    "cross-env": "7.0.3",
+    "docusaurus-plugin-typedoc": "0.17.4",
+    "eslint": "8.13.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-import-resolver-typescript": "2.7.1",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-jsx-a11y": "6.5.1",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "7.29.4",
+    "eslint-plugin-react-hooks": "4.4.0",
+    "eslint-plugin-regexp": "1.6.0",
+    "eslint-plugin-sonarjs": "0.13.0",
+    "microbundle": "0.14.2",
+    "prettier": "2.6.2",
+    "react": "18.0.0",
+    "react-native": "0.68.1",
+    "rimraf": "3.0.2",
+    "typedoc": "0.22.15",
+    "typedoc-github-wiki-theme": "1.0.0",
+    "typedoc-plugin-markdown": "3.12.1",
+    "typescript": "4.6.3"
+  }
+}

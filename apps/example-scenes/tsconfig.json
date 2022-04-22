@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "target": "esnext",
+    "lib": ["esnext"],
+    "module": "esnext",
+    "jsx": "react-native",
+    "noEmit": false,
+    "composite": false,
+    "incremental": true,
+    "paths": {}
+  },
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js", "index.js"]
+}

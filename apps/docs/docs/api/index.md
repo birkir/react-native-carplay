@@ -1,6 +1,15 @@
+---
+id: "index"
+title: "root"
+slug: "/api/"
+sidebar_label: "Readme"
+sidebar_position: 0
+custom_edit_url: null
+---
+
 # CarPlay with React Native
 
-![Map Template](/.github/images/mapTemplateRoutes.png)
+![Map Template](/.github/mapTemplateRoutes.png)
 
 What if you could create CarPlay with React Native. Well, now you can.
 
@@ -178,8 +187,8 @@ Templates are used to render contents on the CarPlay screen from your app. Detai
 
 ### MapTemplate
 
-![Map Template](/.github/images/mapTemplateRoutes.png)
-![Map Template](/.github/images/mapTemplateNavigation.png)
+![Map Template](/.github/mapTemplateRoutes.png)
+![Map Template](/.github/mapTemplateNavigation.png)
 
 ```jsx
 import { CarPlay } from 'react-native-carplay';
@@ -200,7 +209,7 @@ CarPlay.setRootTemplate(mapTemplate);
 
 ### ListTemplate
 
-![List Template](/.github/images/listTemplate.png)
+![List Template](/.github/listTemplate.png)
 
 ```jsx
 import { CarPlay } from 'react-native-carplay';
@@ -219,7 +228,7 @@ CarPlay.pushTemplate(listTemplate, true);
 
 ### InformationTemplate
 
-![Information Template](/.github/images/informationTemplate.png)
+![Information Template](/.github/informationTemplate.png)
 
 ```jsx
 import { CarPlay } from 'react-native-carplay';
@@ -239,7 +248,7 @@ CarPlay.pushTemplate(informationTemplate);
 
 ### GridTemplate
 
-![Grid Template](/.github/images/gridTemplate.png)
+![Grid Template](/.github/gridTemplate.png)
 
 ```jsx
 import { CarPlay } from 'react-native-carplay';
@@ -274,7 +283,7 @@ CarPlay.pushTemplate(gridTemplate, true);
 
 ### SearchTemplate
 
-![Search Template](/.github/images/searchTemplate.png)
+![Search Template](/.github/searchTemplate.png)
 
 ```jsx
 const searchTemplate = new SearchTemplate({
@@ -299,7 +308,7 @@ CarPlay.pushTemplate(searchTemplate, true);
 
 ### VoiceTemplate
 
-![Voice Template](/.github/images/voiceTemplate.png)
+![Voice Template](/.github/voiceTemplate.png)
 
 This template is presented via `CarPlay.presentTemplate`. In order to implement voice recognition, take a look at the [`@react-native-voice/voice`](https://github.com/react-native-voice/voice) package.
 
@@ -321,7 +330,7 @@ CarPlay.presentTemplate(voiceControlTemplate, true);
 
 ### AlertTemplate
 
-![Alert Template](/.github/images/alertTemplate.png)
+![Alert Template](/.github/alertTemplate.png)
 
 This template is presented via `CarPlay.presentTemplate`.
 
@@ -354,7 +363,7 @@ CarPlay.presentTemplate(alertTemplate);
 
 ### ActionSheetTemplate
 
-![ActionSheet Template](/.github/images/actionSheetTemplate.png)
+![ActionSheet Template](/.github/actionSheetTemplate.png)
 
 This template is presented via `CarPlay.presentTemplate`.
 
@@ -383,7 +392,7 @@ CarPlay.presentTemplate(actionSheetTemplate);
 
 ### TabTemplate
 
-![Tab Template](/.github/images/tabTemplate.png)
+![Tab Template](/.github/tabTemplate.png)
 
 This template must be set as the root template and cannot be pushed on top of other templates.
 

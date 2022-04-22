@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "target": "esnext",
+    "lib": ["esnext"],
+    "module": "esnext",
+    "noEmit": false,
+    "composite": false,
+    "incremental": true,
+    "paths": {}
+  },
+  "exclude": ["**/node_modules", "**/.*/", "lib", "build"]
+}
