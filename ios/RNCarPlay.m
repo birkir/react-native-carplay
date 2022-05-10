@@ -1,6 +1,8 @@
 #import "RNCarPlay.h"
 #import <React/RCTConvert.h>
 #import <React/RCTRootView.h>
+#import "SVGKImage.h"
+#import "SVGKSourceString.h"
 
 @implementation RNCarPlay
 
@@ -861,9 +863,22 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         [maneuver setInitialTravelEstimates:travelEstimates];
     }
 
-    if ([json objectForKey:@"symbolImage"]) {
-        UIImage *symbolImage = [RCTConvert UIImage:json[@"symbolImage"]];
+    UIImage *symbolImage = nil;
+    UIImage *symbolImageDark = nil;
+    if([json objectForKey:@"symbolImageSvg"]) {
+        NSString *svgString = json[@"symbolImageSvg"];
+        SVGKImage *image = [[SVGKImage alloc] initWithSource:[SVGKSourceString sourceFromContentsOfString:svgString]];
+        symbolImage = image.UIImage;
+        if([json objectForKey:@"symbolImageSvgDarkMode"]) {
+            svgString = json[@"symbolImageSvgDarkMode"];
+            image = [[SVGKImage alloc] initWithSource:[SVGKSourceString sourceFromContentsOfString:svgString]];
+            symbolImageDark = image.UIImage;
+        }
+    } else if ([json objectForKey:@"symbolImage"]) {
+        symbolImage = [RCTConvert UIImage:json[@"symbolImage"]];
+    }
 
+    if(symbolImage != nil) {
         if ([json objectForKey:@"tintSymbolImage"]) {
             UIColor *tintColor = [RCTConvert UIColor:json[@"tintSymbolImage"]];
             symbolImage = [self imageWithTint:symbolImage andTintColor:tintColor];
@@ -881,10 +896,12 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         }
 
         if(@available(iOS 13.0, *)) {
-            if ([json objectForKey:@"tintSymbolImageDarkMode"]) {
+            if (symbolImageDark == nil && [json objectForKey:@"tintSymbolImageDarkMode"]) {
                 UIColor *tintColor = [RCTConvert UIColor:json[@"tintSymbolImageDarkMode"]];
-                UIImage *symbolImageDark = [self imageWithTint:symbolImage andTintColor:tintColor];
-                
+                symbolImageDark = [self imageWithTint:symbolImage andTintColor:tintColor];
+            }
+
+            if(symbolImageDark != nil) {
                 UIImageAsset* imageAseset = [[UIImageAsset alloc]init];
                 //light mode
                 UITraitCollection* lightImageTrateCollection = [UITraitCollection traitCollectionWithTraitsFromCollections:

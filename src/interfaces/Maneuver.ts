@@ -8,6 +8,8 @@ export interface Maneuver {
   junctionImage?: any;
   initialTravelEstimates?: TravelEstimates;
   symbolImage?: any;
+  symbolImageSvg?: string;
+  symbolImageSvgDarkMode?: string;
   /**
    * Allows the supplied symbol image to be resized
    * to the suitable scal for it's use as a primary
