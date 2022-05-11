@@ -1181,4 +1181,12 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 
 }
 
+- (CPManeuverDisplayStyle)mapTemplate:(CPMapTemplate *)mapTemplate displayStyleForManeuver:(CPManeuver *)maneuver {
+    if(maneuver.instructionVariants.count == 0) {
+        return CPManeuverDisplayStyleSymbolOnly;
+    } else {
+        return CPManeuverDisplayStyleDefault;
+    }
+}
+
 @end
