@@ -532,6 +532,17 @@ RCT_EXPORT_METHOD(updateInformationTemplateItems:(NSString *)templateId items:(N
     }
 }
 
+RCT_EXPORT_METHOD(updateInformationTemplateActions:(NSString *)templateId items:(NSArray*)actions) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPInformationTemplate *informationTemplate = (CPInformationTemplate*) template;
+        informationTemplate.actions = [self parseInformationActions:actions];
+    } else {
+        NSLog(@"Failed to find template %@", template);
+    }
+}
+
 RCT_EXPORT_METHOD(updateMapTemplateConfig:(NSString *)templateId config:(NSDictionary*)config) {
     CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
     if (template) {
@@ -829,6 +840,18 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     }
     
     return _items;
+}
+
+- (NSArray<CPInformationAction*>*)parseInformationActions:(NSArray*)actions {
+    NSMutableArray *_actions = [NSMutableArray array];
+    for (NSDictionary *action in actions) {
+        CPTextButton *_action = [[CPTextButton alloc] initWithTitle:action[@"title"] textStyle:CPTextButtonStyleNormal handler:^(__kindof CPTextButton * _Nonnull contactButton) {
+            [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": action[@"id"] }];
+        }];
+        [_actions addObject:_action];
+    }
+    
+    return _actions;
 }
 
 - (NSArray<CPGridButton*>*)parseGridButtons:(NSArray*)buttons templateId:(NSString*)templateId {

@@ -33,4 +33,8 @@ export class InformationTemplate extends Template<InformationTemplateConfig> {
   public updateInformationTemplateItems = (items: InformationItem[]) => {
     return CarPlay.bridge.updateInformationTemplateItems(this.id, this.parseConfig(items));
   };
+
+  public updateInformationTemplateActions = (actions: InformationAction[]) => {
+    return CarPlay.bridge.updateInformationTemplateActions(this.id, this.parseConfig(actions));
+  };
 }
