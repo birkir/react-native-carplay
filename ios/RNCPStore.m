@@ -42,8 +42,8 @@
     return [_templatesStore objectForKey:templateId];
 }
 
-- (NSString*) setTemplate:(NSString*)templateId template:(CPTemplate*)template {
-    [_templatesStore setObject:template forKey:templateId];
+- (NSString*) setTemplate:(NSString*)templateId template:(CPTemplate*)cpTemplate {
+    [_templatesStore setObject:cpTemplate forKey:templateId];
     return templateId;
 }
 
