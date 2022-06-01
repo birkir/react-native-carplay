@@ -521,6 +521,17 @@ RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictio
     }
 }
 
+RCT_EXPORT_METHOD(updateInformationTemplateItems:(NSString *)templateId items:(NSArray*)items) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPInformationTemplate *informationTemplate = (CPInformationTemplate*) template;
+        informationTemplate.items = [self parseInformationItems:items];
+    } else {
+        NSLog(@"Failed to find template %@", template);
+    }
+}
+
 RCT_EXPORT_METHOD(updateMapTemplateConfig:(NSString *)templateId config:(NSDictionary*)config) {
     CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
     if (template) {
@@ -808,6 +819,15 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         [_items addObject:_item];
         index = index + 1;
     }
+    return _items;
+}
+
+- (NSArray<CPInformationItem*>*)parseInformationItems:(NSArray*)items {
+    NSMutableArray *_items = [NSMutableArray array];
+    for (NSDictionary *item in items) {
+        [_items addObject:[[CPInformationItem alloc] initWithTitle:item[@"title"] detail:item[@"detail"]]];
+    }
+    
     return _items;
 }
 
