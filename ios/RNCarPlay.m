@@ -537,7 +537,7 @@ RCT_EXPORT_METHOD(updateInformationTemplateActions:(NSString *)templateId items:
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
         CPInformationTemplate *informationTemplate = (CPInformationTemplate*) template;
-        informationTemplate.actions = [self parseInformationActions:actions];
+        informationTemplate.actions = [self parseInformationActions:actions templateId:templateId];
     } else {
         NSLog(@"Failed to find template %@", template);
     }
@@ -842,7 +842,7 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     return _items;
 }
 
-- (NSArray<CPInformationAction*>*)parseInformationActions:(NSArray*)actions {
+- (NSArray<CPTextButton*>*)parseInformationActions:(NSArray*)actions templateId:(NSString *)templateId {
     NSMutableArray *_actions = [NSMutableArray array];
     for (NSDictionary *action in actions) {
         CPTextButton *_action = [[CPTextButton alloc] initWithTitle:action[@"title"] textStyle:CPTextButtonStyleNormal handler:^(__kindof CPTextButton * _Nonnull contactButton) {
