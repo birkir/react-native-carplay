@@ -1,11 +1,3 @@
-//
-//  RNCarPlay.m
-//  RNCarPlay
-//
-//  Created by Birkir Gudjonsson on 3/25/19.
-//  Copyright © 2019 SOLID Mobile. All rights reserved.
-//
-
 #import "RNCarPlay.h"
 #import <React/RCTConvert.h>
 #import <React/RCTRootView.h>
@@ -16,6 +8,7 @@
 @synthesize window;
 @synthesize searchResultBlock;
 @synthesize selectedResultBlock;
+@synthesize isNowPlayingActive;
 
 + (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window {
     RNCPStore * store = [RNCPStore sharedManager];
@@ -23,20 +16,20 @@
     store.window = window;
     [store setConnected:true];
 
-   RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
-   if (cp.bridge) {
-       [cp sendEventWithName:@"didConnect" body:@{}];
-   }
+    RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
+    if (cp.bridge) {
+        [cp sendEventWithName:@"didConnect" body:@{}];
+    }
 }
 
 + (void) disconnect {
-   RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
+    RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
     RNCPStore *store = [RNCPStore sharedManager];
     [store setConnected:false];
 
-   if (cp.bridge) {
-       [cp sendEventWithName:@"didDisconnect" body:@{}];
-   }
+    if (cp.bridge) {
+        [cp sendEventWithName:@"didDisconnect" body:@{}];
+    }
 }
 
 RCT_EXPORT_MODULE();
@@ -53,47 +46,47 @@ RCT_EXPORT_MODULE();
 - (NSArray<NSString *> *)supportedEvents
 {
     return @[
-             @"didConnect",
-             @"didDisconnect",
-             // interface
-             @"barButtonPressed",
-             @"backButtonPressed",
-             @"didAppear",
-             @"didDisappear",
-             @"willAppear",
-             @"willDisappear",
-             // grid
-             @"gridButtonPressed",
-             // information
-             @"actionButtonPressed",
-             // list
-             @"didSelectListItem",
-             // search
-             @"updatedSearchText",
-             @"searchButtonPressed",
-             @"selectedResult",
-             // tabbar
-             @"didSelectTemplate",
-             // map
-             @"mapButtonPressed",
-             @"didUpdatePanGestureWithTranslation",
-             @"didEndPanGestureWithVelocity",
-             @"panBeganWithDirection",
-             @"panEndedWithDirection",
-             @"panWithDirection",
-             @"didBeginPanGesture",
-             @"didDismissPanningInterface",
-             @"willDismissPanningInterface",
-             @"didShowPanningInterface",
-             @"didDismissNavigationAlert",
-             @"willDismissNavigationAlert",
-             @"didShowNavigationAlert",
-             @"willShowNavigationAlert",
-             @"didCancelNavigation",
-             @"alertActionPressed",
-             @"selectedPreviewForTrip",
-             @"startedTrip"
-             ];
+        @"didConnect",
+        @"didDisconnect",
+        // interface
+        @"barButtonPressed",
+        @"backButtonPressed",
+        @"didAppear",
+        @"didDisappear",
+        @"willAppear",
+        @"willDisappear",
+        // grid
+        @"gridButtonPressed",
+        // information
+        @"actionButtonPressed",
+        // list
+        @"didSelectListItem",
+        // search
+        @"updatedSearchText",
+        @"searchButtonPressed",
+        @"selectedResult",
+        // tabbar
+        @"didSelectTemplate",
+        // map
+        @"mapButtonPressed",
+        @"didUpdatePanGestureWithTranslation",
+        @"didEndPanGestureWithVelocity",
+        @"panBeganWithDirection",
+        @"panEndedWithDirection",
+        @"panWithDirection",
+        @"didBeginPanGesture",
+        @"didDismissPanningInterface",
+        @"willDismissPanningInterface",
+        @"didShowPanningInterface",
+        @"didDismissNavigationAlert",
+        @"willDismissNavigationAlert",
+        @"didShowNavigationAlert",
+        @"willShowNavigationAlert",
+        @"didCancelNavigation",
+        @"alertActionPressed",
+        @"selectedPreviewForTrip",
+        @"startedTrip"
+    ];
 }
 
 - (dispatch_queue_t)methodQueue
@@ -160,6 +153,12 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
             [self popTemplate:false];
         }];
         [listTemplate setBackButton:backButton];
+        if (config[@"emptyViewTitleVariants"]) {
+            listTemplate.emptyViewTitleVariants = [RCTConvert NSArray:config[@"emptyViewTitleVariants"]];
+        }
+        if (config[@"emptyViewSubtitleVariants"]) {
+            listTemplate.emptyViewSubtitleVariants = [RCTConvert NSArray:config[@"emptyViewSubtitleVariants"]];
+        }
         listTemplate.delegate = self;
         template = listTemplate;
     }
@@ -256,18 +255,19 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         template = informationTemplate;
     }
 
-    [template setUserInfo:@{ @"templateId": templateId }];
-
-    [store setTemplate:templateId template:template];
-}
-
-RCT_EXPORT_METHOD(updateTemplates:(NSString*)templateId config:(NSDictionary*)config) {
-    RNCPStore *store = [RNCPStore sharedManager];
-    CPTemplate *template = [store findTemplateById:templateId];
-    if (template) {
-        CPTabBarTemplate *tabBarTemplate = (CPTabBarTemplate*) template;
-        [tabBarTemplate updateTemplates:[self parseTemplatesFrom:config]];
+    if (config[@"tabSystemItem"]) {
+        template.tabSystemItem = [RCTConvert NSInteger:config[@"tabSystemItem"]];
     }
+    if (config[@"tabSystemImg"]) {
+        template.tabImage = [UIImage systemImageNamed:[RCTConvert NSString:config[@"tabSystemImg"]]];
+    }
+    if (config[@"tabImage"]) {
+        template.tabImage = [RCTConvert UIImage:config[@"tabImage"]];
+    }
+
+
+    [template setUserInfo:@{ @"templateId": templateId }];
+    [store setTemplate:templateId template:template];
 }
 
 RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
@@ -438,6 +438,39 @@ RCT_EXPORT_METHOD(dismissTemplate:(BOOL)animated) {
     [store.interfaceController dismissTemplateAnimated:animated];
 }
 
+RCT_EXPORT_METHOD(updateListTemplate:(NSString*)templateId config:(NSDictionary*)config) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template && [template isKindOfClass:[CPListTemplate class]]) {
+        CPListTemplate *listTemplate = (CPListTemplate *)template;
+        if (config[@"leadingNavigationBarButtons"]) {
+            NSArray *leadingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"leadingNavigationBarButtons"]] templateId:templateId];
+            [listTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
+        }
+        if (config[@"trailingNavigationBarButtons"]) {
+            NSArray *trailingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"trailingNavigationBarButtons"]] templateId:templateId];
+            [listTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
+        }
+        if (config[@"emptyViewTitleVariants"]) {
+            listTemplate.emptyViewTitleVariants = [RCTConvert NSArray:config[@"emptyViewTitleVariants"]];
+        }
+        if (config[@"emptyViewSubtitleVariants"]) {
+            NSLog(@"%@", [RCTConvert NSArray:config[@"emptyViewSubtitleVariants"]]);
+            listTemplate.emptyViewSubtitleVariants = [RCTConvert NSArray:config[@"emptyViewSubtitleVariants"]];
+        }
+    }
+}
+
+RCT_EXPORT_METHOD(updateTabBarTemplates:(NSString *)templateId templates:(NSDictionary*)config) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPTabBarTemplate *tabBarTemplate = (CPTabBarTemplate*) template;
+        [tabBarTemplate updateTemplates:[self parseTemplatesFrom:config]];
+    } else {
+        NSLog(@"Failed to find template %@", template);
+    }
+}
 
 
 RCT_EXPORT_METHOD(updateListTemplateSections:(NSString *)templateId sections:(NSArray*)sections) {
@@ -446,6 +479,43 @@ RCT_EXPORT_METHOD(updateListTemplateSections:(NSString *)templateId sections:(NS
     if (template) {
         CPListTemplate *listTemplate = (CPListTemplate*) template;
         [listTemplate updateSections:[self parseSections:sections]];
+    } else {
+        NSLog(@"Failed to find template %@", template);
+    }
+}
+
+RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictionary*)config) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPListTemplate *listTemplate = (CPListTemplate*) template;
+        NSInteger sectionIndex = [RCTConvert NSInteger:config[@"sectionIndex"]];
+        if (sectionIndex >= listTemplate.sections.count) {
+            NSLog(@"Failed to update item at section %d, sections size is %d", index, listTemplate.sections.count);
+            return;
+        }
+        CPListSection *section = listTemplate.sections[sectionIndex];
+        NSInteger index = [RCTConvert NSInteger:config[@"itemIndex"]];
+        if (index >= section.items.count) {
+            NSLog(@"Failed to update item at index %d, section size is %d", index, section.items.count);
+            return;
+        }
+        CPListItem *item = (CPListItem *)section.items[index];
+        if (config[@"imgUrl"]) {
+            [item setImage:[[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[RCTConvert NSString:config[@"imgUrl"]]]]]];
+        }
+        if (config[@"image"]) {
+            [item setImage:[RCTConvert UIImage:config[@"image"]]];
+        }
+        if (config[@"text"]) {
+            [item setText:[RCTConvert NSString:config[@"text"]]];
+        }
+        if (config[@"detailText"]) {
+            [item setDetailText:[RCTConvert NSString:config[@"text"]]];
+        }
+        if (config[@"isPlaying"]) {
+            [item setPlaying:[RCTConvert BOOL:config[@"isPlaying"]]];
+        }
     } else {
         NSLog(@"Failed to find template %@", template);
     }
@@ -481,6 +551,14 @@ RCT_EXPORT_METHOD(dismissPanningInterface:(NSString *)templateId animated:(BOOL)
     }
 }
 
+RCT_EXPORT_METHOD(enableNowPlaying:(BOOL)enable) {
+    if (enable && !isNowPlayingActive) {
+        [CPNowPlayingTemplate.sharedTemplate addObserver:self];
+    } else if (!enable && isNowPlayingActive) {
+        [CPNowPlayingTemplate.sharedTemplate removeObserver:self];
+    }
+}
+
 RCT_EXPORT_METHOD(hideTripPreviews:(NSString*)templateId) {
     CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
     if (template) {
@@ -503,6 +581,16 @@ RCT_EXPORT_METHOD(showTripPreviews:(NSString*)templateId tripIds:(NSArray*)tripI
     if (template) {
         CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
         [mapTemplate showTripPreviews:trips textConfiguration:[self parseTripPreviewTextConfiguration:tripConfiguration]];
+    }
+}
+
+RCT_EXPORT_METHOD(showRouteChoicesPreviewForTrip:(NSString*)templateId tripId:(NSString*)tripId tripConfiguration:(NSDictionary*)tripConfiguration) {
+    CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
+    CPTrip *trip = [[RNCPStore sharedManager] findTripById:tripId];
+
+    if (template) {
+        CPMapTemplate *mapTemplate = (CPMapTemplate*) template;
+        [mapTemplate showRouteChoicesPreviewForTrip:trip textConfiguration:[self parseTripPreviewTextConfiguration:tripConfiguration]];
     }
 }
 
@@ -709,7 +797,13 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         NSString *_detailText = [item objectForKey:@"detailText"];
         NSString *_text = [item objectForKey:@"text"];
         UIImage *_image = [RCTConvert UIImage:[item objectForKey:@"image"]];
+        if (item[@"imgUrl"]) {
+            _image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[RCTConvert NSString:item[@"imgUrl"]]]]];
+        }
         CPListItem *_item = [[CPListItem alloc] initWithText:_text detailText:_detailText image:_image showsDisclosureIndicator:_showsDisclosureIndicator];
+        if ([item objectForKey:@"isPlaying"]) {
+            [_item setPlaying:[RCTConvert BOOL:[item objectForKey:@"isPlaying"]]];
+        }
         [_item setUserInfo:@{ @"index": @(index) }];
         [_items addObject:_item];
         index = index + 1;
@@ -836,7 +930,9 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     if ([json objectForKey:@"lightImage"] && [json objectForKey:@"darkImage"]) {
         imageSet = [[CPImageSet alloc] initWithLightContentImage:[RCTConvert UIImage:json[@"lightImage"]] darkContentImage:[RCTConvert UIImage:json[@"darkImage"]]];
     }
-    return [[CPNavigationAlert alloc] initWithTitleVariants:[RCTConvert NSStringArray:json[@"titleVariants"]] subtitleVariants:[RCTConvert NSStringArray:json[@"subtitleVariants"]] imageSet:imageSet primaryAction:[self parseAlertAction:json[@"primaryAction"] body:@{ @"templateId": templateId, @"primary": @(YES) }] secondaryAction:[self parseAlertAction:json[@"secondaryAction"] body:@{ @"templateId": templateId, @"secondary": @(YES) }] duration:[RCTConvert double:json[@"duration"]]];
+    CPAlertAction *secondaryAction = [json objectForKey:@"secondaryAction"] ? [self parseAlertAction:json[@"secondaryAction"] body:@{ @"templateId": templateId, @"secondary": @(YES) }] : nil;
+
+    return [[CPNavigationAlert alloc] initWithTitleVariants:[RCTConvert NSStringArray:json[@"titleVariants"]] subtitleVariants:[RCTConvert NSStringArray:json[@"subtitleVariants"]] imageSet:imageSet primaryAction:[self parseAlertAction:json[@"primaryAction"] body:@{ @"templateId": templateId, @"primary": @(YES) }] secondaryAction:secondaryAction duration:[RCTConvert double:json[@"duration"]]];
 }
 
 - (CPAlertAction*)parseAlertAction:(NSDictionary*)json body:(NSDictionary*)body {
@@ -884,15 +980,15 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     }
 
     return @{
-             @"todo": @(YES),
-             @"reason": dismissalCtx
-             };
+        @"todo": @(YES),
+        @"reason": dismissalCtx
+    };
 }
 - (NSDictionary*)navigationAlertToJson:(CPNavigationAlert*)navigationAlert {
     return @{ @"todo": @(YES) };
-//    NSMutableDictionary *res = [[NSMutableDictionary alloc] init];
-//    return @{
-//                            };
+    //    NSMutableDictionary *res = [[NSMutableDictionary alloc] init];
+    //    return @{
+    //                            };
 }
 
 - (void)sendTemplateEventWithName:(CPTemplate *)template name:(NSString*)name {
@@ -1043,5 +1139,14 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     [self sendTemplateEventWithName:aTemplate name:@"willDisappear" json:@{ @"animated": @(animated) }];
 }
 
+# pragma NowPlaying
+
+- (void)nowPlayingTemplateUpNextButtonTapped:(CPNowPlayingTemplate *)nowPlayingTemplate {
+
+}
+
+- (void)nowPlayingTemplateAlbumArtistButtonTapped:(CPNowPlayingTemplate *)nowPlayingTemplate {
+
+}
 
 @end

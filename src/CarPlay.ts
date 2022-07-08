@@ -1,4 +1,4 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 import { ActionSheetTemplate } from './templates/ActionSheetTemplate';
 import { AlertTemplate } from './templates/AlertTemplate';
 import { ContactTemplate } from './templates/ContactTemplate';
@@ -10,6 +10,7 @@ import { PointOfInterestTemplate } from './templates/PointOfInterestTemplate';
 import { SearchTemplate } from './templates/SearchTemplate';
 import { TabBarTemplate } from './templates/TabBarTemplate';
 import { VoiceControlTemplate } from './templates/VoiceControlTemplate';
+import { NowPlayingTemplate } from './templates/NowPlayingTemplate';
 
 const { RNCarPlay } = NativeModules;
 
@@ -20,7 +21,8 @@ type PushableTemplates =
   | PointOfInterestTemplate
   | ListTemplate
   | InformationTemplate
-  | ContactTemplate;
+  | ContactTemplate
+  | NowPlayingTemplate;
 type PresentableTemplates = AlertTemplate | ActionSheetTemplate | VoiceControlTemplate;
 
 /**
@@ -46,6 +48,10 @@ class CarPlayInterface {
   private onDisconnectCallbacks = new Set<() => void>();
 
   constructor() {
+    if (Platform.OS !== 'ios') {
+      return;
+    }
+
     this.emitter.addListener('didConnect', () => {
       this.connected = true;
       this.onConnectCallbacks.forEach(callback => {
@@ -160,6 +166,14 @@ class CarPlayInterface {
    */
   public get topTemplate(): Promise<string> {
     return Promise.resolve('');
+  }
+
+  /**
+   * Control now playing template state
+   * @param enable A Boolean value that indicates whether the system use now playing template.
+   */
+  public enableNowPlaying(enable = true) {
+    return this.bridge.enableNowPlaying(enable);
   }
 }
 

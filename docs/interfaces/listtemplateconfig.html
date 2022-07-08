@@ -85,9 +85,14 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listtemplateconfig.html#emptyviewsubtitlevariants" class="tsd-kind-icon">empty<wbr>View<wbr>Subtitle<wbr>Variants</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listtemplateconfig.html#emptyviewtitlevariants" class="tsd-kind-icon">empty<wbr>View<wbr>Title<wbr>Variants</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="listtemplateconfig.html#id" class="tsd-kind-icon">id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="listtemplateconfig.html#leadingnavigationbarbuttons" class="tsd-kind-icon">leading<wbr>Navigation<wbr>Bar<wbr>Buttons</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listtemplateconfig.html#sections" class="tsd-kind-icon">sections</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="listtemplateconfig.html#tabimage" class="tsd-kind-icon">tab<wbr>Image</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="listtemplateconfig.html#tabsystemimg" class="tsd-kind-icon">tab<wbr>System<wbr>Img</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="listtemplateconfig.html#tabsystemitem" class="tsd-kind-icon">tab<wbr>System<wbr>Item</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listtemplateconfig.html#title" class="tsd-kind-icon">title</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="listtemplateconfig.html#trailingnavigationbarbuttons" class="tsd-kind-icon">trailing<wbr>Navigation<wbr>Bar<wbr>Buttons</a></li>
 							</ul>
@@ -109,6 +114,50 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="emptyviewsubtitlevariants" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> empty<wbr>View<wbr>Subtitle<wbr>Variants</h3>
+					<div class="tsd-signature tsd-kind-icon">empty<wbr>View<wbr>Subtitle<wbr>Variants<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/ListTemplate.ts#L35">templates/ListTemplate.ts:35</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p> An optional array of strings, ordered from most to least preferred.
+								The variant strings should be provided as localized, displayable content.
+								The system will select the first variant that fits the available space.
+								If the list template does not contain any items (itemCount == 0), then
+								the template will display an empty view with a title and subtitle to indicate
+								that the template has no list items.
+								If the list template is updated to contain items, the empty view will be automatically
+							removed.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="emptyviewtitlevariants" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> empty<wbr>View<wbr>Title<wbr>Variants</h3>
+					<div class="tsd-signature tsd-kind-icon">empty<wbr>View<wbr>Title<wbr>Variants<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/ListTemplate.ts#L24">templates/ListTemplate.ts:24</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p> An optional array of strings, ordered from most to least preferred.
+								The variant strings should be provided as localized, displayable content.
+								The system will select the first variant that fits the available space.
+								If the list template does not contain any items (itemCount == 0), then
+								the template will display an empty view with a title and subtitle to indicate
+								that the template has no list items.
+								If the list template is updated to contain items, the empty view will be automatically
+							removed.</p>
+						</div>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="id" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> id</h3>
@@ -116,7 +165,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from TemplateConfig.id</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/Template.ts#L22">templates/Template.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L22">templates/Template.ts:22</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -132,7 +181,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from TemplateConfig.leadingNavigationBarButtons</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/Template.ts#L28">templates/Template.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L28">templates/Template.ts:28</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -148,12 +197,60 @@
 					<div class="tsd-signature tsd-kind-icon">sections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ListSection</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/ListTemplate.ts#L14">templates/ListTemplate.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/ListTemplate.ts#L13">templates/ListTemplate.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The sections displayed in the list.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="tabimage" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tab<wbr>Image</h3>
+					<div class="tsd-signature tsd-kind-icon">tab<wbr>Image<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">null</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from TemplateConfig.tabImage</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L46">templates/Template.ts:46</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Name of system image for tab</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="tabsystemimg" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tab<wbr>System<wbr>Img</h3>
+					<div class="tsd-signature tsd-kind-icon">tab<wbr>System<wbr>Img<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from TemplateConfig.tabSystemImg</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L42">templates/Template.ts:42</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Name of system image for tab</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="tabsystemitem" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tab<wbr>System<wbr>Item</h3>
+					<div class="tsd-signature tsd-kind-icon">tab<wbr>System<wbr>Item<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from TemplateConfig.tabSystemItem</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L38">templates/Template.ts:38</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>UITabBarSystemItem</p>
 						</div>
 					</div>
 				</section>
@@ -163,7 +260,7 @@
 					<div class="tsd-signature tsd-kind-icon">title<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/ListTemplate.ts#L10">templates/ListTemplate.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/ListTemplate.ts#L9">templates/ListTemplate.ts:9</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -179,7 +276,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from TemplateConfig.trailingNavigationBarButtons</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/Template.ts#L34">templates/Template.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L34">templates/Template.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -202,7 +299,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/ListTemplate.ts#L26">templates/ListTemplate.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/ListTemplate.ts#L47">templates/ListTemplate.ts:47</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -225,7 +322,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from TemplateConfig.onBarButtonPressed</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/Template.ts#L60">templates/Template.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L72">templates/Template.ts:72</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -257,7 +354,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from TemplateConfig.onDidAppear</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/Template.ts#L49">templates/Template.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L61">templates/Template.ts:61</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -289,7 +386,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from TemplateConfig.onDidDisappear</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/Template.ts#L54">templates/Template.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L66">templates/Template.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -320,7 +417,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/ListTemplate.ts#L21">templates/ListTemplate.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/ListTemplate.ts#L42">templates/ListTemplate.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -359,7 +456,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from TemplateConfig.onWillAppear</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/Template.ts#L39">templates/Template.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L51">templates/Template.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -391,7 +488,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from TemplateConfig.onWillDisappear</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6125787/src/templates/Template.ts#L44">templates/Template.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/birkir/react-native-carplay/blob/6c15510/src/templates/Template.ts#L56">templates/Template.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -486,6 +583,12 @@
 					<li class="current tsd-kind-interface">
 						<a href="listtemplateconfig.html" class="tsd-kind-icon">List<wbr>Template<wbr>Config</a>
 						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="listtemplateconfig.html#emptyviewsubtitlevariants" class="tsd-kind-icon">empty<wbr>View<wbr>Subtitle<wbr>Variants</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="listtemplateconfig.html#emptyviewtitlevariants" class="tsd-kind-icon">empty<wbr>View<wbr>Title<wbr>Variants</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="listtemplateconfig.html#id" class="tsd-kind-icon">id</a>
 							</li>
@@ -494,6 +597,15 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="listtemplateconfig.html#sections" class="tsd-kind-icon">sections</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="listtemplateconfig.html#tabimage" class="tsd-kind-icon">tab<wbr>Image</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="listtemplateconfig.html#tabsystemimg" class="tsd-kind-icon">tab<wbr>System<wbr>Img</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="listtemplateconfig.html#tabsystemitem" class="tsd-kind-icon">tab<wbr>System<wbr>Item</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="listtemplateconfig.html#title" class="tsd-kind-icon">title</a>

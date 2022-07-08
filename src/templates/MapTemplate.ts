@@ -38,10 +38,11 @@ export interface MapTemplateConfig extends TemplateConfig {
    */
   onAlertActionPressed?(e: { secondary?: boolean; primary?: boolean }): void;
   onMapButtonPressed?(e: { id: string; template: string }): void;
-  onPanWithDirection?({ direction: string }): void;
-  onPanBeganWithDirection?({ direction: string }): void;
-  onPanEndedDirection?({ direction: string }): void;
+  onPanWithDirection?(e: { direction: string }): void;
+  onPanBeganWithDirection?(e: { direction: string }): void;
+  onPanEndedWithDirection?(e: { direction: string }): void;
   onSelectedPreviewForTrip?(e: { tripId: string; routeIndex: number }): void;
+  onDidCancelNavigation?(e: {}): void;
   onStartedTrip?(e: { tripId: string; routeIndex: number }): void;
 }
 
@@ -69,6 +70,7 @@ export class MapTemplate extends Template<MapTemplateConfig> {
       panBeganWithDirection: 'onPanBeganWithDirection',
       panEndedWithDirection: 'onPanEndedWithDirection',
       selectedPreviewForTrip: 'onSelectedPreviewForTrip',
+      didCancelNavigation: 'onDidCancelNavigation',
       startedTrip: 'onStartedTrip',
     };
   }
@@ -131,11 +133,15 @@ export class MapTemplate extends Template<MapTemplateConfig> {
   }
 
   public showTripPreviews(tripPreviews: Trip[], textConfiguration: TextConfiguration = {}) {
-    CarPlay.bridge.showTripPreviews(this.id, tripPreviews.map(trip => trip.id), textConfiguration);
+    CarPlay.bridge.showTripPreviews(
+      this.id,
+      tripPreviews.map(trip => trip.id),
+      textConfiguration,
+    );
   }
 
   public showRouteChoicesPreviewForTrip(trip: Trip, textConfiguration: TextConfiguration = {}) {
-    CarPlay.bridge.showRouteChoicesPreviewForTrip(this.id, trip, textConfiguration);
+    CarPlay.bridge.showRouteChoicesPreviewForTrip(this.id, trip.id, textConfiguration);
   }
 
   public presentNavigationAlert(config: NavigationAlert, animated = true) {

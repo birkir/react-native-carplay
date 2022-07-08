@@ -36,9 +36,14 @@ const trip = new Trip({
   },
   routeChoices: [
     {
-      additionalInformationVariants: [],
-      selectionSummaryVariants: ['What a great trip'],
-      summaryVariants: [],
+      additionalInformationVariants: ["Via DK45"],
+      summaryVariants: ["Fastest route now"],
+      selectionSummaryVariants: ['This is Summary for DK45'],
+    },
+    {
+      additionalInformationVariants: ["Via DK99"],
+      summaryVariants: ["Longer route"],
+      selectionSummaryVariants: ['This is Summary for DK99'],
     },
   ],
 });
@@ -118,6 +123,14 @@ export function Map({ navigation }) {
     mapTemplate.current.dismissPanningInterface(true);
   };
 
+  const onShowRouteChoicesPreviewPress = () => {
+    mapTemplate.current.showRouteChoicesPreviewForTrip(trip);
+  };
+
+  const onDismissRouteChoicesPreviewPress = () => {
+    mapTemplate.current.hideTripPreviews();
+  };
+
   const onStartNavigation = async () => {
     mapTemplate.current.hideTripPreviews();
     const newNavigationSession = await mapTemplate.current.startNavigationSession(
@@ -161,6 +174,10 @@ export function Map({ navigation }) {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Button title="Show alert" onPress={onShowAlertPress} />
       <Button title="Dismiss alert" onPress={onDismissAlertPress} />
+
+      <Button title="Show route choices" onPress={onShowRouteChoicesPreviewPress} />
+      <Button title="Dismiss route choices" onPress={onDismissRouteChoicesPreviewPress} />
+
       <View style={{ height: 16 }} />
       <Button title="Show panning" onPress={onShowPanningPress} />
       <Button title="Dismiss panning" onPress={onDismissPanningPress} />

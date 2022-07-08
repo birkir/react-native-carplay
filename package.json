@@ -1,6 +1,6 @@
 {
   "name": "react-native-carplay",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "CarPlay for React Native",
   "main": "lib/index.js",
   "files": [
@@ -11,7 +11,7 @@
   ],
   "podspecPath": "./react-native-carplay.podspec",
   "scripts": {
-    "prepublish": "yarn run build",
+    "prepare": "yarn run build",
     "prettier": "prettier --write '**/*.{json,md,js,jsx,ts,tsx}'",
     "tslint": "tslint --fix 'src/**/*.{ts,tsx}' -p .",
     "build": "tsc",

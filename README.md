@@ -4,6 +4,10 @@ What if you could create CarPlay with React Native. Well, now you can.
 
 ![Animated Demo](https://media.giphy.com/media/Ffa4hukA3YMLh6U8fl/giphy.gif)
 
+## Discord Channel
+
+Come join us on our discord channel: https://discord.gg/b235pv6QHM
+
 ## Support
 
 This version of `react-native-carplay` supports iOS 14. If you need support for versions before this please refer to version 1.3.1 of this package.
@@ -446,6 +450,10 @@ yarn start
 ```
 
 5. start xcode and run the project on your simulator or device
+
+## Image Size and Resolution
+
+Quirks observed where PNG image resolutions should be specfied with scale factor of 3.0 (i.e. append with `@3x`) with ListTemplate image sizing suggested around 80 x 80 px per [Issue #6](https://github.com/birkir/react-native-carplay/issues/6)
 
 ## Not working / In progress
 
