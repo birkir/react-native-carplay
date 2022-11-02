@@ -521,6 +521,36 @@ RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictio
     }
 }
 
+RCT_EXPORT_METHOD(getMaximumListItemCount:(NSString *)templateId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPListTemplate *listTemplate = (CPListTemplate*) template;
+        NSInteger count = CPListTemplate.maximumItemCount;
+        resolve(@(count));
+    } else {
+        NSLog(@"Failed to find template %@", template);
+        reject(@"template_not_found", @"Template not found in store", nil);
+    }
+}
+
+RCT_EXPORT_METHOD(getMaximumListSectionCount:(NSString *)templateId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPListTemplate *listTemplate = (CPListTemplate*) template;
+        NSInteger count = CPListTemplate.maximumSectionCount;
+        resolve(@(count));
+    } else {
+        NSLog(@"Failed to find template %@", template);
+        reject(@"template_not_found", @"Template not found in store", nil);
+    }
+}
+
 RCT_EXPORT_METHOD(updateMapTemplateConfig:(NSString *)templateId config:(NSDictionary*)config) {
     CPTemplate *template = [[RNCPStore sharedManager] findTemplateById:templateId];
     if (template) {
