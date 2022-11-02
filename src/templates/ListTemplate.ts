@@ -85,4 +85,12 @@ export class ListTemplate extends Template<ListTemplateConfig> {
   public updateListTemplateItem = (config: ListItemUpdate) => {
     return CarPlay.bridge.updateListTemplateItem(this.id, this.parseConfig(config));
   };
+
+  public getMaximumListItemCount () {
+    return CarPlay.bridge.getMaximumListItemCount(this.id);
+  }
+
+  public getMaximumListSectionCount () {
+    return CarPlay.bridge.getMaximumListSectionCount(this.id);
+  }
 }
