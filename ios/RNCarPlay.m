@@ -528,8 +528,7 @@ RCT_EXPORT_METHOD(getMaximumListItemCount:(NSString *)templateId
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
         CPListTemplate *listTemplate = (CPListTemplate*) template;
-        NSInteger count = CPListTemplate.maximumItemCount;
-        resolve(@(count));
+        resolve(@(CPListTemplate.maximumItemCount));
     } else {
         NSLog(@"Failed to find template %@", template);
         reject(@"template_not_found", @"Template not found in store", nil);
@@ -543,8 +542,7 @@ RCT_EXPORT_METHOD(getMaximumListSectionCount:(NSString *)templateId
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
         CPListTemplate *listTemplate = (CPListTemplate*) template;
-        NSInteger count = CPListTemplate.maximumSectionCount;
-        resolve(@(count));
+        resolve(@(CPListTemplate.maximumSectionCount));
     } else {
         NSLog(@"Failed to find template %@", template);
         reject(@"template_not_found", @"Template not found in store", nil);
