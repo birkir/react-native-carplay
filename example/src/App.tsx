@@ -3,7 +3,6 @@ import { Text, View } from 'react-native';
 import { CarPlay, InformationTemplate, ListTemplate, TabBarTemplate, AlertTemplate, NowPlayingTemplate } from 'react-native-carplay';
 import { Part } from './types/content';
 import fetchWeekly from './data/fetchWeekly';
-import SoundPlayer from 'react-native-sound-player';
 import queue from './data/queue';
 
 export type RootStackParamList = {
@@ -31,7 +30,6 @@ const getTabBarTemplates = (articles, sections) => {
     title: 'Weekly',
     onItemSelect: async ({ index }) => {
       onArticlePress(articles[index])
-      // NowPlaying(articles[index])
     },
     tabTitle: 'Weekly',
     tabSystemImg: 'magazine'
@@ -42,7 +40,8 @@ const getTabBarTemplates = (articles, sections) => {
     sections: [
       {
         items: queue.getQueueItems().map((item) => ({
-          text: item.title
+          text: item.title,
+          isPlaying: queue.getCurrentTrack()?.title === item.title
         }))
       }
     ],
@@ -63,10 +62,17 @@ const getTabBarTemplates = (articles, sections) => {
 }
 
 const onArticlePress = (article: Part) => {
+  const articleTitle = article.print?.title || article.title
+  const currentAudioTrack = queue.getCurrentTrack()
+  const isPlaying = currentAudioTrack?.title === articleTitle
+
   const alertTemplate = new AlertTemplate({
     titleVariants: [ article.title],
     actions: [
-      {
+      isPlaying ? {
+        id: 'stop',
+        title: 'Stop'
+      } : {
         id: 'play',
         title: 'Play'
       },
@@ -82,19 +88,41 @@ const onArticlePress = (article: Part) => {
     onActionButtonPressed: ({ id }) => {
       switch(id) {
         case 'play': {
-          // if (article.audio?.main?.url?.canonical) {
-          //   SoundPlayer.playUrl(article.audio?.main?.url?.canonical)
-          // }
+          if (article.audio?.main?.url?.canonical) {
+            queue.play({
+              id: article.tegID,
+              title: article.print?.title || article.title,
+              url: article.audio?.main?.url?.canonical
+            })
+          }
 
-          // CarPlay.dismissTemplate();
+          CarPlay.dismissTemplate();
+
+          // CarPlay.pushTemplate(new NowPlayingTemplate({
+          //   albumArtistButton: false,
+          //   upNextTitle: 'Next',
+          //   upNextButton: false
+          // }), true)
+
+          break;
+        }
+        case 'stop': {
+          if (article.audio?.main?.url?.canonical) {
+            queue.stop()
+          }
+
+          CarPlay.dismissTemplate();
           break;
         }
         case 'queue': {
-          queue.add({
-            id: article.tegID,
-            title: article.title,
-            url: article.audio?.main?.url?.canonical
-          })
+          if (article.audio?.main?.url?.canonical) {
+            queue.add({
+              id: article.tegID,
+              title: article.print?.title || article.title,
+              url: article.audio?.main?.url?.canonical
+            })
+          }
+
           CarPlay.dismissTemplate();
           break;
         }
@@ -153,6 +181,18 @@ export const App = () => {
       });
 
       queue.addListener(() => {
+        const currentAudioTrack = queue.getCurrentTrack();
+
+        sections.forEach((section) => {
+          section.items.forEach((article) => {
+            if (currentAudioTrack?.title === article.text) {
+              article.isPlaying = true
+            } else {
+              article.isPlaying = false
+            }
+          })
+        })
+
         const templates = getTabBarTemplates(articles, sections)
 
         tabBarRef.current?.updateTemplates({
@@ -164,7 +204,7 @@ export const App = () => {
 
     TabBar(tabBarRef)
 
-    CarPlay.enableNowPlaying();
+    CarPlay.enableNowPlaying(true);
   }, [])
 
   return carPlayConnected ? (

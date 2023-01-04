@@ -48,6 +48,22 @@ class AudioQueue {
     }
   }
 
+  play (audioTrack: AudioTrack) {
+    this.currentTrack = audioTrack
+
+    // SoundPlayer.playUrl(audioTrack.url)
+
+    this.onQueueChange()
+  }
+
+  stop () {
+    this.currentTrack = undefined
+
+    SoundPlayer.stop()
+
+    this.onQueueChange()
+  }
+
   getCurrentTrack () {
     return this.currentTrack
   }
