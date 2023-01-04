@@ -51,7 +51,7 @@ class AudioQueue {
   play (audioTrack: AudioTrack) {
     this.currentTrack = audioTrack
 
-    // SoundPlayer.playUrl(audioTrack.url)
+    SoundPlayer.playUrl(audioTrack.url)
 
     this.onQueueChange()
   }
