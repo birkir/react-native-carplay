@@ -250,7 +250,6 @@ const getSearchResults = async (
       results.push(data);
     }
   }));
-  console.log(results)
   return results
 };
 

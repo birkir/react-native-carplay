@@ -271,7 +271,6 @@ export const App = () => {
     fetchWeekly(DEC24_REF).then(({ articles, sections }) => {
 
       const templates = getTabBarTemplates(articles, sections)
-      console.log(templates)
       tabBarRef.current?.updateTemplates({
         templates,
         onTemplateSelect: () => { }
