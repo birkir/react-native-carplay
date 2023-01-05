@@ -18,48 +18,52 @@ const HOME_TAB_DATA = [
   {
     id: '/content/omi23dr8h15h8c33t2gkb2cju8ap758o',
     title: 'Podcasts',
+    image: require('./images/e.png')
   },
   {
     id: '/content/g4qu1flbgau1di0dvenri74a2pdelkko',
     title: 'Morning Briefing',
+    image: require('./images/mb.png')
   },
   {
     id: '/content/79244csej12lltat5mgqtckdp41aagcj',
     title: 'Business',
+    image: require('./images/business.png')
   },
   {
     id: '/content/i-dont-know-the-id',
-    title: 'Finance & Economics',
+    title: 'Finance',
+    image: require('./images/f&e.png')
   },
   {
     id: '/content/i-dont-know-the-id',
     title: 'International',
+    image: require('./images/int.png')
   },
   {
     id: '/content/i-dont-know-the-id',
     title: 'Culture',
+    image: require('./images/culture.png')
   },
   {
     id: '/content/i-dont-know-the-id',
     title: 'Britain',
+    image: require('./images/britain.png')
   },
   {
     id: '/content/i-dont-know-the-id',
     title: 'Briefing',
-  },
-  {
-    id: '/content/i-dont-know-the-id',
-    title: 'The Americas',
+    image: require('./images/briefing.jpeg')
   },
 ]
 
 const getTabBarTemplates = (articles, sections) => {
   console.log('🚀 ~ file: App.tsx:57 ~ getTabBarTemplates ~ articles, sections', articles, sections);
   const homeTab = new GridTemplate({
-    
+    trailingNavigationBarButtons: [],
     buttons: HOME_TAB_DATA.map((item, i) => ({
       id: item.id,
-      image: require('./images/e.png'),
+      image: item.image,
       titleVariants: [item.title],
     })),
     title: 'Home',
