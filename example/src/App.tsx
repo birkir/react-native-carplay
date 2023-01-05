@@ -45,6 +45,9 @@ const getTabBarTemplates = (articles, sections) => {
         }))
       }
     ],
+    onItemSelect: async ({ index }) => {
+      onArticlePress(articles[index])
+    },
     tabTitle: 'Queue',
     tabSystemImg: 'list.triangle'
   })
@@ -138,13 +141,13 @@ const onArticlePress = (article: Part) => {
   CarPlay.presentTemplate(alertTemplate);
 }
 
-const TabBar = (ref: React.MutableRefObject<TabBarTemplate | undefined>) => {
+const TabBar = (tabBarRef: React.MutableRefObject<TabBarTemplate | undefined>) => {
   const tabBarTemplate = new TabBarTemplate({
     templates: [],
     onTemplateSelect: () => {}
   });
 
-  ref.current = tabBarTemplate
+  tabBarRef.current = tabBarTemplate
 
   CarPlay.setRootTemplate(tabBarTemplate);
 }
