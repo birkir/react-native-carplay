@@ -54,7 +54,9 @@ const HOME_TAB_DATA = [
 ]
 
 const getTabBarTemplates = (articles, sections) => {
+  console.log('🚀 ~ file: App.tsx:57 ~ getTabBarTemplates ~ articles, sections', articles, sections);
   const homeTab = new GridTemplate({
+    
     buttons: HOME_TAB_DATA.map((item, i) => ({
       id: item.id,
       image: require('./images/e.png'),
@@ -111,6 +113,7 @@ const getTabBarTemplates = (articles, sections) => {
 
 const onHomeItemPress = async (data) => {
   const { items, articles } = await fetchData(data.id)
+  console.log('🚀 ~ file: App.tsx:114 ~ onHomeItemPress ~  items, articles ', items, articles);
 
   const pageTemplate = new ListTemplate({
     sections: [
