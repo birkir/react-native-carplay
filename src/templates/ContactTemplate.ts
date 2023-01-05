@@ -36,7 +36,7 @@ export class ContactTemplate extends Template<ContactTemplateConfig> {
   }
   get eventMap() {
     return {
-      gridButtonPressed: 'onButtonPressed',
+      buttonPressed: 'onButtonPressed',
     };
   }
 }

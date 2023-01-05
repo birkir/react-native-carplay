@@ -85,7 +85,8 @@ RCT_EXPORT_MODULE();
         @"didCancelNavigation",
         @"alertActionPressed",
         @"selectedPreviewForTrip",
-        @"startedTrip"
+        @"startedTrip",
+        @"buttonPressed",
     ];
 }
 
@@ -186,8 +187,9 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         tabBarTemplate.delegate = self;
         template = tabBarTemplate;
     } else if ([type isEqualToString:@"contact"]) {
-        CPContact *contact = [[CPContact alloc] init];
-        [contact setName:config[@"name"]];
+        NSString *nm = [RCTConvert NSString:config[@"name"]];
+        UIImage *img = [RCTConvert UIImage:config[@"image"]];
+        CPContact *contact = [[CPContact alloc] initWithName:nm image:img];
         [contact setSubtitle:config[@"subtitle"]];
         [contact setActions:[self parseButtons:config[@"actions"] templateId:templateId]];
         CPContactTemplate *contactTemplate = [[CPContactTemplate alloc] initWithContact:contact];
