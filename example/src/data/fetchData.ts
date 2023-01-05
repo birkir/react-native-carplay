@@ -21,10 +21,8 @@ const fetchData = async (path: string) => {
     const response = await fetch("https://content.p.aws.economist.com/graphql", requestOptions)
 
     const data = await response.json()
-    console.log('🚀 ~ file: fetchData.ts:24 ~ fetchData ~ data', data);
 
     const articles: Part[] = data.data?.section?.hasPart?.parts
-    console.log('🚀 ~ file: fetchData.ts:26 ~ fetchData ~ articles', articles);
 
     const audioArticles = articles?.filter((article) => article?.audio?.main) ?? []
 
