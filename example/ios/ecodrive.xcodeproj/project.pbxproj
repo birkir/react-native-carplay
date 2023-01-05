@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* test2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* test2Tests.m */; };
+		00E356F31AD99517003FC87E /* ecodriveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ecodriveTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2DCD954D1E0B4F2C00145EB5 /* test2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* test2Tests.m */; };
-		35204666F9C8C4540742A4DC /* libPods-test2-test2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7351DFE29F7AE9089A4EEB9 /* libPods-test2-test2Tests.a */; };
+		2DCD954D1E0B4F2C00145EB5 /* ecodriveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ecodriveTests.m */; };
+		35204666F9C8C4540742A4DC /* libPods-ecodrive-ecodriveTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7351DFE29F7AE9089A4EEB9 /* libPods-ecodrive-ecodriveTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		96939697EB8BB4F77CB48DB2 /* libPods-test2-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFB126B355251232C52FBEB0 /* libPods-test2-tvOSTests.a */; };
-		C9FB5618238730EF0ACCB1D4 /* libPods-test2-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 05CB05BCE4AECDA1EA03CB51 /* libPods-test2-tvOS.a */; };
-		CF76C0822BBAFC3F5C0C9630 /* libPods-test2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEC8DCFEEC4403A6553ED4CE /* libPods-test2.a */; };
+		96939697EB8BB4F77CB48DB2 /* libPods-ecodrive-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFB126B355251232C52FBEB0 /* libPods-ecodrive-tvOSTests.a */; };
+		C9FB5618238730EF0ACCB1D4 /* libPods-ecodrive-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 05CB05BCE4AECDA1EA03CB51 /* libPods-ecodrive-tvOS.a */; };
+		CF76C0822BBAFC3F5C0C9630 /* libPods-ecodrive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEC8DCFEEC4403A6553ED4CE /* libPods-ecodrive.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,46 +28,46 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = test2;
+			remoteInfo = "ecodrive";
 		};
 		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
-			remoteInfo = "test2-tvOS";
+			remoteInfo = "ecodrive-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* test2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = test2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* ecodriveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ecodriveTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* test2Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = test2Tests.m; sourceTree = "<group>"; };
-		05CB05BCE4AECDA1EA03CB51 /* libPods-test2-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test2-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07F961A680F5B00A75B9A /* test2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test2.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = test2/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = test2/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = test2/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = test2/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = test2/main.m; sourceTree = "<group>"; };
-		1403DA63AC0A6CD5741E3386 /* Pods-test2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test2.debug.xcconfig"; path = "Target Support Files/Pods-test2/Pods-test2.debug.xcconfig"; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* test2-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "test2-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* test2-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "test2-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		306EABE53DA39CE40268841A /* Pods-test2-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test2-tvOS.release.xcconfig"; path = "Target Support Files/Pods-test2-tvOS/Pods-test2-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		3AD8FFB94B689E74BB74F41A /* Pods-test2-test2Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test2-test2Tests.debug.xcconfig"; path = "Target Support Files/Pods-test2-test2Tests/Pods-test2-test2Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		3E6BCAF82F4971BEA048201E /* Pods-test2-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test2-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-test2-tvOS/Pods-test2-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		4297109C0F96B3E9F79539EA /* Pods-test2-test2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test2-test2Tests.release.xcconfig"; path = "Target Support Files/Pods-test2-test2Tests/Pods-test2-test2Tests.release.xcconfig"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = test2/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		A854384C9A0B58E311A59C19 /* Pods-test2-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test2-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-test2-tvOSTests/Pods-test2-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		AFBCFE0613A7372E691B88DF /* Pods-test2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test2.release.xcconfig"; path = "Target Support Files/Pods-test2/Pods-test2.release.xcconfig"; sourceTree = "<group>"; };
-		BFB126B355251232C52FBEB0 /* libPods-test2-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test2-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C7351DFE29F7AE9089A4EEB9 /* libPods-test2-test2Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test2-test2Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D12EF7A2682CF1809A5DC4C8 /* Pods-test2-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test2-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-test2-tvOSTests/Pods-test2-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		E3393DCC2539BEBA002810F6 /* test2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = test2.entitlements; path = test2/test2.entitlements; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* ecodriveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "ecodriveTests.m"; sourceTree = "<group>"; };
+		05CB05BCE4AECDA1EA03CB51 /* libPods-ecodrive-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ecodrive-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* ecodrive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ecodrive.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = "ecodrive/AppDelegate.h"; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ecodrive/AppDelegate.m; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "ecodrive/Images.xcassets"; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "ecodrive/Info.plist"; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "ecodrive/main.m"; sourceTree = "<group>"; };
+		1403DA63AC0A6CD5741E3386 /* Pods-ecodrive.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ecodrive.debug.xcconfig"; path = "Target Support Files/Pods-ecodrive/Pods-ecodrive.debug.xcconfig"; sourceTree = "<group>"; };
+		2D02E47B1E0B4A5D006451C7 /* ecodrive-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ecodrive-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* ecodrive-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ecodrive-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		306EABE53DA39CE40268841A /* Pods-ecodrive-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ecodrive-tvOS.release.xcconfig"; path = "Target Support Files/Pods-ecodrive-tvOS/Pods-ecodrive-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		3AD8FFB94B689E74BB74F41A /* Pods-ecodrive-ecodriveTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ecodrive-ecodriveTests.debug.xcconfig"; path = "Target Support Files/Pods-ecodrive-ecodriveTests/Pods-ecodrive-ecodriveTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3E6BCAF82F4971BEA048201E /* Pods-ecodrive-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ecodrive-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-ecodrive-tvOS/Pods-ecodrive-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		4297109C0F96B3E9F79539EA /* Pods-ecodrive-ecodriveTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ecodrive-ecodriveTests.release.xcconfig"; path = "Target Support Files/Pods-ecodrive-ecodriveTests/Pods-ecodrive-ecodriveTests.release.xcconfig"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = "ecodrive/LaunchScreen.storyboard"; sourceTree = "<group>"; };
+		A854384C9A0B58E311A59C19 /* Pods-ecodrive-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ecodrive-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-ecodrive-tvOSTests/Pods-ecodrive-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		AFBCFE0613A7372E691B88DF /* Pods-ecodrive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ecodrive.release.xcconfig"; path = "Target Support Files/Pods-ecodrive/Pods-ecodrive.release.xcconfig"; sourceTree = "<group>"; };
+		BFB126B355251232C52FBEB0 /* libPods-ecodrive-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ecodrive-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7351DFE29F7AE9089A4EEB9 /* libPods-ecodrive-ecodriveTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ecodrive-ecodriveTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D12EF7A2682CF1809A5DC4C8 /* Pods-ecodrive-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ecodrive-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-ecodrive-tvOSTests/Pods-ecodrive-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		E3393DCC2539BEBA002810F6 /* ecodrive.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ecodrive.entitlements; path = ecodrive/ecodrive.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		FEC8DCFEEC4403A6553ED4CE /* libPods-test2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEC8DCFEEC4403A6553ED4CE /* libPods-ecodrive.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ecodrive.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				35204666F9C8C4540742A4DC /* libPods-test2-test2Tests.a in Frameworks */,
+				35204666F9C8C4540742A4DC /* libPods-ecodrive-ecodriveTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF76C0822BBAFC3F5C0C9630 /* libPods-test2.a in Frameworks */,
+				CF76C0822BBAFC3F5C0C9630 /* libPods-ecodrive.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,7 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9FB5618238730EF0ACCB1D4 /* libPods-test2-tvOS.a in Frameworks */,
+				C9FB5618238730EF0ACCB1D4 /* libPods-ecodrive-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,20 +99,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96939697EB8BB4F77CB48DB2 /* libPods-test2-tvOSTests.a in Frameworks */,
+				96939697EB8BB4F77CB48DB2 /* libPods-ecodrive-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* test2Tests */ = {
+		00E356EF1AD99517003FC87E /* ecodriveTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* test2Tests.m */,
+				00E356F21AD99517003FC87E /* ecodriveTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = test2Tests;
+			path = "ecodriveTests";
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -123,10 +123,10 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* test2 */ = {
+		13B07FAE1A68108700A75B9A /* ecodrive */ = {
 			isa = PBXGroup;
 			children = (
-				E3393DCC2539BEBA002810F6 /* test2.entitlements */,
+				E3393DCC2539BEBA002810F6 /* ecodrive.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -135,7 +135,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = test2;
+			name = "ecodrive";
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -143,10 +143,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				FEC8DCFEEC4403A6553ED4CE /* libPods-test2.a */,
-				C7351DFE29F7AE9089A4EEB9 /* libPods-test2-test2Tests.a */,
-				05CB05BCE4AECDA1EA03CB51 /* libPods-test2-tvOS.a */,
-				BFB126B355251232C52FBEB0 /* libPods-test2-tvOSTests.a */,
+				FEC8DCFEEC4403A6553ED4CE /* libPods-ecodrive.a */,
+				C7351DFE29F7AE9089A4EEB9 /* libPods-ecodrive-ecodriveTests.a */,
+				05CB05BCE4AECDA1EA03CB51 /* libPods-ecodrive-tvOS.a */,
+				BFB126B355251232C52FBEB0 /* libPods-ecodrive-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -161,9 +161,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* test2 */,
+				13B07FAE1A68108700A75B9A /* ecodrive */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* test2Tests */,
+				00E356EF1AD99517003FC87E /* ecodriveTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				A3442C4B4A8D3FDBD9B74B7D /* Pods */,
@@ -176,10 +176,10 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* test2.app */,
-				00E356EE1AD99517003FC87E /* test2Tests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* test2-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* test2-tvOSTests.xctest */,
+				13B07F961A680F5B00A75B9A /* ecodrive.app */,
+				00E356EE1AD99517003FC87E /* ecodriveTests.xctest */,
+				2D02E47B1E0B4A5D006451C7 /* ecodrive-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* ecodrive-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -187,14 +187,14 @@
 		A3442C4B4A8D3FDBD9B74B7D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				1403DA63AC0A6CD5741E3386 /* Pods-test2.debug.xcconfig */,
-				AFBCFE0613A7372E691B88DF /* Pods-test2.release.xcconfig */,
-				3AD8FFB94B689E74BB74F41A /* Pods-test2-test2Tests.debug.xcconfig */,
-				4297109C0F96B3E9F79539EA /* Pods-test2-test2Tests.release.xcconfig */,
-				3E6BCAF82F4971BEA048201E /* Pods-test2-tvOS.debug.xcconfig */,
-				306EABE53DA39CE40268841A /* Pods-test2-tvOS.release.xcconfig */,
-				A854384C9A0B58E311A59C19 /* Pods-test2-tvOSTests.debug.xcconfig */,
-				D12EF7A2682CF1809A5DC4C8 /* Pods-test2-tvOSTests.release.xcconfig */,
+				1403DA63AC0A6CD5741E3386 /* Pods-ecodrive.debug.xcconfig */,
+				AFBCFE0613A7372E691B88DF /* Pods-ecodrive.release.xcconfig */,
+				3AD8FFB94B689E74BB74F41A /* Pods-ecodrive-ecodriveTests.debug.xcconfig */,
+				4297109C0F96B3E9F79539EA /* Pods-ecodrive-ecodriveTests.release.xcconfig */,
+				3E6BCAF82F4971BEA048201E /* Pods-ecodrive-tvOS.debug.xcconfig */,
+				306EABE53DA39CE40268841A /* Pods-ecodrive-tvOS.release.xcconfig */,
+				A854384C9A0B58E311A59C19 /* Pods-ecodrive-tvOSTests.debug.xcconfig */,
+				D12EF7A2682CF1809A5DC4C8 /* Pods-ecodrive-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -202,9 +202,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* test2Tests */ = {
+		00E356ED1AD99517003FC87E /* ecodriveTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "test2Tests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ecodriveTests" */;
 			buildPhases = (
 				5BCEF35CB9CDB5709AA0DEC3 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -217,14 +217,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = test2Tests;
-			productName = test2Tests;
-			productReference = 00E356EE1AD99517003FC87E /* test2Tests.xctest */;
+			name = "ecodriveTests";
+			productname = "ecodriveTests";
+			productReference = 00E356EE1AD99517003FC87E /* ecodriveTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* test2 */ = {
+		13B07F861A680F5B00A75B9A /* ecodrive */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "test2" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ecodrive" */;
 			buildPhases = (
 				7EC49AAEC8D39D0258894C81 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -238,14 +238,14 @@
 			);
 			dependencies = (
 			);
-			name = test2;
-			productName = test2;
-			productReference = 13B07F961A680F5B00A75B9A /* test2.app */;
+			name = "ecodrive";
+			productName = "ecodrive";
+			productReference = 13B07F961A680F5B00A75B9A /* ecodrive.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* test2-tvOS */ = {
+		2D02E47A1E0B4A5D006451C7 /* ecodrive-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "test2-tvOS" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "ecodrive-tvOS" */;
 			buildPhases = (
 				2AFA480E1D898FC752CCA4D6 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
@@ -258,14 +258,14 @@
 			);
 			dependencies = (
 			);
-			name = "test2-tvOS";
-			productName = "test2-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* test2-tvOS.app */;
+			name = "ecodrive-tvOS";
+			productName = "ecodrive-tvOS";
+			productReference = 2D02E47B1E0B4A5D006451C7 /* ecodrive-tvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E48F1E0B4A5D006451C7 /* test2-tvOSTests */ = {
+		2D02E48F1E0B4A5D006451C7 /* ecodrive-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "test2-tvOSTests" */;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "ecodrive-tvOSTests" */;
 			buildPhases = (
 				80F23B90C46F6A35817A19F4 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
@@ -277,9 +277,9 @@
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
-			name = "test2-tvOSTests";
-			productName = "test2-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* test2-tvOSTests.xctest */;
+			name = "ecodrive-tvOSTests";
+			productName = "ecodrive-tvOSTests";
+			productReference = 2D02E4901E0B4A5D006451C7 /* ecodrive-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -309,7 +309,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "test2" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ecodrive" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -322,10 +322,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* test2 */,
-				00E356ED1AD99517003FC87E /* test2Tests */,
-				2D02E47A1E0B4A5D006451C7 /* test2-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* test2-tvOSTests */,
+				13B07F861A680F5B00A75B9A /* ecodrive */,
+				00E356ED1AD99517003FC87E /* ecodriveTests */,
+				2D02E47A1E0B4A5D006451C7 /* ecodrive-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* ecodrive-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -394,7 +394,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-test2-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ecodrive-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -430,7 +430,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-test2-test2Tests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ecodrive-ecodriveTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -452,7 +452,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-test2-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ecodrive-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -474,7 +474,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-test2-tvOSTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ecodrive-tvOSTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -487,7 +487,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-test2-test2Tests/Pods-test2-test2Tests-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ecodrive-ecodriveTests/Pods-ecodrive-ecodriveTests-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -496,7 +496,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-test2-test2Tests/Pods-test2-test2Tests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ecodrive-ecodriveTests/Pods-ecodrive-ecodriveTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F985B958259A09F4C270225E /* [CP] Copy Pods Resources */ = {
@@ -505,7 +505,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-test2/Pods-test2-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ecodrive/Pods-ecodrive-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -514,7 +514,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-test2/Pods-test2-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ecodrive/Pods-ecodrive-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -562,7 +562,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* test2Tests.m in Sources */,
+				00E356F31AD99517003FC87E /* ecodriveTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,7 +588,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DCD954D1E0B4F2C00145EB5 /* test2Tests.m in Sources */,
+				2DCD954D1E0B4F2C00145EB5 /* ecodriveTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,12 +597,12 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* test2 */;
+			target = 13B07F861A680F5B00A75B9A /* ecodrive */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* test2-tvOS */;
+			target = 2D02E47A1E0B4A5D006451C7 /* ecodrive-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -610,14 +610,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3AD8FFB94B689E74BB74F41A /* Pods-test2-test2Tests.debug.xcconfig */;
+			baseConfigurationReference = 3AD8FFB94B689E74BB74F41A /* Pods-ecodrive-ecodriveTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = test2Tests/Info.plist;
+				INFOPLIST_FILE = "ecodriveTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -627,17 +627,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/test2.app/test2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ecodrive.app/ecodrive";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4297109C0F96B3E9F79539EA /* Pods-test2-test2Tests.release.xcconfig */;
+			baseConfigurationReference = 4297109C0F96B3E9F79539EA /* Pods-ecodrive-ecodriveTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = test2Tests/Info.plist;
+				INFOPLIST_FILE = "ecodriveTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -647,23 +647,24 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/test2.app/test2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ecodrive.app/ecodrive";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1403DA63AC0A6CD5741E3386 /* Pods-test2.debug.xcconfig */;
+			baseConfigurationReference = 1403DA63AC0A6CD5741E3386 /* Pods-ecodrive.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = test2/test2.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ecodrive/ecodrive.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = test2/Info.plist;
+				INFOPLIST_FILE = "ecodrive/Info.plist";
+             INFOPLIST_KEY_CFBundleDisplayName = "ecodrive";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -672,7 +673,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = test2;
+				PRODUCT_NAME = "ecodrive";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -682,16 +683,17 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AFBCFE0613A7372E691B88DF /* Pods-test2.release.xcconfig */;
+			baseConfigurationReference = AFBCFE0613A7372E691B88DF /* Pods-ecodrive.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = test2/test2.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ecodrive/ecodrive.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = test2/Info.plist;
+				INFOPLIST_FILE = "ecodrive/Info.plist";
+             INFOPLIST_KEY_CFBundleDisplayName = "ecodrive";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -700,7 +702,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = test2;
+				PRODUCT_NAME = "ecodrive";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -709,7 +711,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3E6BCAF82F4971BEA048201E /* Pods-test2-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 3E6BCAF82F4971BEA048201E /* Pods-ecodrive-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -720,14 +722,14 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "test2-tvOS/Info.plist";
+				INFOPLIST_FILE = "ecodrive-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.test2-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.ecodrive-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -737,7 +739,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 306EABE53DA39CE40268841A /* Pods-test2-tvOS.release.xcconfig */;
+			baseConfigurationReference = 306EABE53DA39CE40268841A /* Pods-ecodrive-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -748,14 +750,14 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "test2-tvOS/Info.plist";
+				INFOPLIST_FILE = "ecodrive-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.test2-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.ecodrive-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -765,7 +767,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A854384C9A0B58E311A59C19 /* Pods-test2-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = A854384C9A0B58E311A59C19 /* Pods-ecodrive-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -775,24 +777,24 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "test2-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "ecodrive-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.test2-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.ecodrive-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/test2-tvOS.app/test2-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ecodrive-tvOS.app/ecodrive-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D12EF7A2682CF1809A5DC4C8 /* Pods-test2-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = D12EF7A2682CF1809A5DC4C8 /* Pods-ecodrive-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -802,17 +804,17 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "test2-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "ecodrive-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.test2-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.ecodrive-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/test2-tvOS.app/test2-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ecodrive-tvOS.app/ecodrive-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -933,7 +935,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "test2Tests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ecodriveTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -942,7 +944,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "test2" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ecodrive" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -951,7 +953,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "test2-tvOS" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "ecodrive-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
@@ -960,7 +962,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "test2-tvOSTests" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "ecodrive-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
@@ -969,7 +971,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "test2" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ecodrive" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

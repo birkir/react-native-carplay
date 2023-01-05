@@ -3,12 +3,12 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '12.0'
 
-target 'test2' do
+target 'ecodrive' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
 
-  target 'test2Tests' do
+  target 'ecodriveTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -20,10 +20,10 @@ target 'test2' do
   # end
 end
 
-target 'test2-tvOS' do
-  # Pods for test2-tvOS
+target 'ecodrive-tvOS' do
+  # Pods for ecodrive-tvOS
 
-  target 'test2-tvOSTests' do
+  target 'ecodrive-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
