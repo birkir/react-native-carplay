@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Text, View } from 'react-native';
-import { CarPlay, InformationTemplate, ListTemplate, TabBarTemplate, AlertTemplate, NowPlayingTemplate } from 'react-native-carplay';
-import { Part } from './types/content';
+import { CarPlay, InformationTemplate, ListTemplate, TabBarTemplate, AlertTemplate, NowPlayingTemplate, GridTemplate } from 'react-native-carplay';
+import { Part, BlogType, CollectionType } from './types/content';
 import fetchWeekly from './data/fetchWeekly';
+import fetchData from './data/fetchData';
 import queue from './data/queue';
 
 export type RootStackParamList = {
@@ -13,15 +14,63 @@ export type RootStackParamList = {
 const DEC24_REF = "/content/f0e872f2ipoun91v1goki0jb4va2v5ei"
 const DEC17_REF = "/content/mkl0ncokb3kju08rpusfeptidohkvmcr"
 const DEC10_REF = "/content/c6btp3bpqls69m9ivokt8da56jdi2iti"
+const HOME_TAB_DATA = [
+  {
+    id: '/content/omi23dr8h15h8c33t2gkb2cju8ap758o',
+    title: 'Podcasts',
+    image: require('./images/e.png')
+  },
+  {
+    id: '/content/g4qu1flbgau1di0dvenri74a2pdelkko',
+    title: 'Morning Briefing',
+    image: require('./images/mb.png')
+  },
+  {
+    id: '/content/79244csej12lltat5mgqtckdp41aagcj',
+    title: 'Business',
+    image: require('./images/business.png')
+  },
+  {
+    id: '/content/i-dont-know-the-id',
+    title: 'Finance',
+    image: require('./images/f&e.png')
+  },
+  {
+    id: '/content/i-dont-know-the-id',
+    title: 'International',
+    image: require('./images/int.png')
+  },
+  {
+    id: '/content/i-dont-know-the-id',
+    title: 'Culture',
+    image: require('./images/culture.png')
+  },
+  {
+    id: '/content/i-dont-know-the-id',
+    title: 'Britain',
+    image: require('./images/britain.png')
+  },
+  {
+    id: '/content/i-dont-know-the-id',
+    title: 'Briefing',
+    image: require('./images/briefing.jpeg')
+  },
+]
 
 const getTabBarTemplates = (articles, sections) => {
-  const homeTab = new InformationTemplate({
+  const homeTab = new GridTemplate({
+    trailingNavigationBarButtons: [],
+    buttons: HOME_TAB_DATA.map((item, i) => ({
+      id: item.id,
+      image: item.image,
+      titleVariants: [item.title],
+    })),
     title: 'Home',
-    items: [],
-    actions: [],
-    onActionButtonPressed: () => {},
-    tabTitle: 'Home',
-    tabSystemImg: 'house'
+    tabSystemImg: 'house',
+    onButtonPressed(e) {
+      const data = HOME_TAB_DATA.find((item) => item.id === e.id)
+      onHomeItemPress(data)
+    },
   })
 
   const weeklyTab = new ListTemplate({
@@ -56,12 +105,39 @@ const getTabBarTemplates = (articles, sections) => {
     title: 'Search',
     items: [],
     actions: [],
-    onActionButtonPressed: () => {},
+    onActionButtonPressed: () => { },
     tabTitle: 'Search',
     tabSystemImg: 'magnifyingglass'
   })
 
   return [homeTab, weeklyTab, queueTab, searchTab]
+}
+
+
+const onHomeItemPress = async (data) => {
+  const { items, articles } = await fetchData(data.id)
+
+  const pageTemplate = new ListTemplate({
+    sections: [
+      {
+        items: items.map((item) => ({
+          text: item.text,
+          isPlaying: queue.getCurrentTrack()?.title === item.text
+        }))
+      }
+    ],
+    title: data.title,
+    async onItemSelect(e) {
+      const clickedItem = items[e.index];
+      const article = articles.find((item) => item.title === clickedItem.text)
+
+      if (article) {
+        onArticlePress(article)
+      };
+    },
+  })
+
+  CarPlay.pushTemplate(pageTemplate);
 }
 
 const onArticlePress = (article: Part) => {
@@ -70,7 +146,7 @@ const onArticlePress = (article: Part) => {
   const isPlaying = currentAudioTrack?.title === articleTitle
 
   const alertTemplate = new AlertTemplate({
-    titleVariants: [ article.title],
+    titleVariants: [article.title],
     actions: [
       isPlaying ? {
         id: 'stop',
@@ -89,7 +165,7 @@ const onArticlePress = (article: Part) => {
       }
     ],
     onActionButtonPressed: ({ id }) => {
-      switch(id) {
+      switch (id) {
         case 'play': {
           if (article.audio?.main?.url?.canonical) {
             queue.play({
@@ -144,7 +220,7 @@ const onArticlePress = (article: Part) => {
 const TabBar = (tabBarRef: React.MutableRefObject<TabBarTemplate | undefined>) => {
   const tabBarTemplate = new TabBarTemplate({
     templates: [],
-    onTemplateSelect: () => {}
+    onTemplateSelect: () => { }
   });
 
   tabBarRef.current = tabBarTemplate
@@ -180,7 +256,7 @@ export const App = () => {
 
       tabBarRef.current?.updateTemplates({
         templates,
-        onTemplateSelect: () => {}
+        onTemplateSelect: () => { }
       });
 
       queue.addListener(() => {
@@ -200,7 +276,7 @@ export const App = () => {
 
         tabBarRef.current?.updateTemplates({
           templates,
-          onTemplateSelect: () => {}
+          onTemplateSelect: () => { }
         });
       })
     })
