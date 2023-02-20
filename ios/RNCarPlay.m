@@ -146,7 +146,14 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     }
     else if ([type isEqualToString:@"list"]) {
         NSArray *sections = [self parseSections:[RCTConvert NSArray:config[@"sections"]]];
-        CPListTemplate *listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections];
+        CPListTemplate *listTemplate;
+        if (@available(iOS 15.0, *)) {
+            CPAssistantCellConfiguration *conf = [[CPAssistantCellConfiguration alloc] initWithPosition: CPAssistantCellPositionTop visibility:CPAssistantCellVisibilityAlways assistantAction:CPAssistantCellActionTypeStartCall];
+            listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections assistantCellConfiguration:conf];
+        } else {
+            // Fallback on earlier versions
+            listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections];
+        }
         [listTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
         [listTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
         CPBarButton *backButton = [[CPBarButton alloc] initWithTitle:@" Back" handler:^(CPBarButton * _Nonnull barButton) {
