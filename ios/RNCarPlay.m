@@ -278,7 +278,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     }
 
     [template setUserInfo:@{ @"templateId": templateId }];
-    [store setTemplate:templateId template:template];
+    [store setTemplate:templateId _template:template];
 }
 
 RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
