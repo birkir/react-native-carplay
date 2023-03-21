@@ -1,3 +1,11 @@
+//
+//  RNCPStore.m
+//  RNCarPlay
+//
+//  Created by Birkir Gudjonsson on 3/25/19.
+//  Copyright © 2019 SOLID Mobile. All rights reserved.
+//
+
 #import "RNCPStore.h"
 
 @implementation RNCPStore {
@@ -42,8 +50,8 @@
     return [_templatesStore objectForKey:templateId];
 }
 
-- (NSString*) setTemplate:(NSString*)templateId template:(CPTemplate*)template {
-    [_templatesStore setObject:template forKey:templateId];
+- (NSString*) setTemplate:(NSString*)templateId selectedTemplate:(CPTemplate*)selectedTemplate {
+    [_templatesStore setObject:selectedTemplate forKey:templateId];
     return templateId;
 }
 

@@ -36,14 +36,18 @@ export interface TemplateConfig {
    * UITabBarSystemItem
    */
   tabSystemItem?: number;
-  /**
+   /**
    * Name of system image for tab
    */
   tabSystemImg?: string;
-  /**
+   /**
    * Name of system image for tab
    */
   tabImage?: null;
+  /**
+   * Name of tab
+   */
+   tabTitle?: string;
   /**
    * Fired before template appears
    * @param e Event

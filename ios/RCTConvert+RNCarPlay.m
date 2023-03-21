@@ -1,3 +1,11 @@
+//
+//  RCTConvert+RNCarPlay.m
+//  RNCarPlay
+//
+//  Created by Birkir Gudjonsson on 3/27/19.
+//  Copyright © 2019 SOLID Mobile. All rights reserved.
+//
+
 #import "RCTConvert+RNCarPlay.h"
 #import <React/RCTConvert+CoreLocation.h>
 #import <Availability.h>
@@ -63,7 +71,12 @@ RCT_ENUM_CONVERTER(CPPanDirection, (@{
     NSString *detailSubtitle = [RCTConvert NSString:json[@"detailSubtitle"]];
     NSString *detailSummary = [RCTConvert NSString:json[@"detailSummary"]];
 
-    CPPointOfInterest *poi = [[CPPointOfInterest alloc] initWithLocation:location title:title subtitle:subtitle summary:summary detailTitle:detailTitle detailSubtitle:detailSubtitle detailSummary:detailSummary pinImage:nil];
+    UIImage* pinImage = nil;
+    if ([json objectForKey:@"image"]) {
+      pinImage = [RCTConvert UIImage:json[@"image"]];
+    }
+  
+    CPPointOfInterest *poi = [[CPPointOfInterest alloc] initWithLocation:location title:title subtitle:subtitle summary:summary detailTitle:detailTitle detailSubtitle:detailSubtitle detailSummary:detailSummary pinImage:pinImage];
     return poi;
 }
 

@@ -1,3 +1,12 @@
+//
+//  RNCPStore.h
+//  RNCarPlay
+//
+//  Created by Birkir Gudjonsson on 3/25/19.
+//  Copyright © 2019 SOLID Mobile. All rights reserved.
+//
+
+
 #import <Foundation/Foundation.h>
 #import <CarPlay/CarPlay.h>
 
@@ -11,7 +20,7 @@
 
 + (id)sharedManager;
 - (CPTemplate*) findTemplateById: (NSString*)templateId;
-- (NSString*) setTemplate:(NSString*)templateId template:(CPTemplate*)template;
+- (NSString*) setTemplate:(NSString*)templateId selectedTemplate:(CPTemplate*)selectedTemplate;
 - (CPTrip*) findTripById: (NSString*)tripId;
 - (NSString*) setTrip:(NSString*)tripId trip:(CPTrip*)trip;
 - (CPNavigationSession*) findNavigationSessionById:(NSString*)navigationSessionId;

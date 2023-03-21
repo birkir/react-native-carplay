@@ -34,10 +34,7 @@ export class TabBarTemplate extends Template<TabBarTemplateConfig> {
 
     CarPlay.emitter.addListener('didSelectTemplate', e => {
       if (config.onTemplateSelect && e.templateId === this.id) {
-        config.onTemplateSelect(
-          config.templates.find(tpl => tpl.id === e.selectedTemplateId),
-          e,
-        );
+        config.onTemplateSelect(config.templates.find(tpl => tpl.id === e.selectedTemplateId), e);
       }
     });
   }

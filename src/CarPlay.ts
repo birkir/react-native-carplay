@@ -1,4 +1,4 @@
-import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
+import { NativeEventEmitter, NativeModules } from 'react-native';
 import { ActionSheetTemplate } from './templates/ActionSheetTemplate';
 import { AlertTemplate } from './templates/AlertTemplate';
 import { ContactTemplate } from './templates/ContactTemplate';
@@ -48,10 +48,6 @@ class CarPlayInterface {
   private onDisconnectCallbacks = new Set<() => void>();
 
   constructor() {
-    if (Platform.OS !== 'ios') {
-      return;
-    }
-
     this.emitter.addListener('didConnect', () => {
       this.connected = true;
       this.onConnectCallbacks.forEach(callback => {
@@ -170,11 +166,11 @@ class CarPlayInterface {
 
   /**
    * Control now playing template state
-   * @param enable A Boolean value that indicates whether the system use now playing template.
-   */
-  public enableNowPlaying(enable = true) {
-    return this.bridge.enableNowPlaying(enable);
-  }
+   * * @param enable A Boolean value that indicates whether the system use now playing template.
+  */
+     public enableNowPlaying(enable = true) {
+      return this.bridge.enableNowPlaying(enable);
+    }
 }
 
 export const CarPlay = new CarPlayInterface();
