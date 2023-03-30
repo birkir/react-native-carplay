@@ -11,7 +11,7 @@
 
 + (id)sharedManager;
 - (CPTemplate*) findTemplateById: (NSString*)templateId;
-- (NSString*) setTemplate:(NSString*)templateId template:(CPTemplate*)template;
+- (NSString*) setTemplate:(NSString*)templateId template:(CPTemplate*)carPlayTemplate;
 - (CPTrip*) findTripById: (NSString*)tripId;
 - (NSString*) setTrip:(NSString*)tripId trip:(CPTrip*)trip;
 - (CPNavigationSession*) findNavigationSessionById:(NSString*)navigationSessionId;
