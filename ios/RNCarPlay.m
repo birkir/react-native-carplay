@@ -10,6 +10,10 @@
 @synthesize selectedResultBlock;
 @synthesize isNowPlayingActive;
 
++ (NSDictionary *) getConnectedWindowInformation: (CPWindow *) window {
+    return @{@"width": @(window.bounds.size.width), @"height": @(window.bounds.size.height), @"scale": @(window.screen.scale)}
+}
+
 + (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window {
     RNCPStore * store = [RNCPStore sharedManager];
     store.interfaceController = interfaceController;
@@ -18,7 +22,7 @@
 
     RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
     if (cp.bridge) {
-        [cp sendEventWithName:@"didConnect" body:@{}];
+        [cp sendEventWithName:@"didConnect" body:[self getConnectedWindowInformation:window]];
     }
 }
 
@@ -117,7 +121,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(checkForConnection) {
     RNCPStore *store = [RNCPStore sharedManager];
     if ([store isConnected]) {
-        [self sendEventWithName:@"didConnect" body:@{}];
+        [self sendEventWithName:@"didConnect" body:[RNCarPlay getConnectedWindowInformation: store.window]];
     }
 }
 
