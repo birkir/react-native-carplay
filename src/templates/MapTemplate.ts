@@ -46,6 +46,10 @@ export interface MapTemplateConfig extends TemplateConfig {
   onSelectedPreviewForTrip?(e: { tripId: string; routeIndex: number }): void;
   onDidCancelNavigation?(e: {}): void;
   onStartedTrip?(e: { tripId: string; routeIndex: number }): void;
+  /**
+   * Fired when the back button is pressed
+   */
+  onBackButtonPressed?(): void;
 }
 
 /**
@@ -75,6 +79,7 @@ export class MapTemplate extends Template<MapTemplateConfig> {
       selectedPreviewForTrip: 'onSelectedPreviewForTrip',
       didCancelNavigation: 'onDidCancelNavigation',
       startedTrip: 'onStartedTrip',
+      backButtonPressed: 'onBackButtonPressed',
     };
   }
 

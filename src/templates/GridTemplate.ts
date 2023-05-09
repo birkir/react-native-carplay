@@ -1,4 +1,3 @@
-import { CarPlay } from '../CarPlay';
 import { GridButton } from '../interfaces/GridButton';
 import { BaseEvent, Template, TemplateConfig } from './Template';
 
@@ -30,6 +29,10 @@ export interface GridTemplateConfig extends TemplateConfig {
    * Fired when a button is pressed
    */
   onButtonPressed?(e: ButtonPressedEvent): void;
+  /**
+   * Fired when the back button is pressed
+   */
+  onBackButtonPressed?(): void;
 }
 
 export class GridTemplate extends Template<GridTemplateConfig> {
@@ -40,6 +43,7 @@ export class GridTemplate extends Template<GridTemplateConfig> {
   get eventMap() {
     return {
       gridButtonPressed: 'onButtonPressed',
+      backButtonPressed: 'onBackButtonPressed',
     };
   }
 }

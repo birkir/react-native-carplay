@@ -28,6 +28,10 @@ export interface ContactTemplateConfig extends TemplateConfig {
    * @param e Event
    */
   onButtonPressed?(e: ContactButtonEvent): void;
+  /**
+   * Fired when the back button is pressed
+   */
+  onBackButtonPressed?(): void;
 }
 
 export class ContactTemplate extends Template<ContactTemplateConfig> {
@@ -37,6 +41,7 @@ export class ContactTemplate extends Template<ContactTemplateConfig> {
   get eventMap() {
     return {
       gridButtonPressed: 'onButtonPressed',
+      backButtonPressed: 'onBackButtonPressed',
     };
   }
 }

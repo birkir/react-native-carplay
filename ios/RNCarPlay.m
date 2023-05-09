@@ -132,6 +132,9 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     NSArray *trailingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"trailingNavigationBarButtons"]] templateId:templateId];
 
     CPTemplate *template = [[CPTemplate alloc] init];
+    CPBarButton *backButton = config[@"isBackButtonCustomized"] ? [[CPBarButton alloc] initWithType:CPBarButtonTypeText handler:^(CPBarButton * _Nonnull barButton) {
+        [self sendEventWithName:@"backButtonPressed" body:@{@"templateId":templateId}];
+    }] : nil;
 
     if ([type isEqualToString:@"search"]) {
         CPSearchTemplate *searchTemplate = [[CPSearchTemplate alloc] init];
@@ -143,6 +146,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         CPGridTemplate *gridTemplate = [[CPGridTemplate alloc] initWithTitle:title gridButtons:buttons];
         [gridTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
         [gridTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
+        [gridTemplate setBackButton:backButton];
         template = gridTemplate;
     }
     else if ([type isEqualToString:@"list"]) {
@@ -150,6 +154,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         CPListTemplate *listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections];
         [listTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
         [listTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
+        [listTemplate setBackButton:backButton];
         if (config[@"emptyViewTitleVariants"]) {
             listTemplate.emptyViewTitleVariants = [RCTConvert NSArray:config[@"emptyViewTitleVariants"]];
         }
@@ -166,6 +171,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         [mapTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
         [mapTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
         [mapTemplate setUserInfo:@{ @"templateId": templateId }];
+        [mapTemplate setBackButton:backButton];
         mapTemplate.mapDelegate = self;
 
         template = mapTemplate;
@@ -188,6 +194,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         [contact setSubtitle:config[@"subtitle"]];
         [contact setActions:[self parseButtons:config[@"actions"] templateId:templateId]];
         CPContactTemplate *contactTemplate = [[CPContactTemplate alloc] initWithContact:contact];
+        [contactTemplate setBackButton:backButton];
         template = contactTemplate;
     } else if ([type isEqualToString:@"actionsheet"]) {
         NSString *title = [RCTConvert NSString:config[@"title"]];
@@ -227,6 +234,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         }
 
         CPPointOfInterestTemplate *poiTemplate = [[CPPointOfInterestTemplate alloc] initWithTitle:title pointsOfInterest:items selectedIndex:selectedIndex];
+        [poiTemplate setBackButton:backButton];
         poiTemplate.pointOfInterestDelegate = self;
         template = poiTemplate;
     } else if ([type isEqualToString:@"information"]) {
@@ -249,6 +257,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         }
 
         CPInformationTemplate *informationTemplate = [[CPInformationTemplate alloc] initWithTitle:title layout:layout items:items actions:actions];
+        [informationTemplate setBackButton:backButton];
         template = informationTemplate;
     }
 

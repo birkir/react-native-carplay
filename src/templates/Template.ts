@@ -120,6 +120,9 @@ export class Template<P> {
         this.update(Image.resolveAssetSource(x));
       }
     });
+    if (config.onBackButtonPressed) {
+      result.isBackButtonCustomized = true;
+    }
     return JSON.parse(JSON.stringify(result));
   }
 }

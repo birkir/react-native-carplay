@@ -16,6 +16,10 @@ export interface InformationTemplateConfig extends TemplateConfig {
   items: InformationItem[];
   actions: InformationAction[];
   onActionButtonPressed(e: { id: string; templateId: string }): void;
+  /**
+   * Fired when the back button is pressed
+   */
+  onBackButtonPressed?(): void;
 }
 
 export class InformationTemplate extends Template<InformationTemplateConfig> {
@@ -26,6 +30,7 @@ export class InformationTemplate extends Template<InformationTemplateConfig> {
   get eventMap() {
     return {
       actionButtonPressed: 'onActionButtonPressed',
+      backButtonPressed: 'onBackButtonPressed',
     };
   }
 }
