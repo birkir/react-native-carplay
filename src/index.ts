@@ -8,7 +8,12 @@ export { NavigationSession } from './navigation/NavigationSession';
 export { ContactTemplate, ContactTemplateConfig } from './templates/ContactTemplate';
 export { ActionSheetTemplate, ActionSheetTemplateConfig } from './templates/ActionSheetTemplate';
 export { AlertTemplate, AlertTemplateConfig } from './templates/AlertTemplate';
-export { InformationTemplate, InformationTemplateConfig } from './templates/InformationTemplate';
+export {
+  InformationTemplate,
+  InformationTemplateConfig,
+  InformationAction,
+  InformationItem,
+} from './templates/InformationTemplate';
 export { NowPlayingTemplate } from './templates/NowPlayingTemplate';
 export {
   PointOfInterestTemplate,

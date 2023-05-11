@@ -240,21 +240,11 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     } else if ([type isEqualToString:@"information"]) {
         NSString *title = [RCTConvert NSString:config[@"title"]];
         CPInformationTemplateLayout layout = [RCTConvert BOOL:config[@"leading"]] ? CPInformationTemplateLayoutLeading : CPInformationTemplateLayoutTwoColumn;
-        NSMutableArray<__kindof CPInformationItem *> * items = [NSMutableArray new];
-        NSMutableArray<__kindof CPTextButton *> * actions = [NSMutableArray new];
 
         NSArray<NSDictionary*> *_items = [RCTConvert NSDictionaryArray:config[@"items"]];
-        for (NSDictionary *_item in _items) {
-            [items addObject:[[CPInformationItem alloc] initWithTitle:_item[@"title"] detail:_item[@"detail"]]];
-        }
-
+        NSMutableArray<__kindof CPInformationItem *> * items = [self parseInformationItems:_items];
         NSArray<NSDictionary*> *_actions = [RCTConvert NSDictionaryArray:config[@"actions"]];
-        for (NSDictionary *_action in _actions) {
-            CPTextButton *action = [[CPTextButton alloc] initWithTitle:_action[@"title"] textStyle:CPTextButtonStyleNormal handler:^(__kindof CPTextButton * _Nonnull contactButton) {
-                [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": _action[@"id"] }];
-            }];
-            [actions addObject:action];
-        }
+        NSMutableArray<__kindof CPTextButton *> * actions = [self parseInformationActions:_actions templateId:templateId];
 
         CPInformationTemplate *informationTemplate = [[CPInformationTemplate alloc] initWithTitle:title layout:layout items:items actions:actions];
         [informationTemplate setBackButton:backButton];
@@ -521,6 +511,26 @@ RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictio
         }
         if (config[@"isPlaying"]) {
             [item setPlaying:[RCTConvert BOOL:config[@"isPlaying"]]];
+        }
+    } else {
+        NSLog(@"Failed to find template %@", template);
+    }
+}
+
+RCT_EXPORT_METHOD(updateInformationTemplate:(NSString *)templateId config:(NSDictionary*)config) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPInformationTemplate *informationTemplate = (CPInformationTemplate*) template;
+
+        if ([config objectForKey:@"actions"]) {
+            NSArray<NSDictionary*> *actions = [RCTConvert NSDictionaryArray:config[@"actions"]];
+            [informationTemplate setActions:[self parseInformationActions:actions templateId:templateId]];
+        }
+
+        if ([config objectForKey:@"items"]) {
+            NSArray<NSDictionary*> *items = [RCTConvert NSDictionaryArray:config[@"items"]];
+            [informationTemplate setItems:[self parseInformationItems:items]];
         }
     } else {
         NSLog(@"Failed to find template %@", template);
@@ -992,6 +1002,25 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     NSMutableArray<CPVoiceControlState*>* res = [NSMutableArray array];
     for (NSDictionary *item in items) {
         [res addObject:[self parseVoiceControlState:item]];
+    }
+    return res;
+}
+
+- (NSArray<CPInformationItem*>*)parseInformationItems:(NSArray*)items {
+    NSMutableArray<__kindof CPInformationItem *> * res = [NSMutableArray new];
+    for (NSDictionary *item in items) {
+        [res addObject:[[CPInformationItem alloc] initWithTitle:item[@"title"] detail:item[@"detail"]]];
+    }
+    return res;
+}
+
+- (NSArray<CPTextButton*>*)parseInformationActions:(NSArray*)actions templateId:(NSString*)templateId {
+    NSMutableArray<__kindof CPTextButton *> * res = [NSMutableArray new];
+    for (NSDictionary *_action in actions) {
+        CPTextButton *action = [[CPTextButton alloc] initWithTitle:_action[@"title"] textStyle:CPTextButtonStyleNormal handler:^(__kindof CPTextButton * _Nonnull contactButton) {
+            [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": _action[@"id"] }];
+        }];
+        [res addObject:action];
     }
     return res;
 }

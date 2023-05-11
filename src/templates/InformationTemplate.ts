@@ -1,11 +1,12 @@
+import { CarPlay } from '../CarPlay';
 import { Template, TemplateConfig } from './Template';
 
-interface InformationItem {
+export interface InformationItem {
   title: string;
   detail: string;
 }
 
-interface InformationAction {
+export interface InformationAction {
   id: string;
   title: string;
 }
@@ -33,4 +34,10 @@ export class InformationTemplate extends Template<InformationTemplateConfig> {
       backButtonPressed: 'onBackButtonPressed',
     };
   }
+
+  public updateConfig = (config: Partial<Pick<InformationTemplateConfig, 'actions' | 'items'>>) => {
+    const parsed = this.parseConfig(config);
+    this.config = { ...config, ...parsed };
+    return CarPlay.bridge.updateInformationTemplate(this.id, parsed);
+  };
 }
