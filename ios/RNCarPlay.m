@@ -774,7 +774,7 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         CPBarButton *_barButton = [[CPBarButton alloc] initWithType:_type handler:^(CPBarButton * _Nonnull barButton) {
             [self sendEventWithName:@"barButtonPressed" body:@{@"id": _id, @"templateId":templateId}];
         }];
-        BOOL _disabled = [barButton objectForKey:@"disabled"];
+        BOOL _disabled = [[barButton objectForKey:@"disabled"] isEqualToNumber:[NSNumber numberWithInt:1]];
         [_barButton setEnabled:!_disabled];
 
         if (_type == CPBarButtonTypeText) {
