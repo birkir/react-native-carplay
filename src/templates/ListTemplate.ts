@@ -37,9 +37,9 @@ export interface ListTemplateConfig extends TemplateConfig {
    * Fired when list item is selected.
    * Spinner shows by default.
    * When the returned promise is resolved the spinner will hide.
-   * @param item Object with the selected index
+   * @param item Object with the selected index (total, all sections combined), sectionIndex and itemIndex in the specific section
    */
-  onItemSelect?(item: { index: number }): Promise<void>;
+  onItemSelect?(item: { index: number; sectionIndex: number; itemIndex: number }): Promise<void>;
 
   /**
    * Fired when the back button is pressed
@@ -79,6 +79,7 @@ export class ListTemplate extends Template<ListTemplateConfig> {
   }
 
   public updateSections = (sections: ListSection[]) => {
+    this.config = { ...this.config, sections };
     return CarPlay.bridge.updateListTemplateSections(this.id, this.parseConfig(sections));
   };
 

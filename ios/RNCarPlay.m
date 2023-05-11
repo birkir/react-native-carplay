@@ -637,7 +637,7 @@ RCT_EXPORT_METHOD(activateVoiceControlState:(NSString*)templateId identifier:(NS
 }
 
 RCT_EXPORT_METHOD(reactToUpdatedSearchText:(NSArray *)items) {
-    NSArray *sectionsItems = [self parseListItems:items startIndex:0];
+    NSArray *sectionsItems = [self parseListItems:items startIndex:0 sectionIndex:0];
 
     if (self.searchResultBlock) {
         self.searchResultBlock(sectionsItems);
@@ -792,22 +792,25 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 - (NSArray<CPListSection*>*)parseSections:(NSArray*)sections {
     NSMutableArray *result = [NSMutableArray array];
     int index = 0;
+    int sectionIndex = 0;
     for (NSDictionary *section in sections) {
         NSArray *items = [section objectForKey:@"items"];
         NSString *_sectionIndexTitle = [section objectForKey:@"sectionIndexTitle"];
         NSString *_header = [section objectForKey:@"header"];
-        NSArray *_items = [self parseListItems:items startIndex:index];
+        NSArray *_items = [self parseListItems:items startIndex:index sectionIndex:sectionIndex];
         CPListSection *_section = [[CPListSection alloc] initWithItems:_items header:_header sectionIndexTitle:_sectionIndexTitle];
         [result addObject:_section];
         int count = (int) [items count];
         index = index + count;
+        sectionIndex++;
     }
     return result;
 }
 
-- (NSArray<CPListItem*>*)parseListItems:(NSArray*)items startIndex:(int)startIndex {
+- (NSArray<CPListItem*>*)parseListItems:(NSArray*)items startIndex:(int)startIndex sectionIndex:(int)sectionIndex {
     NSMutableArray *_items = [NSMutableArray array];
     int index = startIndex;
+    int itemIndex = 0;
     for (NSDictionary *item in items) {
         BOOL _showsDisclosureIndicator = [[item objectForKey:@"showsDisclosureIndicator"] isEqualToNumber:[NSNumber numberWithInt:1]];
         NSString *_detailText = [item objectForKey:@"detailText"];
@@ -826,9 +829,10 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         } else {
             _item = [[CPListItem alloc] initWithText:_text detailText:_detailText image:_image showsDisclosureIndicator:_showsDisclosureIndicator];
         }
-        [_item setUserInfo:@{ @"index": @(index) }];
+        [_item setUserInfo:@{ @"index": @(index), @"sectionIndex": @(sectionIndex), @"itemIndex": @(itemIndex) }];
         [_items addObject:_item];
         index = index + 1;
+        itemIndex++;
     }
     return _items;
 }
@@ -1178,7 +1182,9 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 
 - (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)(void))completionHandler {
     NSNumber* index = [item.userInfo objectForKey:@"index"];
-    [self sendTemplateEventWithName:listTemplate name:@"didSelectListItem" json:@{ @"index": index }];
+    NSNumber* sectionIndex = [item.userInfo objectForKey:@"sectionIndex"];
+    NSNumber* itemIndex = [item.userInfo objectForKey:@"itemIndex"];
+    [self sendTemplateEventWithName:listTemplate name:@"didSelectListItem" json:@{ @"index": index, @"sectionIndex": sectionIndex, @"itemIndex": itemIndex }];
     self.selectedResultBlock = completionHandler;
 }
 
