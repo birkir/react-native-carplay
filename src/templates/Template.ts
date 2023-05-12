@@ -1,4 +1,4 @@
-import { Image } from 'react-native';
+import { EmitterSubscription, Image } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { BarButton } from '../interfaces/BarButton';
 
@@ -78,6 +78,7 @@ export class Template<P> {
     return 'unset';
   }
   public id: string;
+  public listeners: EmitterSubscription[] = [];
 
   public get eventMap() {
     return {};
@@ -90,6 +91,9 @@ export class Template<P> {
 
     if (!this.id) {
       this.id = `${this.type}-${Date.now()}-${Math.round(Math.random() * Number.MAX_SAFE_INTEGER)}`;
+      if (__DEV__) {
+        console.warn(`auto assigning id ${this.id} for template ${this.type}`);
+      }
     }
 
     const eventMap = {
@@ -101,12 +105,13 @@ export class Template<P> {
       ...(this.eventMap || {}),
     };
 
-    Object.entries(eventMap).forEach(([eventName, callbackName]: any) => {
-      CarPlay.emitter.addListener(eventName, e => {
+    Object.entries(eventMap).forEach(([eventName, callbackName]) => {
+      const listener = CarPlay.emitter.addListener(eventName, e => {
         if (config[callbackName] && e.templateId === this.id) {
           config[callbackName](e);
         }
       });
+      this.listeners.push(listener);
     });
 
     if (this.type !== 'map') {
@@ -124,5 +129,9 @@ export class Template<P> {
       result.isBackButtonCustomized = true;
     }
     return JSON.parse(JSON.stringify(result));
+  }
+
+  public destroy() {
+    this.listeners.forEach(listener => listener.remove());
   }
 }

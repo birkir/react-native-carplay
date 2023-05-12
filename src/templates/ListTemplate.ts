@@ -1,3 +1,4 @@
+import { EmitterSubscription } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { ListItemUpdate } from '../interfaces/ListItemUpdate';
 import { ListSection } from '../interfaces/ListSection';
@@ -70,12 +71,13 @@ export class ListTemplate extends Template<ListTemplateConfig> {
   constructor(public config: ListTemplateConfig) {
     super(config);
 
-    CarPlay.emitter.addListener('didSelectListItem', e => {
+    const listener = CarPlay.emitter.addListener('didSelectListItem', e => {
       if (config.onItemSelect && e.templateId === this.id) {
         const x = config.onItemSelect(e);
         Promise.resolve(x).then(() => CarPlay.bridge.reactToSelectedResult(true));
       }
     });
+    this.listeners.push(listener);
   }
 
   public updateSections = (sections: ListSection[]) => {

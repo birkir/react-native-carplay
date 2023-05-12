@@ -1,3 +1,4 @@
+import { EmitterSubscription } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { GridTemplate } from './GridTemplate';
 import { InformationTemplate } from './InformationTemplate';
@@ -32,7 +33,7 @@ export class TabBarTemplate extends Template<TabBarTemplateConfig> {
   constructor(public config: TabBarTemplateConfig) {
     super(config);
 
-    CarPlay.emitter.addListener('didSelectTemplate', e => {
+    const listener = CarPlay.emitter.addListener('didSelectTemplate', e => {
       if (config.onTemplateSelect && e.templateId === this.id) {
         config.onTemplateSelect(
           config.templates.find(tpl => tpl.id === e.selectedTemplateId),
@@ -40,6 +41,7 @@ export class TabBarTemplate extends Template<TabBarTemplateConfig> {
         );
       }
     });
+    this.listeners.push(listener);
   }
 
   public updateTemplates = (config: TabBarTemplateConfig) => {
