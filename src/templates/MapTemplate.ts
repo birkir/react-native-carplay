@@ -125,7 +125,8 @@ export class MapTemplate extends Template<MapTemplateConfig> {
   /**
    * Update MapTemplate configuration
    */
-  public updateConfig(config: MapTemplateConfig) {
+  public updateConfig(config: Partial<MapTemplateConfig>) {
+    this.config = { ...this.config, ...config };
     CarPlay.bridge.updateMapTemplateConfig(this.id, this.parseConfig(config));
   }
 
