@@ -3,6 +3,7 @@
 
 @interface RNCPStore : NSObject {
     CPInterfaceController *interfaceController;
+    CPInformationTemplate *informationTemplate;
     CPWindow *window;
 }
 
