@@ -8,8 +8,9 @@
 typedef void(^SearchResultUpdateBlock)(NSArray<CPListItem *> * _Nonnull);
 typedef void(^SelectedResultBlock)(void);
 
-@interface RNCarPlay : RCTEventEmitter<RCTBridgeModule, CPInterfaceControllerDelegate, CPSearchTemplateDelegate, CPListTemplateDelegate, CPMapTemplateDelegate,  CPTabBarTemplateDelegate, CPPointOfInterestTemplateDelegate, CPNowPlayingTemplateObserver> {
+@interface RNCarPlay : RCTEventEmitter<RCTBridgeModule, CPInterfaceControllerDelegate, CPSearchTemplateDelegate, CPListTemplateDelegate, CPMapTemplateDelegate, CPTabBarTemplateDelegate, CPPointOfInterestTemplateDelegate, CPNowPlayingTemplateObserver> {
     CPInterfaceController *interfaceController;
+    CPInformationTemplate *informationTemplate;
     CPWindow *window;
     SearchResultUpdateBlock searchResultBlock;
     SelectedResultBlock selectedResultBlock;
