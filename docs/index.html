@@ -252,13 +252,19 @@
 				<p><img src=".github/informationTemplate.png" alt="Information Template"></p>
 				<pre><code class="language-jsx"><span style="color: #000000">import { CarPlay } from &#039;react-native-carplay&#039;;</span>
 
-<span style="color: #000000">const informationTemplate = new InformationTemplate({</span>
+<span style="color: #000000">const template = new InformationTemplate({</span>
 <span style="color: #000000">  title: &#039;Information&#039;,</span>
-<span style="color: #000000">  items: [],</span>
-<span style="color: #000000">  actions: [{ id: &#039;x&#039;, title: &#039;demo&#039; }],</span>
-<span style="color: #000000">  onActionButtonPressed({ id }) {</span>
-<span style="color: #000000">    // id of button pressed</span>
-<span style="color: #000000">    console.log(&#039;pressed&#039;, id);</span>
+<span style="color: #000000">  items: Array.from({ length: 30 }).fill({ title: &#039;foo&#039;, detail: &#039;bar&#039; }),</span>
+<span style="color: #000000">  actions: [{ id: &#039;u&#039;, title: &#039;Update List&#039; }, { id: &#039;r&#039;, title: &#039;Random #:&#039; }],</span>
+<span style="color: #000000">  onActionButtonPressed(action) {</span>
+<span style="color: #000000">    console.log(&#039;pressed&#039;, action);</span>
+<span style="color: #000000">    if (action.id == &#039;u&#039;) {</span>
+<span style="color: #000000">      const numOfItems = Math.floor(Math.random() * 6);</span>
+<span style="color: #000000">      template.updateInformationTemplateItems(Array.from({ length: numOfItems }).fill({ title: &#039;foo&#039;, detail: &#039;bar&#039; }));</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">    else if (action.id == &#039;r&#039;) {</span>
+<span style="color: #000000">      template.updateInformationTemplateActions([{ id: &#039;u&#039;, title: &#039;Update List&#039; }, { id: &#039;r&#039;, title: &#039;Random #:&#039; + Math.floor(Math.random() * 100) }]);</span>
+<span style="color: #000000">    }</span>
 <span style="color: #000000">  },</span>
 <span style="color: #000000">});</span>
 

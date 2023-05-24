@@ -1,4 +1,5 @@
 import { Template, TemplateConfig } from './Template';
+import { CarPlay } from '../CarPlay';
 
 interface InformationItem {
   title: string;
@@ -28,4 +29,12 @@ export class InformationTemplate extends Template<InformationTemplateConfig> {
       actionButtonPressed: 'onActionButtonPressed',
     };
   }
+
+  public updateInformationTemplateItems = (items: InformationItem[]) => {
+    return CarPlay.bridge.updateInformationTemplateItems(this.id, this.parseConfig(items));
+  };
+
+  public updateInformationTemplateActions = (actions: InformationAction[]) => {
+    return CarPlay.bridge.updateInformationTemplateActions(this.id, this.parseConfig(actions));
+  };
 }
