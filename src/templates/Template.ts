@@ -39,11 +39,15 @@ export interface TemplateConfig {
   /**
    * Name of system image for tab
    */
-  tabSystemImg?: string;
+  tabSystemImage?: string;
   /**
-   * Name of system image for tab
+   * Image source for tab
    */
   tabImage?: null;
+  /**
+   * Set tab title
+   */
+  tabTitle?: string;
   /**
    * Fired before template appears
    * @param e Event
