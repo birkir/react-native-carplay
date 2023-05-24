@@ -26,6 +26,7 @@
     RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
     RNCPStore *store = [RNCPStore sharedManager];
     [store setConnected:false];
+    [[store.window subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     if (cp.bridge) {
         [cp sendEventWithName:@"didDisconnect" body:@{}];
