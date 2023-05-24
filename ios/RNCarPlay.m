@@ -182,11 +182,13 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         }
         [listTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
         [listTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
-        CPBarButton *backButton = [[CPBarButton alloc] initWithTitle:@" Back" handler:^(CPBarButton * _Nonnull barButton) {
-            [self sendEventWithName:@"backButtonPressed" body:@{@"templateId":templateId}];
-            [self popTemplate:false];
-        }];
-        [listTemplate setBackButton:backButton];
+        if (![RCTConvert BOOL:config[@"backButtonHidden"]]) {
+            CPBarButton *backButton = [[CPBarButton alloc] initWithTitle:@" Back" handler:^(CPBarButton * _Nonnull barButton) {
+                [self sendEventWithName:@"backButtonPressed" body:@{@"templateId":templateId}];
+                [self popTemplate:false];
+            }];
+            [listTemplate setBackButton:backButton];
+        }
         if (config[@"emptyViewTitleVariants"]) {
             listTemplate.emptyViewTitleVariants = [RCTConvert NSArray:config[@"emptyViewTitleVariants"]];
         }
@@ -293,8 +295,8 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     if (config[@"tabSystemItem"]) {
         template.tabSystemItem = [RCTConvert NSInteger:config[@"tabSystemItem"]];
     }
-    if (config[@"tabSystemImg"]) {
-        template.tabImage = [UIImage systemImageNamed:[RCTConvert NSString:config[@"tabSystemImg"]]];
+    if (config[@"tabSystemImage"]) {
+        template.tabImage = [UIImage systemImageNamed:[RCTConvert NSString:config[@"tabSystemImage"]]];
     }
     if (config[@"tabImage"]) {
         template.tabImage = [RCTConvert UIImage:config[@"tabImage"]];

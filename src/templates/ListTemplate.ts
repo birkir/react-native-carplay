@@ -45,6 +45,12 @@ export interface ListTemplateConfig extends TemplateConfig {
    * Fired when the back button is pressed
    */
   onBackButtonPressed?(): void;
+
+  /**
+   * Option to hide back button
+   * (defaults to false)
+   */
+  backButtonHidden?: Boolean;
 }
 
 /**
