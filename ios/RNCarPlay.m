@@ -10,6 +10,10 @@
 @synthesize selectedResultBlock;
 @synthesize isNowPlayingActive;
 
++ (NSDictionary *) getConnectedWindowInformation: (CPWindow *) window {
+    return @{@"width": @(window.bounds.size.width), @"height": @(window.bounds.size.height), @"scale": @(window.screen.scale)}
+}
+
 + (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window {
     RNCPStore * store = [RNCPStore sharedManager];
     store.interfaceController = interfaceController;
@@ -18,7 +22,7 @@
 
     RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
     if (cp.bridge) {
-        [cp sendEventWithName:@"didConnect" body:@{}];
+        [cp sendEventWithName:@"didConnect" body:[self getConnectedWindowInformation:window]];
     }
 }
 
@@ -26,6 +30,7 @@
     RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
     RNCPStore *store = [RNCPStore sharedManager];
     [store setConnected:false];
+    [[store.window subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     if (cp.bridge) {
         [cp sendEventWithName:@"didDisconnect" body:@{}];
@@ -85,7 +90,8 @@ RCT_EXPORT_MODULE();
         @"didCancelNavigation",
         @"alertActionPressed",
         @"selectedPreviewForTrip",
-        @"startedTrip"
+        @"startedTrip",
+        @"buttonPressed",
     ];
 }
 
@@ -117,7 +123,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(checkForConnection) {
     RNCPStore *store = [RNCPStore sharedManager];
     if ([store isConnected]) {
-        [self sendEventWithName:@"didConnect" body:@{}];
+        [self sendEventWithName:@"didConnect" body:[RNCarPlay getConnectedWindowInformation: store.window]];
     }
 }
 
@@ -145,7 +151,14 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     }
     else if ([type isEqualToString:@"list"]) {
         NSArray *sections = [self parseSections:[RCTConvert NSArray:config[@"sections"]]];
-        CPListTemplate *listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections];
+        CPListTemplate *listTemplate;
+        if (@available(iOS 15.0, *)) {
+            CPAssistantCellConfiguration *conf = [[CPAssistantCellConfiguration alloc] initWithPosition: CPAssistantCellPositionTop visibility:CPAssistantCellVisibilityAlways assistantAction:CPAssistantCellActionTypeStartCall];
+            listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections assistantCellConfiguration:conf];
+        } else {
+            // Fallback on earlier versions
+            listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections];
+        }
         [listTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
         [listTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
         CPBarButton *backButton = [[CPBarButton alloc] initWithTitle:@" Back" handler:^(CPBarButton * _Nonnull barButton) {
@@ -186,8 +199,9 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         tabBarTemplate.delegate = self;
         template = tabBarTemplate;
     } else if ([type isEqualToString:@"contact"]) {
-        CPContact *contact = [[CPContact alloc] init];
-        [contact setName:config[@"name"]];
+        NSString *nm = [RCTConvert NSString:config[@"name"]];
+        UIImage *img = [RCTConvert UIImage:config[@"image"]];
+        CPContact *contact = [[CPContact alloc] initWithName:nm image:img];
         [contact setSubtitle:config[@"subtitle"]];
         [contact setActions:[self parseButtons:config[@"actions"] templateId:templateId]];
         CPContactTemplate *contactTemplate = [[CPContactTemplate alloc] initWithContact:contact];
@@ -264,10 +278,12 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     if (config[@"tabImage"]) {
         template.tabImage = [RCTConvert UIImage:config[@"tabImage"]];
     }
-
+    if (config[@"tabTitle"]) {
+        template.tabTitle = [RCTConvert NSString:config[@"tabTitle"]];
+    }
 
     [template setUserInfo:@{ @"templateId": templateId }];
-    [store setTemplate:templateId template:template];
+    [store setTemplate:templateId _template:template];
 }
 
 RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
@@ -511,7 +527,7 @@ RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictio
             [item setText:[RCTConvert NSString:config[@"text"]]];
         }
         if (config[@"detailText"]) {
-            [item setDetailText:[RCTConvert NSString:config[@"text"]]];
+            [item setDetailText:[RCTConvert NSString:config[@"detailText"]]];
         }
         if (config[@"isPlaying"]) {
             [item setPlaying:[RCTConvert BOOL:config[@"isPlaying"]]];
@@ -540,6 +556,34 @@ RCT_EXPORT_METHOD(updateInformationTemplateActions:(NSString *)templateId items:
         informationTemplate.actions = [self parseInformationActions:actions templateId:templateId];
     } else {
         NSLog(@"Failed to find template %@", template);
+    }
+}
+
+RCT_EXPORT_METHOD(getMaximumListItemCount:(NSString *)templateId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPListTemplate *listTemplate = (CPListTemplate*) template;
+        resolve(@(CPListTemplate.maximumItemCount));
+    } else {
+        NSLog(@"Failed to find template %@", template);
+        reject(@"template_not_found", @"Template not found in store", nil);
+    }
+}
+
+RCT_EXPORT_METHOD(getMaximumListSectionCount:(NSString *)templateId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPListTemplate *listTemplate = (CPListTemplate*) template;
+        resolve(@(CPListTemplate.maximumSectionCount));
+    } else {
+        NSLog(@"Failed to find template %@", template);
+        reject(@"template_not_found", @"Template not found in store", nil);
     }
 }
 

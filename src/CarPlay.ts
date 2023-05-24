@@ -25,6 +25,15 @@ type PushableTemplates =
   | NowPlayingTemplate;
 type PresentableTemplates = AlertTemplate | ActionSheetTemplate | VoiceControlTemplate;
 
+type WindowInformation = {
+  width: number,
+  height: number,
+  scale: number,
+}
+
+type OnConnectCallback = (window: WindowInformation) => void
+type OnDisconnectCallback = () => void
+
 /**
  * A controller that manages all user interface elements appearing on your map displayed on the CarPlay screen.
  */
@@ -44,18 +53,18 @@ class CarPlayInterface {
    */
   public emitter = new NativeEventEmitter(RNCarPlay);
 
-  private onConnectCallbacks = new Set<() => void>();
-  private onDisconnectCallbacks = new Set<() => void>();
+  private onConnectCallbacks = new Set<OnConnectCallback>();
+  private onDisconnectCallbacks = new Set<OnDisconnectCallback>();
 
   constructor() {
     if (Platform.OS !== 'ios') {
       return;
     }
 
-    this.emitter.addListener('didConnect', () => {
+    this.emitter.addListener('didConnect', (window: WindowInformation) => {
       this.connected = true;
       this.onConnectCallbacks.forEach(callback => {
-        callback();
+        callback(window);
       });
     });
     this.emitter.addListener('didDisconnect', () => {
@@ -73,22 +82,22 @@ class CarPlayInterface {
   /**
    * Fired when CarPlay is connected to the device.
    */
-  public registerOnConnect = (callback: () => void) => {
+  public registerOnConnect = (callback: OnConnectCallback) => {
     this.onConnectCallbacks.add(callback);
   };
 
-  public unregisterOnConnect = (callback: () => void) => {
+  public unregisterOnConnect = (callback: OnConnectCallback) => {
     this.onConnectCallbacks.delete(callback);
   };
 
   /**
    * Fired when CarPlay is disconnected from the device.
    */
-  public registerOnDisconnect = (callback: () => void) => {
+  public registerOnDisconnect = (callback: OnDisconnectCallback) => {
     this.onDisconnectCallbacks.add(callback);
   };
 
-  public unregisterOnDisconnect = (callback: () => void) => {
+  public unregisterOnDisconnect = (callback: OnDisconnectCallback) => {
     this.onDisconnectCallbacks.delete(callback);
   };
 
