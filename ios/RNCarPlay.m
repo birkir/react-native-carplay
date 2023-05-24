@@ -112,6 +112,27 @@ RCT_EXPORT_MODULE();
     return tintedImage;
 }
 
+-(UIImage*)dynamicImageWithNormalImage:(UIImage*)normalImage darkImage:(UIImage*)darkImage {
+  RNCPStore *store = [RNCPStore sharedManager];
+    if (normalImage == nil || darkImage == nil) {
+        return normalImage ? : darkImage;
+    }
+    if (@available(iOS 13.0, *)) {
+      UIImageAsset* imageAsset = darkImage.imageAsset;
+
+        // darkImage
+        UITraitCollection* darkImageTraitCollection = [UITraitCollection traitCollectionWithTraitsFromCollections:
+        @[[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleDark],
+          [UITraitCollection traitCollectionWithDisplayScale:normalImage.scale]]];
+        [imageAsset registerImage:normalImage withTraitCollection:darkImageTraitCollection];
+
+        return [imageAsset imageWithTraitCollection: store.interfaceController.carTraitCollection];
+    }
+    else {
+        return normalImage;
+   }
+}
+
 - (UIImage *)imageWithSize:(UIImage *)image convertToSize:(CGSize)size {
     UIGraphicsBeginImageContext(size);
     [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
@@ -726,9 +747,15 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     if ([config objectForKey:@"guidanceBackgroundColor"]) {
         [mapTemplate setGuidanceBackgroundColor:[RCTConvert UIColor:config[@"guidanceBackgroundColor"]]];
     }
-
+    else {
+      [mapTemplate setGuidanceBackgroundColor:UIColor.systemGray5Color];
+    }
+    
     if ([config objectForKey:@"tripEstimateStyle"]) {
         [mapTemplate setTripEstimateStyle:[RCTConvert CPTripEstimateStyle:config[@"tripEstimateStyle"]]];
+    }
+    else {
+      [mapTemplate setTripEstimateStyle:CPTripEstimateStyleDark];
     }
 
     if ([config objectForKey:@"leadingNavigationBarButtons"]){
@@ -955,14 +982,7 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 
     if ([json objectForKey:@"symbolImage"]) {
         UIImage *symbolImage = [RCTConvert UIImage:json[@"symbolImage"]];
-
-        BOOL shouldTint = [RCTConvert BOOL:json[@"tintSymbolImage"]];
-        if ([json objectForKey:@"tintSymbolImage"]) {
-            UIColor *tintColor = [RCTConvert UIColor:json[@"tintSymbolImage"]];
-            symbolImage = [self imageWithTint:symbolImage andTintColor:tintColor];
-        }
-
-
+      
         if ([json objectForKey:@"resizeSymbolImage"]) {
             NSString *resizeType = [RCTConvert NSString:json[@"resizeSymbolImage"]];
             if ([resizeType isEqualToString: @"primary"]) {
@@ -971,6 +991,14 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
             if ([resizeType isEqualToString: @"secondary"]) {
                 symbolImage = [self imageWithSize:symbolImage convertToSize:CGSizeMake(50, 50)];
             }
+        }
+
+        BOOL shouldTint = [RCTConvert BOOL:json[@"tintSymbolImage"]];
+        if ([json objectForKey:@"tintSymbolImage"]) {
+            UIColor *tintColor = [RCTConvert UIColor:json[@"tintSymbolImage"]];
+            UIImage *darkImage = symbolImage;
+            UIImage *lightImage = [self imageWithTint:symbolImage andTintColor:tintColor];
+            symbolImage = [self dynamicImageWithNormalImage:lightImage darkImage:darkImage];
         }
 
 
