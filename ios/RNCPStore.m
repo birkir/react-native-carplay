@@ -42,8 +42,8 @@
     return [_templatesStore objectForKey:templateId];
 }
 
-- (NSString*) setTemplate:(NSString*)templateId _template:(CPTemplate*)_template {
-    [_templatesStore setObject:_template forKey:templateId];
+- (NSString*) setTemplate:(NSString*)templateId template:(CPTemplate*)carPlayTemplate {
+    [_templatesStore setObject:carPlayTemplate forKey:templateId];
     return templateId;
 }
 

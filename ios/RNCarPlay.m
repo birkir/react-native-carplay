@@ -10,6 +10,10 @@
 @synthesize selectedResultBlock;
 @synthesize isNowPlayingActive;
 
++ (NSDictionary *) getConnectedWindowInformation: (CPWindow *) window {
+    return @{@"width": @(window.bounds.size.width), @"height": @(window.bounds.size.height), @"scale": @(window.screen.scale)}
+}
+
 + (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window {
     RNCPStore * store = [RNCPStore sharedManager];
     store.interfaceController = interfaceController;
@@ -18,7 +22,7 @@
 
     RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
     if (cp.bridge) {
-        [cp sendEventWithName:@"didConnect" body:@{}];
+        [cp sendEventWithName:@"didConnect" body:[self getConnectedWindowInformation:window]];
     }
 }
 
@@ -26,6 +30,7 @@
     RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
     RNCPStore *store = [RNCPStore sharedManager];
     [store setConnected:false];
+    [[store.window subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     if (cp.bridge) {
         [cp sendEventWithName:@"didDisconnect" body:@{}];
@@ -118,7 +123,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(checkForConnection) {
     RNCPStore *store = [RNCPStore sharedManager];
     if ([store isConnected]) {
-        [self sendEventWithName:@"didConnect" body:@{}];
+        [self sendEventWithName:@"didConnect" body:[RNCarPlay getConnectedWindowInformation: store.window]];
     }
 }
 
@@ -522,7 +527,7 @@ RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictio
             [item setText:[RCTConvert NSString:config[@"text"]]];
         }
         if (config[@"detailText"]) {
-            [item setDetailText:[RCTConvert NSString:config[@"text"]]];
+            [item setDetailText:[RCTConvert NSString:config[@"detailText"]]];
         }
         if (config[@"isPlaying"]) {
             [item setPlaying:[RCTConvert BOOL:config[@"isPlaying"]]];
