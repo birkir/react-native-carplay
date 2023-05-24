@@ -90,7 +90,8 @@ RCT_EXPORT_MODULE();
         @"didCancelNavigation",
         @"alertActionPressed",
         @"selectedPreviewForTrip",
-        @"startedTrip"
+        @"startedTrip",
+        @"buttonPressed",
     ];
 }
 
@@ -150,7 +151,14 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     }
     else if ([type isEqualToString:@"list"]) {
         NSArray *sections = [self parseSections:[RCTConvert NSArray:config[@"sections"]]];
-        CPListTemplate *listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections];
+        CPListTemplate *listTemplate;
+        if (@available(iOS 15.0, *)) {
+            CPAssistantCellConfiguration *conf = [[CPAssistantCellConfiguration alloc] initWithPosition: CPAssistantCellPositionTop visibility:CPAssistantCellVisibilityAlways assistantAction:CPAssistantCellActionTypeStartCall];
+            listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections assistantCellConfiguration:conf];
+        } else {
+            // Fallback on earlier versions
+            listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections];
+        }
         [listTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
         [listTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
         CPBarButton *backButton = [[CPBarButton alloc] initWithTitle:@" Back" handler:^(CPBarButton * _Nonnull barButton) {
@@ -191,8 +199,9 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         tabBarTemplate.delegate = self;
         template = tabBarTemplate;
     } else if ([type isEqualToString:@"contact"]) {
-        CPContact *contact = [[CPContact alloc] init];
-        [contact setName:config[@"name"]];
+        NSString *nm = [RCTConvert NSString:config[@"name"]];
+        UIImage *img = [RCTConvert UIImage:config[@"image"]];
+        CPContact *contact = [[CPContact alloc] initWithName:nm image:img];
         [contact setSubtitle:config[@"subtitle"]];
         [contact setActions:[self parseButtons:config[@"actions"] templateId:templateId]];
         CPContactTemplate *contactTemplate = [[CPContactTemplate alloc] initWithContact:contact];
@@ -269,10 +278,12 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     if (config[@"tabImage"]) {
         template.tabImage = [RCTConvert UIImage:config[@"tabImage"]];
     }
-
+    if (config[@"tabTitle"]) {
+        template.tabTitle = [RCTConvert NSString:config[@"tabTitle"]];
+    }
 
     [template setUserInfo:@{ @"templateId": templateId }];
-    [store setTemplate:templateId template:template];
+    [store setTemplate:templateId _template:template];
 }
 
 RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
