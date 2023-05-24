@@ -516,7 +516,7 @@ RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictio
             [item setText:[RCTConvert NSString:config[@"text"]]];
         }
         if (config[@"detailText"]) {
-            [item setDetailText:[RCTConvert NSString:config[@"text"]]];
+            [item setDetailText:[RCTConvert NSString:config[@"detailText"]]];
         }
         if (config[@"isPlaying"]) {
             [item setPlaying:[RCTConvert BOOL:config[@"isPlaying"]]];
