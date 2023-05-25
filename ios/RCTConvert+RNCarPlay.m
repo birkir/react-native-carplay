@@ -16,8 +16,25 @@ RCT_ENUM_CONVERTER(CPPanDirection, (@{
                                       @"right": @(CPPanDirectionRight),
                                       @"bottom": @(CPPanDirectionDown),
                                       @"left": @(CPPanDirectionLeft),
-                                      @"none": @(CPPanDirectionNone),
+                                      @"none": @(CPPanDirectionNone)
                                       }), CPPanDirectionNone, integerValue)
+
+RCT_ENUM_CONVERTER(CPAssistantCellPosition, (@{
+                                      @"top": @(CPAssistantCellPositionTop),
+                                      @"bottom": @(CPAssistantCellPositionBottom)
+                                      }), CPAssistantCellPositionTop, integerValue)
+
+RCT_ENUM_CONVERTER(CPAssistantCellVisibility, (@{
+                                      @"off": @(CPAssistantCellVisibilityOff),
+                                      @"always": @(CPAssistantCellVisibilityAlways),
+                                      @"limited": @(CPAssistantCellVisibilityWhileLimitedUIActive)
+                                      }), CPAssistantCellVisibilityOff, integerValue)
+
+RCT_ENUM_CONVERTER(CPAssistantCellActionType, (@{
+                                      @"playMedia": @(CPAssistantCellActionTypePlayMedia),
+                                      @"startCall": @(CPAssistantCellActionTypeStartCall)
+                                      }), CPAssistantCellActionTypeStartCall, integerValue)
+
 
 + (CPMapButton*)CPMapButton:(id)json withHandler:(void (^)(CPMapButton * _Nonnull mapButton))handler {
     CPMapButton *mapButton = [[CPMapButton alloc] initWithHandler:handler];

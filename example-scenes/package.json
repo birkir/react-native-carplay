@@ -6,13 +6,19 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "bundle": "cd ..; yarn build; cd -; cp -r ../{ios,lib,src} node_modules/react-native-carplay/.",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-navigation/native": "^6.1.6",
+    "@react-navigation/stack": "^6.3.16",
     "react": "17.0.2",
     "react-native": "0.68.1",
-    "react-native-carplay": "*"
+    "react-native-carplay": "*",
+    "react-native-gesture-handler": "^2.10.1",
+    "react-native-safe-area-context": "^4.5.3",
+    "react-native-screens": "^3.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

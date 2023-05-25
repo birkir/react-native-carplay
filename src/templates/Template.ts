@@ -1,3 +1,4 @@
+import { ImageSourcePropType } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { BarButton } from '../interfaces/BarButton';
 
@@ -39,11 +40,11 @@ export interface TemplateConfig {
   /**
    * Name of system image for tab
    */
-  tabSystemImage?: string;
+  tabSystemImageName?: string;
   /**
    * Image source for tab
    */
-  tabImage?: null;
+  tabImage?: ImageSourcePropType;
   /**
    * Set tab title
    */

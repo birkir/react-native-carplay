@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 interface BarButtonBase {
   /**
    * Button ID
@@ -30,7 +32,7 @@ interface BarButtonImage extends BarButtonBase {
    *
    * If you provide an animated image, the button displays only the first image in the animation sequence.
    */
-  image: null;
+  image: ImageSourcePropType;
 }
 
 /**

@@ -7,6 +7,9 @@
 
 + (CPTripEstimateStyle)CPTripEstimateStyle:(id)json;
 + (CPPanDirection)CPPanDirection:(id)json;
++ (CPAssistantCellPosition)CPAssistantCellPosition:(id)json;
++ (CPAssistantCellVisibility)CPAssistantCellVisibility:(id)json;
++ (CPAssistantCellActionType)CPAssistantCellActionType:(id)json;
 + (CPMapButton*)CPMapButton:(id)json withHandler:(void (^)(CPMapButton * _Nonnull mapButton))handler;
 + (CPRouteChoice*)CPRouteChoice:(id)json;
 + (MKMapItem*)MKMapItem:(id)json;

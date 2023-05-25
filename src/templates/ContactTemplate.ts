@@ -1,3 +1,4 @@
+import { ImageSourcePropType } from 'react-native';
 import { Template, TemplateConfig } from './Template';
 
 interface ContactButtonEvent {
@@ -21,7 +22,9 @@ type ContactAction = ContactActionBase | ContactActionMessage;
 
 export interface ContactTemplateConfig extends TemplateConfig {
   name: string;
+  image: ImageSourcePropType;
   subtitle?: string;
+  informativeText?: string;
   actions?: ContactAction[];
   /**
    * Fired when bar button is pressed

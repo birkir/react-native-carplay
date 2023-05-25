@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 /**
  * A button representing an action that a map template displays on the CarPlay screen.
  */
@@ -9,11 +11,11 @@ export interface MapButton {
   /**
    * The image to display on the button.
    */
-  image?: any;
+  image?: ImageSourcePropType;
   /**
    * The image to display when focus is on the button.
    */
-  focusedImage?: any;
+  focusedImage?: ImageSourcePropType;
   /**
    * A Boolean value that enables and disables the map button.
    */

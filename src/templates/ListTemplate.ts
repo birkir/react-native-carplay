@@ -51,6 +51,17 @@ export interface ListTemplateConfig extends TemplateConfig {
    * (defaults to false)
    */
   backButtonHidden?: Boolean;
+
+  /**
+   * Assistant Configuration
+   * @see https://developer.apple.com/documentation/carplay/cplisttemplate#3762508
+   */
+  assistant?: {
+    enabled: boolean;
+    position: 'top' | 'bottom';
+    visibility: 'off' | 'always' | 'limited';
+    action: 'playMedia' | 'startCall';
+  }
 }
 
 /**

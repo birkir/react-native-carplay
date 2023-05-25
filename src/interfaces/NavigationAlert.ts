@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 export enum NavigationAlertActionStyle {
   Default = 0,
   Cancel = 1,
@@ -19,8 +21,8 @@ export interface NavigationAlertAction {
  * An alert panel that displays map or navigation related information to the user.
  */
 export interface NavigationAlert {
-  lightImage?: any;
-  darkImage?: any;
+  lightImage?: ImageSourcePropType;
+  darkImage?: ImageSourcePropType;
   /**
    * An array of title strings.
    */

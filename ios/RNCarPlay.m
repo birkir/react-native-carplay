@@ -11,7 +11,11 @@
 @synthesize isNowPlayingActive;
 
 + (NSDictionary *) getConnectedWindowInformation: (CPWindow *) window {
-    return @{@"width": @(window.bounds.size.width), @"height": @(window.bounds.size.height), @"scale": @(window.screen.scale)}
+    return @{
+        @"width": @(window.bounds.size.width),
+        @"height": @(window.bounds.size.height),
+        @"scale": @(window.screen.scale)
+    };
 }
 
 + (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window {
@@ -60,6 +64,7 @@ RCT_EXPORT_MODULE();
         @"didDisappear",
         @"willAppear",
         @"willDisappear",
+        @"buttonPressed",
         // grid
         @"gridButtonPressed",
         // information
@@ -72,6 +77,11 @@ RCT_EXPORT_MODULE();
         @"selectedResult",
         // tabbar
         @"didSelectTemplate",
+        // nowplaying
+        @"upNextButtonPressed",
+        @"albumArtistButtonPressed",
+        // poi
+        @"didSelectPointOfInterest",
         // map
         @"mapButtonPressed",
         @"didUpdatePanGestureWithTranslation",
@@ -91,7 +101,6 @@ RCT_EXPORT_MODULE();
         @"alertActionPressed",
         @"selectedPreviewForTrip",
         @"startedTrip",
-        @"buttonPressed",
     ];
 }
 
@@ -149,34 +158,44 @@ RCT_EXPORT_METHOD(checkForConnection) {
 }
 
 RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config) {
+    // Get the shared instance of the RNCPStore class
     RNCPStore *store = [RNCPStore sharedManager];
 
+    // Extract values from the 'config' dictionary
     NSString *type = [RCTConvert NSString:config[@"type"]];
     NSString *title = [RCTConvert NSString:config[@"title"]];
     NSArray *leadingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"leadingNavigationBarButtons"]] templateId:templateId];
     NSArray *trailingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"trailingNavigationBarButtons"]] templateId:templateId];
-
-    CPTemplate *template = [[CPTemplate alloc] init];
+    
+    // Create a new CPTemplate object
+    CPTemplate *carPlayTemplate = [[CPTemplate alloc] init];
 
     if ([type isEqualToString:@"search"]) {
         CPSearchTemplate *searchTemplate = [[CPSearchTemplate alloc] init];
         searchTemplate.delegate = self;
-        template = searchTemplate;
+        carPlayTemplate = searchTemplate;
     }
     else if ([type isEqualToString:@"grid"]) {
         NSArray *buttons = [self parseGridButtons:[RCTConvert NSArray:config[@"buttons"]] templateId:templateId];
         CPGridTemplate *gridTemplate = [[CPGridTemplate alloc] initWithTitle:title gridButtons:buttons];
         [gridTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
         [gridTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
-        template = gridTemplate;
+        carPlayTemplate = gridTemplate;
     }
     else if ([type isEqualToString:@"list"]) {
         NSArray *sections = [self parseSections:[RCTConvert NSArray:config[@"sections"]]];
         CPListTemplate *listTemplate;
         if (@available(iOS 15.0, *)) {
-            CPAssistantCellConfiguration *conf = [[CPAssistantCellConfiguration alloc] initWithPosition: CPAssistantCellPositionTop visibility:CPAssistantCellVisibilityAlways assistantAction:CPAssistantCellActionTypeStartCall];
-            listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections assistantCellConfiguration:conf];
-        } else {
+            if ([config objectForKey:@"assistant"]) {
+                NSDictionary *assistant = [config objectForKey:@"assistant"];
+                BOOL _enabled = [assistant valueForKey:@"enabled"];
+                if (_enabled) {
+                    CPAssistantCellConfiguration *conf = [[CPAssistantCellConfiguration alloc] initWithPosition:[RCTConvert CPAssistantCellPosition:[config valueForKey:@"position"]] visibility:[RCTConvert CPAssistantCellVisibility:[config valueForKey:@"visibility"]] assistantAction:[RCTConvert CPAssistantCellActionType:[config valueForKey:@"visibility"]]];
+                    listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections assistantCellConfiguration:conf];
+                }
+            }
+        }
+        if (listTemplate == nil) {
             // Fallback on earlier versions
             listTemplate = [[CPListTemplate alloc] initWithTitle:title sections:sections];
         }
@@ -196,7 +215,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
             listTemplate.emptyViewSubtitleVariants = [RCTConvert NSArray:config[@"emptyViewSubtitleVariants"]];
         }
         listTemplate.delegate = self;
-        template = listTemplate;
+        carPlayTemplate = listTemplate;
     }
     else if ([type isEqualToString:@"map"]) {
         CPMapTemplate *mapTemplate = [[CPMapTemplate alloc] init];
@@ -207,20 +226,52 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         [mapTemplate setUserInfo:@{ @"templateId": templateId }];
         mapTemplate.mapDelegate = self;
 
-        template = mapTemplate;
+        carPlayTemplate = mapTemplate;
     } else if ([type isEqualToString:@"voicecontrol"]) {
         CPVoiceControlTemplate *voiceTemplate = [[CPVoiceControlTemplate alloc] initWithVoiceControlStates: [self parseVoiceControlStates:config[@"voiceControlStates"]]];
-        template = voiceTemplate;
+        carPlayTemplate = voiceTemplate;
     } else if ([type isEqualToString:@"nowplaying"]) {
         CPNowPlayingTemplate *nowPlayingTemplate = [CPNowPlayingTemplate sharedTemplate];
-        [nowPlayingTemplate setAlbumArtistButtonEnabled:[RCTConvert BOOL:config[@"albumArtistButton"]]];
-        [nowPlayingTemplate setUpNextTitle:[RCTConvert NSString:config[@"upNextTitle"]]];
-        [nowPlayingTemplate setUpNextButtonEnabled:[RCTConvert BOOL:config[@"upNextButton"]]];
-        template = nowPlayingTemplate;
+        [nowPlayingTemplate setAlbumArtistButtonEnabled:[RCTConvert BOOL:config[@"albumArtistButtonEnabled"]]];
+        [nowPlayingTemplate setUpNextTitle:[RCTConvert NSString:config[@"upNextButtonTitle"]]];
+        [nowPlayingTemplate setUpNextButtonEnabled:[RCTConvert BOOL:config[@"upNextButtonEnabled"]]];
+        NSMutableArray<CPNowPlayingButton *> *buttons = [NSMutableArray new];
+        NSArray<NSDictionary*> *_buttons = [RCTConvert NSDictionaryArray:config[@"buttons"]];
+        for (NSDictionary *_button in _buttons) {
+            NSString *buttonType = [RCTConvert NSString:_button[@"type"]];
+            NSDictionary *body = @{@"templateId":templateId, @"id": _button[@"id"] };
+            if ([buttonType isEqualToString:@"shuffle"]) {
+                [buttons addObject:[[CPNowPlayingShuffleButton alloc] initWithHandler:^(__kindof CPNowPlayingButton * _Nonnull) {
+                    [self sendEventWithName:@"buttonPressed" body:body];
+                }]];
+            } else if ([buttonType isEqualToString:@"add-to-library"]) {
+                [buttons addObject:[[CPNowPlayingAddToLibraryButton alloc] initWithHandler:^(__kindof CPNowPlayingButton * _Nonnull) {
+                    [self sendEventWithName:@"buttonPressed" body:body];
+                }]];
+            } else if ([buttonType isEqualToString:@"more"]) {
+                [buttons addObject:[[CPNowPlayingMoreButton alloc] initWithHandler:^(__kindof CPNowPlayingButton * _Nonnull) {
+                    [self sendEventWithName:@"buttonPressed" body:body];
+                }]];
+            } else if ([buttonType isEqualToString:@"playback"]) {
+                [buttons addObject:[[CPNowPlayingPlaybackRateButton alloc] initWithHandler:^(__kindof CPNowPlayingButton * _Nonnull) {
+                    [self sendEventWithName:@"buttonPressed" body:body];
+                }]];
+            } else if ([buttonType isEqualToString:@"repeat"]) {
+                [buttons addObject:[[CPNowPlayingRepeatButton alloc] initWithHandler:^(__kindof CPNowPlayingButton * _Nonnull) {
+                    [self sendEventWithName:@"buttonPressed" body:body];
+                }]];
+            } else if ([buttonType isEqualToString:@"image"]) {
+                [buttons addObject:[[CPNowPlayingImageButton alloc] initWithImage:[RCTConvert UIImage:[_button objectForKey:@"image"]] handler:^(__kindof CPNowPlayingButton * _Nonnull) {
+                    [self sendEventWithName:@"buttonPressed" body:body];
+                }]];
+            }
+        }
+        [nowPlayingTemplate updateNowPlayingButtons:buttons];
+        carPlayTemplate = nowPlayingTemplate;
     } else if ([type isEqualToString:@"tabbar"]) {
         CPTabBarTemplate *tabBarTemplate = [[CPTabBarTemplate alloc] initWithTemplates:[self parseTemplatesFrom:config]];
         tabBarTemplate.delegate = self;
-        template = tabBarTemplate;
+        carPlayTemplate = tabBarTemplate;
     } else if ([type isEqualToString:@"contact"]) {
         NSString *nm = [RCTConvert NSString:config[@"name"]];
         UIImage *img = [RCTConvert UIImage:config[@"image"]];
@@ -228,7 +279,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         [contact setSubtitle:config[@"subtitle"]];
         [contact setActions:[self parseButtons:config[@"actions"] templateId:templateId]];
         CPContactTemplate *contactTemplate = [[CPContactTemplate alloc] initWithContact:contact];
-        template = contactTemplate;
+        carPlayTemplate = contactTemplate;
     } else if ([type isEqualToString:@"actionsheet"]) {
         NSString *title = [RCTConvert NSString:config[@"title"]];
         NSString *message = [RCTConvert NSString:config[@"message"]];
@@ -241,7 +292,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
             [actions addObject:action];
         }
         CPActionSheetTemplate *actionSheetTemplate = [[CPActionSheetTemplate alloc] initWithTitle:title message:message actions:actions];
-        template = actionSheetTemplate;
+        carPlayTemplate = actionSheetTemplate;
     } else if ([type isEqualToString:@"alert"]) {
         NSMutableArray<CPAlertAction *> *actions = [NSMutableArray new];
         NSArray<NSDictionary*> *_actions = [RCTConvert NSDictionaryArray:config[@"actions"]];
@@ -253,7 +304,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         }
         NSArray<NSString*>* titleVariants = [RCTConvert NSArray:config[@"titleVariants"]];
         CPAlertTemplate *alertTemplate = [[CPAlertTemplate alloc] initWithTitleVariants:titleVariants actions:actions];
-        template = alertTemplate;
+        carPlayTemplate = alertTemplate;
     } else if ([type isEqualToString:@"poi"]) {
         NSString *title = [RCTConvert NSString:config[@"title"]];
         NSMutableArray<__kindof CPPointOfInterest *> * items = [NSMutableArray new];
@@ -268,7 +319,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
 
         CPPointOfInterestTemplate *poiTemplate = [[CPPointOfInterestTemplate alloc] initWithTitle:title pointsOfInterest:items selectedIndex:selectedIndex];
         poiTemplate.pointOfInterestDelegate = self;
-        template = poiTemplate;
+        carPlayTemplate = poiTemplate;
     } else if ([type isEqualToString:@"information"]) {
         NSString *title = [RCTConvert NSString:config[@"title"]];
         CPInformationTemplateLayout layout = [RCTConvert BOOL:config[@"leading"]] ? CPInformationTemplateLayoutLeading : CPInformationTemplateLayoutTwoColumn;
@@ -289,24 +340,24 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         }
 
         CPInformationTemplate *informationTemplate = [[CPInformationTemplate alloc] initWithTitle:title layout:layout items:items actions:actions];
-        template = informationTemplate;
+        carPlayTemplate = informationTemplate;
     }
 
     if (config[@"tabSystemItem"]) {
-        template.tabSystemItem = [RCTConvert NSInteger:config[@"tabSystemItem"]];
+        carPlayTemplate.tabSystemItem = [RCTConvert NSInteger:config[@"tabSystemItem"]];
     }
-    if (config[@"tabSystemImage"]) {
-        template.tabImage = [UIImage systemImageNamed:[RCTConvert NSString:config[@"tabSystemImage"]]];
+    if (config[@"tabSystemImageName"]) {
+        carPlayTemplate.tabImage = [UIImage systemImageNamed:[RCTConvert NSString:config[@"tabSystemImageName"]]];
     }
     if (config[@"tabImage"]) {
-        template.tabImage = [RCTConvert UIImage:config[@"tabImage"]];
+        carPlayTemplate.tabImage = [RCTConvert UIImage:config[@"tabImage"]];
     }
     if (config[@"tabTitle"]) {
-        template.tabTitle = [RCTConvert NSString:config[@"tabTitle"]];
+        carPlayTemplate.tabTitle = [RCTConvert NSString:config[@"tabTitle"]];
     }
 
-    [template setUserInfo:@{ @"templateId": templateId }];
-    [store setTemplate:templateId _template:template];
+    [carPlayTemplate setUserInfo:@{ @"templateId": templateId }];
+    [store setTemplate:templateId template:carPlayTemplate];
 }
 
 RCT_EXPORT_METHOD(createTrip:(NSString*)tripId config:(NSDictionary*)config) {
@@ -1259,11 +1310,11 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 # pragma NowPlaying
 
 - (void)nowPlayingTemplateUpNextButtonTapped:(CPNowPlayingTemplate *)nowPlayingTemplate {
-
+    [self sendTemplateEventWithName:nowPlayingTemplate name:@"upNextButtonPressed"];
 }
 
 - (void)nowPlayingTemplateAlbumArtistButtonTapped:(CPNowPlayingTemplate *)nowPlayingTemplate {
-
+    [self sendTemplateEventWithName:nowPlayingTemplate name:@"albumArtistButtonPressed"];
 }
 
 @end

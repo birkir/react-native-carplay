@@ -1,6 +1,8 @@
+import { ImageSourcePropType } from "react-native";
+
 export interface VoiceControlState {
   identifier: string;
-  image?: any;
+  image?: ImageSourcePropType;
   repeats: boolean;
   titleVariants: string[];
 }

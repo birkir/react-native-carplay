@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 /**
  * A menu item button displayed on a grid template.
  */
@@ -17,7 +19,7 @@ export interface GridButton {
    *
    * When creating a grid button, don't provide an animated image. If you do, the button uses the first image in the animation sequence.
    */
-  image: null;
+  image: ImageSourcePropType;
 
   disabled?: boolean;
 }

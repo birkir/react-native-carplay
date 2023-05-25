@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 /**
  * A list item that appears in a list template.
  */
@@ -13,7 +15,7 @@ export interface ListItem {
   /**
    * The image displayed on the leading edge of the list item cell.
    */
-  image?: null;
+  image?: ImageSourcePropType;
   /**
    * The image from file system displayed on the leading edge of the list item cell.
    */

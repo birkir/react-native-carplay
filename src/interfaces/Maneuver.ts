@@ -1,13 +1,13 @@
 import { TravelEstimates } from './TravelEstimates';
-import { ProcessedColorValue } from 'react-native';
+import { ImageSourcePropType, ProcessedColorValue } from 'react-native';
 
 /**
  * Navigation instructions and distance from the previous maneuver.
  */
 export interface Maneuver {
-  junctionImage?: any;
+  junctionImage?: ImageSourcePropType;
   initialTravelEstimates?: TravelEstimates;
-  symbolImage?: any;
+  symbolImage?: ImageSourcePropType;
   /**
    * Allows the supplied symbol image to be resized
    * to the suitable scal for it's use as a primary
