@@ -9,6 +9,16 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# Yarn
+#
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # Xcode
 #
 build/
@@ -28,7 +38,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-
+Pods/
 
 # Android/IntelliJ
 #
