@@ -23,21 +23,21 @@ This version of `react-native-carplay` supports iOS 14. If you need support for 
 
 <th>List</th>
 <th>Grid</th>
-<th>TabBar</th>
+<th title="TabBar">T B</th>
 
 <th>Alert</th>
-<th>ActionSheet</th>
+<th title="Action Sheet">A S</th>
 
-<th>VoiceControl</th>
-<th>NowPlaying</th>
+<th title="Voice Controller">🎤</th>
+<th title="Now Playing">▶️</th>
 
 <th>Map</th>
-<th>Search</th>
+<th title="Search">🔎</th>
 
-<th>POI</th>
-<th>Information</th>
+<th title="Point of Interest">POI</th>
+<th title="Information">Info</th>
 
-<th>Contact</th>
+<th title="Contact">📇</th>
 </thead>
 <tbody>
 <tr>
