@@ -1,0 +1,80 @@
+name: ci/packages
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+    paths:
+      - 'packages/**'
+      - '.yarnrc.yml'
+      - 'yarn.lock'
+      - '.prettier*'
+      - 'tsconfig.base.json'
+      - '.prettier*'
+      - '.github/workflows/ci-packages.yml'
+
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - 'packages/**'
+      - '.yarnrc.yml'
+      - 'yarn.lock'
+      - '.prettier*'
+      - 'tsconfig.base.json'
+      - '.prettier*'
+      - '.github/workflows/ci-packages.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Restore yarn cache
+        uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-cache-folder-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          restore-keys: |
+            yarn-cache-folder-
+      - name: Restore packages cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ github.workspace }}/.cache
+            ${{ github.workspace }}/**/tsconfig.tsbuildinfo
+            ${{ github.workspace }}/**/.eslintcache
+          key: ${{ runner.os }}-packages-cache-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('packages/**.[jt]sx?', 'packages/**.json') }}
+          restore-keys: |
+            ${{ runner.os }}-packages-cache-${{ hashFiles('**/yarn.lock') }}-
+      - name: Install dependencies
+        run: |
+          yarn install --immutable
+      - name: Typecheck
+        run: |
+          yarn workspaces foreach -tv --from 'react-native-carplay' --since=origin/main --recursive run typecheck
+      - name: Linter
+        run: |
+          yarn workspaces foreach -tv --include 'react-native-carplay' --since=origin/main --recursive run lint --cache
+      - name: Run build for changed packages
+        run: |
+          yarn workspaces foreach -tv --include 'react-native-carplay' --since=origin/main run build

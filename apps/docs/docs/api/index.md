@@ -1,3 +1,11 @@
+---
+id: "index"
+title: "react-native-carplay"
+sidebar_label: "Readme"
+sidebar_position: 0
+custom_edit_url: null
+---
+
 # CarPlay with React Native
 
 What if you could create CarPlay with React Native. Well, now you can.
@@ -22,21 +30,16 @@ This version of `react-native-carplay` supports iOS 14. If you need support for 
 <th></th>
 <th>List</th>
 <th>Grid</th>
-<th title="TabBar">T B</th>
-
+<th>TabBar</th>
 <th>Alert</th>
-<th title="Action Sheet">A S</th>
-
-<th title="Voice Controller">🎤</th>
-<th title="Now Playing">▶️</th>
-
+<th>ActionSheet</th>
+<th>VoiceControl</th>
+<th>NowPlaying</th>
 <th>Map</th>
-<th title="Search">🔎</th>
-
-<th title="Point of Interest">POI</th>
-<th title="Information">Info</th>
-
-<th title="Contact">📇</th>
+<th>Search</th>
+<th>POI</th>
+<th>Information</th>
+<th>Contact</th>
 </tr>
 </thead>
 <tbody>

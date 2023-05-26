@@ -1,0 +1,76 @@
+{
+  "name": "react-native-carplay",
+  "version": "2.3.0",
+  "description": "CarPlay for React Native",
+  "main": "lib/index.js",
+  "react-native": "src/index.ts",
+  "source": "src/index.ts",
+  "files": [
+    "src",
+    "lib",
+    "ios",
+    "react-native-carplay.podspec"
+  ],
+  "podspecPath": "./react-native-carplay.podspec",
+  "scripts": {
+    "prepare": "yarn run build",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "fix-all-files": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/birkir/react-native-carplay.git"
+  },
+  "keywords": [
+    "react",
+    "native",
+    "carplay",
+    "navigation",
+    "car",
+    "auto"
+  ],
+  "author": "Birkir Gudjonsson <birkir.gudjonsson@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/birkir/react-native-carplay/issues"
+  },
+  "homepage": "https://github.com/birkir/react-native-carplay#readme",
+  "peerDependencies": {
+    "react": "^17.0.2 || ^18.0.0",
+    "react-native": "^0.60.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@tsconfig/react-native": "3.0.2",
+    "@types/node": "17.0.25",
+    "@types/react": "18.0.6",
+    "@types/react-native": "0.67.5",
+    "@typescript-eslint/eslint-plugin": "5.20.0",
+    "@typescript-eslint/parser": "5.20.0",
+    "cross-env": "7.0.3",
+    "docusaurus-plugin-typedoc": "0.19.2",
+    "eslint": "8.13.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-import-resolver-typescript": "2.7.1",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "7.29.4",
+    "eslint-plugin-react-hooks": "4.4.0",
+    "microbundle": "0.14.2",
+    "prettier": "2.6.2",
+    "rimraf": "3.0.2",
+    "typedoc": "0.24.7",
+    "typedoc-github-wiki-theme": "1.1.0",
+    "typedoc-plugin-markdown": "3.15.3",
+    "typescript": "5.0.4"
+  }
+}

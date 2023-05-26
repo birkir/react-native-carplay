@@ -1,0 +1,47 @@
+{
+  "folders": [
+    {
+      "name": "🌳 root",
+      "path": "."
+    },
+    {
+      "name": "🍂 example",
+      "path": "apps/example"
+    },
+    {
+      "name": "📄 docs",
+      "path": "apps/docs"
+    },
+    {
+      "name": "📦 react-native-carplay",
+      "path": "packages/react-native-carplay"
+    },
+  ],
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode"
+    ]
+  },
+  "settings": {
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    // Disable vscode formatting for js,jsx,ts,tsx files
+    // to allow dbaeumer.vscode-eslint to format them
+    "[javascript]": {
+      "editor.formatOnSave": false
+    },
+    "eslint.alwaysShowStatus": true,
+    // https://github.com/Microsoft/vscode-eslint#mono-repository-setup
+    "eslint.workingDirectories": [
+      "./apps/example",
+      "./apps/docs",
+      "./packages/react-native-carplay"
+    ]
+  }
+}
