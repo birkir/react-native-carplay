@@ -1,4 +1,5 @@
 #import "RNCarPlay.h"
+#import <RCTAppDelegate.h>
 
 #if DEBUG
 #if FB_SONARKIT_ENABLED

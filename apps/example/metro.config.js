@@ -4,6 +4,7 @@
  *
  * @format
  */
+const path = require("path");
 
 module.exports = {
   transformer: {
@@ -14,4 +15,8 @@ module.exports = {
       },
     }),
   },
+  watchFolders: [
+    path.resolve(__dirname, '../../node_modules'),
+    path.resolve(__dirname, '../../packages/react-native-carplay')
+  ],
 };

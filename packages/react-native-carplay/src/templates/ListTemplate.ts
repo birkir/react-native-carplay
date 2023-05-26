@@ -2,6 +2,7 @@ import { CarPlay } from '../CarPlay';
 import { ListItemUpdate } from '../interfaces/ListItemUpdate';
 import { ListSection } from '../interfaces/ListSection';
 import { Template, TemplateConfig } from './Template';
+
 export interface ListTemplateConfig extends TemplateConfig {
   /**
    * The title displayed in the navigation bar while the list template is visible.
@@ -61,7 +62,7 @@ export interface ListTemplateConfig extends TemplateConfig {
     position: 'top' | 'bottom';
     visibility: 'off' | 'always' | 'limited';
     action: 'playMedia' | 'startCall';
-  }
+  };
 }
 
 /**
@@ -103,11 +104,11 @@ export class ListTemplate extends Template<ListTemplateConfig> {
     return CarPlay.bridge.updateListTemplateItem(this.id, this.parseConfig(config));
   };
 
-  public getMaximumListItemCount () {
+  public getMaximumListItemCount() {
     return CarPlay.bridge.getMaximumListItemCount(this.id);
   }
 
-  public getMaximumListSectionCount () {
+  public getMaximumListSectionCount() {
     return CarPlay.bridge.getMaximumListSectionCount(this.id);
   }
 }

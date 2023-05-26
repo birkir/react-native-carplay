@@ -6,11 +6,11 @@ import {
   Trip,
   NavigationSession,
   MapTemplateConfig,
+  Maneuver,
+  PauseReason,
+  TimeRemainingColor,
+  TravelEstimates,
 } from 'react-native-carplay';
-import { Maneuver } from 'react-native-carplay/lib/interfaces/Maneuver';
-import { PauseReason } from 'react-native-carplay/lib/interfaces/PauseReason';
-import { TimeRemainingColor } from 'react-native-carplay/lib/interfaces/TimeRemainingColor';
-import { TravelEstimates } from 'react-native-carplay/lib/interfaces/TravelEstimates';
 
 function MapView() {
   return (
@@ -36,13 +36,13 @@ const trip = new Trip({
   },
   routeChoices: [
     {
-      additionalInformationVariants: ["Via DK45"],
-      summaryVariants: ["Fastest route now"],
+      additionalInformationVariants: ['Via DK45'],
+      summaryVariants: ['Fastest route now'],
       selectionSummaryVariants: ['This is Summary for DK45'],
     },
     {
-      additionalInformationVariants: ["Via DK99"],
-      summaryVariants: ["Longer route"],
+      additionalInformationVariants: ['Via DK99'],
+      summaryVariants: ['Longer route'],
       selectionSummaryVariants: ['This is Summary for DK99'],
     },
   ],
@@ -96,9 +96,7 @@ function getRandomManeuver(): Maneuver {
 }
 
 export function Map({ navigation }) {
-  const [navigationSession, setNavigationSession] = useState<NavigationSession>(
-    null,
-  );
+  const [navigationSession, setNavigationSession] = useState<NavigationSession>(null);
 
   const mapTemplate = useRef<MapTemplate>();
 
@@ -133,9 +131,7 @@ export function Map({ navigation }) {
 
   const onStartNavigation = async () => {
     mapTemplate.current.hideTripPreviews();
-    const newNavigationSession = await mapTemplate.current.startNavigationSession(
-      trip,
-    );
+    const newNavigationSession = await mapTemplate.current.startNavigationSession(trip);
     newNavigationSession.updateManeuvers([getRandomManeuver()]);
     mapTemplate.current.updateTravelEstimates(
       trip,
@@ -187,9 +183,7 @@ export function Map({ navigation }) {
           <Text>Navigation:</Text>
           <Button
             title="Custom Pause"
-            onPress={() =>
-              navigationSession.pause(PauseReason.Loading, 'Custom Pause')
-            }
+            onPress={() => navigationSession.pause(PauseReason.Loading, 'Custom Pause')}
           />
           <Button
             title="Re-routing"
@@ -204,10 +198,7 @@ export function Map({ navigation }) {
           <Button
             title="Show Two Maneuvers"
             onPress={() => {
-              navigationSession.updateManeuvers([
-                getRandomManeuver(),
-                getRandomManeuver(),
-              ]);
+              navigationSession.updateManeuvers([getRandomManeuver(), getRandomManeuver()]);
             }}
           />
           <Button

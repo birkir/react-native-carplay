@@ -20,7 +20,7 @@ export interface TripConfig {
 }
 
 export class Trip {
-  public id: string;
+  public id!: string;
 
   constructor(public config: TripConfig) {
     if (config.id) {

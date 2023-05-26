@@ -18,7 +18,7 @@ export interface TabBarTemplateConfig extends TemplateConfig {
   templates: TabBarTemplates[];
 
   onTemplateSelect(
-    template: TabBarTemplates,
+    template: TabBarTemplates | undefined,
     e: { templateId: string; selectedTemplateId: string },
   ): void;
 }

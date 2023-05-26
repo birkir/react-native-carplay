@@ -80,7 +80,7 @@ export class Template<P> {
   public get type(): string {
     return 'unset';
   }
-  public id: string;
+  public id!: string;
 
   public get eventMap() {
     return {};
@@ -106,8 +106,16 @@ export class Template<P> {
 
     Object.entries(eventMap).forEach(([eventName, callbackName]: any) => {
       CarPlay.emitter.addListener(eventName, e => {
-        if (config[callbackName] && e.templateId === this.id) {
-          config[callbackName](e);
+        const configEventName = callbackName as keyof Pick<
+          TemplateConfig,
+          | 'onWillAppear'
+          | 'onWillDisappear'
+          | 'onDidAppear'
+          | 'onDidDisappear'
+          | 'onBarButtonPressed'
+        >;
+        if (config[configEventName] && e.templateId === this.id) {
+          config[configEventName]?.(e);
         }
       });
     });

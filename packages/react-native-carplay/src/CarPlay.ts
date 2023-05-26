@@ -26,13 +26,13 @@ type PushableTemplates =
 type PresentableTemplates = AlertTemplate | ActionSheetTemplate | VoiceControlTemplate;
 
 type WindowInformation = {
-  width: number,
-  height: number,
-  scale: number,
-}
+  width: number;
+  height: number;
+  scale: number;
+};
 
-type OnConnectCallback = (window: WindowInformation) => void
-type OnDisconnectCallback = () => void
+type OnConnectCallback = (window: WindowInformation) => void;
+type OnDisconnectCallback = () => void;
 
 /**
  * A controller that manages all user interface elements appearing on your map displayed on the CarPlay screen.

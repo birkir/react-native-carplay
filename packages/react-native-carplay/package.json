@@ -3,6 +3,8 @@
   "version": "2.3.0",
   "description": "CarPlay for React Native",
   "main": "lib/index.js",
+  "react-native": "src/index.ts",
+  "source": "src/index.ts",
   "files": [
     "src",
     "lib",
@@ -65,8 +67,6 @@
     "eslint-plugin-react-hooks": "4.4.0",
     "microbundle": "0.14.2",
     "prettier": "2.6.2",
-    "react": "18.0.0",
-    "react-native": "0.68.1",
     "rimraf": "3.0.2",
     "typedoc": "0.24.7",
     "typedoc-github-wiki-theme": "1.1.0",

@@ -7,7 +7,7 @@ import { Trip } from './Trip';
 import { Image, processColor } from 'react-native';
 
 export class NavigationSession {
-  public maneuvers: Maneuver[];
+  public maneuvers: Maneuver[] = [];
 
   constructor(public id: string, public trip: Trip, public mapTemplate: MapTemplate) {}
 

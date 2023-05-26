@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 // import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -17,6 +17,7 @@ import { Information } from './screens/Information';
 import { NowPlaying } from './screens/NowPlaying';
 import { POI } from './screens/POI';
 import { CarPlay } from 'react-native-carplay';
+import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,11 @@ export const App = () => {
     function onDisconnect() {
       setCarPlayConnected(false);
     }
+
+    const emt = new NativeEventEmitter(NativeModules.RNCarPlay);
+    emt.addListener('didConnect', () => {
+      console.log('CONNECTED!');
+    });
 
     CarPlay.registerOnConnect(onConnect);
     CarPlay.registerOnDisconnect(onDisconnect);
@@ -62,6 +68,7 @@ export const App = () => {
   ) : (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Please connect Car Play and open the test app</Text>
+      <Button title="Connected" onPress={() => setCarPlayConnected(true)} />
     </View>
   );
 };

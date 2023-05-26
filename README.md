@@ -17,27 +17,22 @@ This version of `react-native-carplay` supports iOS 14. If you need support for 
 ### Entitlement matrix
 
 <table>
-<tr>
 <thead>
+<tr>
 <th></th>
-
 <th>List</th>
 <th>Grid</th>
 <th>TabBar</th>
-
 <th>Alert</th>
 <th>ActionSheet</th>
-
 <th>VoiceControl</th>
 <th>NowPlaying</th>
-
 <th>Map</th>
 <th>Search</th>
-
 <th>POI</th>
 <th>Information</th>
-
 <th>Contact</th>
+</tr>
 </thead>
 <tbody>
 <tr>
@@ -327,8 +322,8 @@ Templates are used to render contents on the CarPlay screen from your app. Detai
 
 ### MapTemplate
 
-![Map Template](.github/mapTemplateRoutes.png)
-![Map Template](.github/mapTemplateNavigation.png)
+![Map Template](/.github/images/mapTemplateRoutes.png)
+![Map Template](/.github/images/mapTemplateNavigation.png)
 
 ```jsx
 import { CarPlay } from 'react-native-carplay';
@@ -349,7 +344,7 @@ CarPlay.setRootTemplate(mapTemplate);
 
 ### ListTemplate
 
-![List Template](.github/listTemplate.png)
+![List Template](/.github/images/listTemplate.png)
 
 ```jsx
 import { CarPlay } from 'react-native-carplay';
@@ -368,7 +363,7 @@ CarPlay.pushTemplate(listTemplate, true);
 
 ### InformationTemplate
 
-![Information Template](.github/informationTemplate.png)
+![Information Template](/.github/images/informationTemplate.png)
 
 ```jsx
 import { CarPlay } from 'react-native-carplay';
@@ -376,15 +371,22 @@ import { CarPlay } from 'react-native-carplay';
 const template = new InformationTemplate({
   title: 'Information',
   items: Array.from({ length: 30 }).fill({ title: 'foo', detail: 'bar' }),
-  actions: [{ id: 'u', title: 'Update List' }, { id: 'r', title: 'Random #:' }],
+  actions: [
+    { id: 'u', title: 'Update List' },
+    { id: 'r', title: 'Random #:' },
+  ],
   onActionButtonPressed(action) {
     console.log('pressed', action);
     if (action.id == 'u') {
       const numOfItems = Math.floor(Math.random() * 6);
-      template.updateInformationTemplateItems(Array.from({ length: numOfItems }).fill({ title: 'foo', detail: 'bar' }));
-    }
-    else if (action.id == 'r') {
-      template.updateInformationTemplateActions([{ id: 'u', title: 'Update List' }, { id: 'r', title: 'Random #:' + Math.floor(Math.random() * 100) }]);
+      template.updateInformationTemplateItems(
+        Array.from({ length: numOfItems }).fill({ title: 'foo', detail: 'bar' }),
+      );
+    } else if (action.id == 'r') {
+      template.updateInformationTemplateActions([
+        { id: 'u', title: 'Update List' },
+        { id: 'r', title: 'Random #:' + Math.floor(Math.random() * 100) },
+      ]);
     }
   },
 });
@@ -394,7 +396,7 @@ CarPlay.pushTemplate(informationTemplate);
 
 ### GridTemplate
 
-![Grid Template](.github/gridTemplate.png)
+![Grid Template](/.github/images/gridTemplate.png)
 
 ```jsx
 import { CarPlay } from 'react-native-carplay';
@@ -429,7 +431,7 @@ CarPlay.pushTemplate(gridTemplate, true);
 
 ### SearchTemplate
 
-![Search Template](.github/searchTemplate.png)
+![Search Template](/.github/images/searchTemplate.png)
 
 ```jsx
 const searchTemplate = new SearchTemplate({
@@ -454,7 +456,7 @@ CarPlay.pushTemplate(searchTemplate, true);
 
 ### VoiceTemplate
 
-![Voice Template](.github/voiceTemplate.png)
+![Voice Template](/.github/images/voiceTemplate.png)
 
 This template is presented via `CarPlay.presentTemplate`. In order to implement voice recognition, take a look at the [`@react-native-voice/voice`](https://github.com/react-native-voice/voice) package.
 
@@ -476,7 +478,7 @@ CarPlay.presentTemplate(voiceControlTemplate, true);
 
 ### AlertTemplate
 
-![Alert Template](.github/alertTemplate.png)
+![Alert Template](/.github/images/alertTemplate.png)
 
 This template is presented via `CarPlay.presentTemplate`.
 
@@ -509,7 +511,7 @@ CarPlay.presentTemplate(alertTemplate);
 
 ### ActionSheetTemplate
 
-![ActionSheet Template](.github/actionSheetTemplate.png)
+![ActionSheet Template](/.github/images/actionSheetTemplate.png)
 
 This template is presented via `CarPlay.presentTemplate`.
 
@@ -538,7 +540,7 @@ CarPlay.presentTemplate(actionSheetTemplate);
 
 ### TabTemplate
 
-![Tab Template](.github/tabTemplate.png)
+![Tab Template](/.github/images/tabTemplate.png)
 
 This template must be set as the root template and cannot be pushed on top of other templates.
 
