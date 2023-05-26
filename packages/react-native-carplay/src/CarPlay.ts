@@ -1,4 +1,4 @@
-import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
+import { NativeEventEmitter, NativeModule, NativeModules, Platform } from 'react-native';
 import { ActionSheetTemplate } from './templates/ActionSheetTemplate';
 import { AlertTemplate } from './templates/AlertTemplate';
 import { ContactTemplate } from './templates/ContactTemplate';
@@ -11,8 +11,69 @@ import { SearchTemplate } from './templates/SearchTemplate';
 import { TabBarTemplate } from './templates/TabBarTemplate';
 import { VoiceControlTemplate } from './templates/VoiceControlTemplate';
 import { NowPlayingTemplate } from './templates/NowPlayingTemplate';
+import { Maneuver } from './interfaces/Maneuver';
+import { TravelEstimates } from './interfaces/TravelEstimates';
+import { PauseReason } from './interfaces/PauseReason';
+import { TripConfig } from './navigation/Trip';
+import { TimeRemainingColor } from './interfaces/TimeRemainingColor';
+import { TextConfiguration } from './interfaces/TextConfiguration';
 
-const { RNCarPlay } = NativeModules;
+interface InternalCarPlay extends NativeModule {
+  checkForConnection(): void;
+  setRootTemplate(templateId: string, animated: boolean): void;
+  pushTemplate(templateId: string, animated: boolean): void;
+  popToTemplate(templateId: string, animated: boolean): void;
+  popToRootTemplate(animated: boolean): void;
+  popTemplate(animated: boolean): void;
+  presentTemplate(templateId: string, animated: boolean): void;
+  dismissTemplate(animated: boolean): void;
+  enableNowPlaying(enabled: boolean): void;
+  updateManeuversNavigationSession(id: string, x: Maneuver[]): void;
+  updateTravelEstimatesNavigationSession(
+    id: string,
+    index: number,
+    estimates: TravelEstimates,
+  ): void;
+  cancelNavigationSession(id: string): void;
+  finishNavigationSession(id: string): void;
+  pauseNavigationSession(id: string, reason: PauseReason, description?: string): void;
+  createTrip(id: string, config: TripConfig): void;
+  updateInformationTemplateItems(id: string, config: unknown): void;
+  updateInformationTemplateActions(id: string, config: unknown): void;
+  createTemplate(id: string, config: unknown): void;
+  startNavigationSession(
+    id: string,
+    tripId: string,
+  ): Promise<{
+    tripId: string;
+    navigationSessionId: string;
+  }>;
+  updateTravelEstimatesForTrip(
+    id: string,
+    tripId: string,
+    travelEstimates: TravelEstimates,
+    timeRemainingColor: TimeRemainingColor,
+  ): void;
+  updateMapTemplateConfig(id: string, config: unknown): void;
+  updateMapTemplateMapButtons(id: string, config: unknown): void;
+  hideTripPreviews(id: string): void;
+  showTripPreviews(id: string, previews: string[], config: TextConfiguration): void;
+  showRouteChoicesPreviewForTrip(id: string, tripId: string, config: TextConfiguration): void;
+  presentNavigationAlert(id: string, config: unknown, animated: boolean): void;
+  dismissNavigationAlert(id: string, animated: boolean): void;
+  showPanningInterface(id: string, animated: boolean): void;
+  dismissPanningInterface(id: string, animated: boolean): void;
+  getMaximumListSectionCount(id: string): Promise<number>;
+  getMaximumListItemCount(id: string): Promise<number>;
+  reactToSelectedResult(status: boolean): void;
+  updateListTemplateSections(id: string, config: unknown): void;
+  updateListTemplateItem(id: string, config: unknown): void;
+  reactToUpdatedSearchText(items: unknown): void;
+  updateTabBarTemplates(id: string, config: unknown): void;
+  activateVoiceControlState(id: string, identifier: string): void;
+}
+
+const { RNCarPlay } = NativeModules as { RNCarPlay: InternalCarPlay };
 
 type PushableTemplates =
   | MapTemplate

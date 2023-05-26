@@ -16,6 +16,7 @@ export interface MapTemplateConfig extends TemplateConfig {
    * Your component to render inside CarPlay
    * Example `component: MyComponent`
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: React.ComponentType<any>;
   /**
    * An array of map buttons displayed on the trailing bottom corner of the map template.
@@ -42,7 +43,7 @@ export interface MapTemplateConfig extends TemplateConfig {
   onPanBeganWithDirection?(e: { direction: string }): void;
   onPanEndedWithDirection?(e: { direction: string }): void;
   onSelectedPreviewForTrip?(e: { tripId: string; routeIndex: number }): void;
-  onDidCancelNavigation?(e: {}): void;
+  onDidCancelNavigation?(): void;
   onStartedTrip?(e: { tripId: string; routeIndex: number }): void;
 }
 

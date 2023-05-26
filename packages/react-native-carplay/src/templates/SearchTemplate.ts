@@ -39,24 +39,26 @@ export class SearchTemplate extends Template<SearchTemplateConfig> {
 
     super(config);
 
-    CarPlay.emitter.addListener('updatedSearchText', e => {
-      if (config.onSearch && e.templateId === this.id) {
-        const x = config.onSearch(e.searchText);
+    CarPlay.emitter.addListener(
+      'updatedSearchText',
+      (e: { searchText: string; templateId: string }) => {
+        if (config.onSearch && e.templateId === this.id) {
+          void Promise.resolve(config.onSearch(e.searchText)).then((result = []) => {
+            const parsedResults = result.map(item => ({
+              ...item,
+              image: item.image ? Image.resolveAssetSource(item.image) : undefined,
+            }));
+            CarPlay.bridge.reactToUpdatedSearchText(parsedResults);
+          });
+        }
+      },
+    );
 
-        Promise.resolve(x).then((result = []) => {
-          const parsedResults = result.map(item => ({
-            ...item,
-            image: item.image ? Image.resolveAssetSource(item.image) : undefined,
-          }));
-          CarPlay.bridge.reactToUpdatedSearchText(parsedResults);
-        });
-      }
-    });
-
-    CarPlay.emitter.addListener('selectedResult', e => {
+    CarPlay.emitter.addListener('selectedResult', (e: { templateId: string; index: number }) => {
       if (config.onItemSelect && e.templateId === this.id) {
-        const x = config.onItemSelect(e);
-        Promise.resolve(x).then(() => CarPlay.bridge.reactToSelectedResult(true));
+        void Promise.resolve(config.onItemSelect(e)).then(() =>
+          CarPlay.bridge.reactToSelectedResult(true),
+        );
       }
     });
   }

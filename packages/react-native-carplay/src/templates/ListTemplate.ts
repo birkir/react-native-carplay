@@ -51,7 +51,7 @@ export interface ListTemplateConfig extends TemplateConfig {
    * Option to hide back button
    * (defaults to false)
    */
-  backButtonHidden?: Boolean;
+  backButtonHidden?: boolean;
 
   /**
    * Assistant Configuration
@@ -88,10 +88,11 @@ export class ListTemplate extends Template<ListTemplateConfig> {
   constructor(public config: ListTemplateConfig) {
     super(config);
 
-    CarPlay.emitter.addListener('didSelectListItem', e => {
+    CarPlay.emitter.addListener('didSelectListItem', (e: { templateId: string; index: number }) => {
       if (config.onItemSelect && e.templateId === this.id) {
-        const x = config.onItemSelect(e);
-        Promise.resolve(x).then(() => CarPlay.bridge.reactToSelectedResult(true));
+        void Promise.resolve(config.onItemSelect(e)).then(() => {
+          CarPlay.bridge.reactToSelectedResult(true);
+        });
       }
     });
   }

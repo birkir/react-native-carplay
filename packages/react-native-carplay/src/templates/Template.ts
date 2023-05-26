@@ -2,6 +2,7 @@ import { ImageSourcePropType } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { BarButton } from '../interfaces/BarButton';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
 export interface BaseEvent {
@@ -104,8 +105,9 @@ export class Template<P> {
       ...(this.eventMap || {}),
     };
 
-    Object.entries(eventMap).forEach(([eventName, callbackName]: any) => {
-      CarPlay.emitter.addListener(eventName, e => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Object.entries(eventMap).forEach(([eventName, callbackName]: [string, any]) => {
+      CarPlay.emitter.addListener(eventName, (e: { id: string; templateId: string }) => {
         const configEventName = callbackName as keyof Pick<
           TemplateConfig,
           | 'onWillAppear'
@@ -125,13 +127,16 @@ export class Template<P> {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public parseConfig(config: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function traverse(obj: any) {
       for (const i in obj) {
         if (obj[i] !== null && typeof obj[i] === 'object') {
           traverse(obj[i]);
         }
         if (String(i).match(/[Ii]mage$/)) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
           obj[i] = resolveAssetSource(obj[i]);
         }
       }

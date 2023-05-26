@@ -1,4 +1,3 @@
-import { CarPlay } from '../CarPlay';
 import { GridButton } from '../interfaces/GridButton';
 import { BaseEvent, Template, TemplateConfig } from './Template';
 

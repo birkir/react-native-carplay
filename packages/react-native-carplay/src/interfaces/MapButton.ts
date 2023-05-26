@@ -1,4 +1,4 @@
-import { ImageSourcePropType } from "react-native";
+import { ImageSourcePropType } from 'react-native';
 
 /**
  * A button representing an action that a map template displays on the CarPlay screen.

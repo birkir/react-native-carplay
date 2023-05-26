@@ -1,0 +1,10 @@
+{
+  "extends": "@react-native-community",
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
+  "ignorePatterns": ["node_modules", "lib", "ios", ".eslintrc"],
+  "rules": {
+    "no-void": "off"
+  }
+}

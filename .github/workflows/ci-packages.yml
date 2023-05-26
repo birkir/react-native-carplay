@@ -71,10 +71,10 @@ jobs:
           yarn install --immutable
       - name: Typecheck
         run: |
-          yarn workspaces foreach -tv --from 'react-native-carplay' --since=origin/main --recursive run typecheck
+          yarn workspaces foreach -tv --from 'react-native-carplay' --since=origin/master --recursive run typecheck
       - name: Linter
         run: |
-          yarn workspaces foreach -tv --include 'react-native-carplay' --since=origin/main --recursive run lint --cache
+          yarn workspaces foreach -tv --include 'react-native-carplay' --since=origin/master --recursive run lint --cache
       - name: Run build for changed packages
         run: |
-          yarn workspaces foreach -tv --include 'react-native-carplay' --since=origin/main run build
+          yarn workspaces foreach -tv --include 'react-native-carplay' --since=origin/master run build
