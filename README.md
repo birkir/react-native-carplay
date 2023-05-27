@@ -236,7 +236,7 @@ pod 'react-native-carplay', path: '../node_modules/react-native-carplay'
 
 ## Basic Usage
 
-[See full example](https://github.com/birkir/react-native-carplay/blob/master/example/src/App.tsx)
+[See full example](https://github.com/birkir/react-native-carplay/blob/master/apps/example/src/App.tsx)
 
 The exported `CarPlay` class gives you the API needed to add / remove templates from the CarPlay view hierarchy.
 
