@@ -31,10 +31,12 @@ export class InformationTemplate extends Template<InformationTemplateConfig> {
   }
 
   public updateInformationTemplateItems = (items: InformationItem[]) => {
+    this.config.items = items
     return CarPlay.bridge.updateInformationTemplateItems(this.id, this.parseConfig(items));
   };
 
   public updateInformationTemplateActions = (actions: InformationAction[]) => {
+    this.config.actions = actions
     return CarPlay.bridge.updateInformationTemplateActions(this.id, this.parseConfig(actions));
   };
 }

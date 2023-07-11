@@ -46,6 +46,7 @@ export class TabBarTemplate extends Template<TabBarTemplateConfig> {
   }
 
   public updateTemplates = (config: TabBarTemplateConfig) => {
+    this.config = config
     return CarPlay.bridge.updateTabBarTemplates(this.id, this.parseConfig(config));
   };
 }

@@ -119,10 +119,12 @@ export class MapTemplate extends Template<MapTemplateConfig> {
    * Update MapTemplate configuration
    */
   public updateConfig(config: MapTemplateConfig) {
+    this.config = config
     CarPlay.bridge.updateMapTemplateConfig(this.id, this.parseConfig(config));
   }
 
   public updateMapButtons(mapButtons: MapButton[]) {
+    this.config.mapButtons = mapButtons
     CarPlay.bridge.updateMapTemplateMapButtons(this.id, this.parseConfig(mapButtons));
   }
 
