@@ -98,12 +98,12 @@ export class ListTemplate extends Template<ListTemplateConfig> {
   }
 
   public updateSections = (sections: ListSection[]) => {
-    this.config.sections = sections
+    this.config.sections = sections;
     return CarPlay.bridge.updateListTemplateSections(this.id, this.parseConfig(sections));
   };
 
   public updateListTemplateItem = (config: ListItemUpdate) => {
-    this.config.sections[config.sectionIndex].items[config.itemIndex] = config
+    this.config.sections[config.sectionIndex].items[config.itemIndex] = config;
     return CarPlay.bridge.updateListTemplateItem(this.id, this.parseConfig(config));
   };
 
