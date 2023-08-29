@@ -13,11 +13,11 @@ export interface ListItem {
    */
   detailText?: string;
   /**
-   * The image displayed on the leading edge of the list item cell.
+   * Image from file system displayed on the leading edge of the list item cell.
    */
   image?: ImageSourcePropType;
   /**
-   * The image from file system displayed on the leading edge of the list item cell.
+   * Url for image displayed on the leading edge of the list item cell.
    */
   imgUrl?: null;
   /**

@@ -160,6 +160,22 @@ RCT_EXPORT_MODULE();
     return destImage;
 }
 
+- (void)updateItemImageWithURL:(CPListItem *)item imgUrl:(NSString *)imgUrlString {
+    NSURL *imgUrl = [NSURL URLWithString:imgUrlString];
+    
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:imgUrl completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (data) {
+            UIImage *image = [UIImage imageWithData:data];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [item setImage:image];
+            });
+        } else {
+            NSLog(@"Failed to load image from URL: %@", imgUrl);
+        }
+    }];
+    [task resume];
+}
+
 RCT_EXPORT_METHOD(checkForConnection) {
     RNCPStore *store = [RNCPStore sharedManager];
     if ([store isConnected] && hasListeners) {
@@ -610,7 +626,8 @@ RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictio
         }
         CPListItem *item = (CPListItem *)section.items[index];
         if (config[@"imgUrl"]) {
-            [item setImage:[[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[RCTConvert NSString:config[@"imgUrl"]]]]]];
+            NSString *imgUrlString = [RCTConvert NSString:config[@"imgUrl"]];
+            [self updateItemImageWithURL:item imgUrl:imgUrlString];
         }
         if (config[@"image"]) {
             [item setImage:[RCTConvert UIImage:config[@"image"]]];
@@ -967,9 +984,6 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         NSString *_detailText = [item objectForKey:@"detailText"];
         NSString *_text = [item objectForKey:@"text"];
         UIImage *_image = [RCTConvert UIImage:[item objectForKey:@"image"]];
-        if (item[@"imgUrl"]) {
-            _image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[RCTConvert NSString:item[@"imgUrl"]]]]];
-        }
         CPListItem *_item;
         if (@available(iOS 14.0, *)) {
             CPListItemAccessoryType accessoryType = _showsDisclosureIndicator ? CPListItemAccessoryTypeDisclosureIndicator : CPListItemAccessoryTypeNone;
@@ -979,6 +993,10 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         }
         if ([item objectForKey:@"isPlaying"]) {
             [_item setPlaying:[RCTConvert BOOL:[item objectForKey:@"isPlaying"]]];
+        }
+        if (item[@"imgUrl"]) {
+            NSString *imgUrlString = [RCTConvert NSString:item[@"imgUrl"]];
+            [self updateItemImageWithURL:_item imgUrl:imgUrlString];
         }
         [_item setUserInfo:@{ @"index": @(index) }];
         [_items addObject:_item];
