@@ -108,6 +108,7 @@ class CarPlayInterface {
    * Boolean to denote if carplay is currently connected.
    */
   public connected = false;
+  public window: WindowInformation | undefined
 
   /**
    * CarPlay Event Emitter
@@ -124,12 +125,14 @@ class CarPlayInterface {
 
     this.emitter.addListener('didConnect', (window: WindowInformation) => {
       this.connected = true;
+      this.window = window
       this.onConnectCallbacks.forEach(callback => {
         callback(window);
       });
     });
     this.emitter.addListener('didDisconnect', () => {
       this.connected = false;
+      this.window = undefined
       this.onDisconnectCallbacks.forEach(callback => {
         callback();
       });
