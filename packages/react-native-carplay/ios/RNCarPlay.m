@@ -154,7 +154,7 @@ RCT_EXPORT_MODULE();
 
 - (UIImage *)imageWithSize:(UIImage *)image convertToSize:(CGSize)size {
     UIGraphicsImageRendererFormat *renderFormat = [UIGraphicsImageRendererFormat defaultFormat];
-    renderFormat.opaque = YES;
+    renderFormat.opaque = NO;
     UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:size format:renderFormat];
     
     UIImage *resizedImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
