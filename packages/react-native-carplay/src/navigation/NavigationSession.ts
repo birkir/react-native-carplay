@@ -20,13 +20,10 @@ export class NavigationSession {
         if (maneuver.symbolImage) {
           const image = Image.resolveAssetSource(maneuver.symbolImage);
           maneuver.symbolImage = image
-          if (maneuver.symbolImageSize) {
-            const width = Math.floor((maneuver.symbolImageSize.width * CarPlay.window!.scale) / image.scale)
-            const height = Math.floor((maneuver.symbolImageSize.height * CarPlay.window!.scale) / image.scale)
-            maneuver.symbolImageSize = { width, height }
-          } else {
-            maneuver.symbolImageSize = { width: 50, height: 50 } // Default Image size
-          }
+          maneuver.symbolImageSize = maneuver.symbolImageSize ?? { width: 50, height: 50 }
+          const width = Math.floor((maneuver.symbolImageSize.width * CarPlay.window!.scale) / image.scale)
+          const height = Math.floor((maneuver.symbolImageSize.height * CarPlay.window!.scale) / image.scale)
+          maneuver.symbolImageSize = { width, height }
         }
         if (maneuver.junctionImage) {
           maneuver.junctionImage = Image.resolveAssetSource(maneuver.junctionImage);
