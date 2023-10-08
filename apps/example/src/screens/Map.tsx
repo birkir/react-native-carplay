@@ -57,6 +57,11 @@ function getTravelEstimates(): TravelEstimates {
   };
 }
 
+const IconSize = {
+  width: 100,
+  height: 100,
+}
+
 const maneuvers: Maneuver[] = [
   {
     tintSymbolImage: 'yellow',
@@ -66,6 +71,7 @@ const maneuvers: Maneuver[] = [
       distanceUnits: 'meters',
       timeRemaining: 20,
     },
+    symbolImageSize: IconSize,
     symbolImage: require('../images/map/uturn.png'),
   },
   {
@@ -76,6 +82,7 @@ const maneuvers: Maneuver[] = [
       distanceUnits: 'miles',
       timeRemaining: 300,
     },
+    symbolImageSize: IconSize,
     symbolImage: require('../images/map/fork.png'),
   },
   {
@@ -86,6 +93,7 @@ const maneuvers: Maneuver[] = [
       distanceUnits: 'feet',
       timeRemaining: 50,
     },
+    symbolImageSize: IconSize,
     symbolImage: require('../images/map/right.png'),
   },
 ];
