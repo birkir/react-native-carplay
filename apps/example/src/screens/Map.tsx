@@ -6,11 +6,11 @@ import {
   Trip,
   NavigationSession,
   MapTemplateConfig,
-  Maneuver,
-  PauseReason,
-  TimeRemainingColor,
-  TravelEstimates,
 } from 'react-native-carplay';
+import { Maneuver } from 'react-native-carplay/src/interfaces/Maneuver';
+import { PauseReason } from 'react-native-carplay/src/interfaces/PauseReason';
+import { TimeRemainingColor } from 'react-native-carplay/src/interfaces/TimeRemainingColor';
+import { TravelEstimates } from 'react-native-carplay/src/interfaces/TravelEstimates';
 
 function MapView() {
   return (
@@ -95,13 +95,13 @@ function getRandomManeuver(): Maneuver {
   return { ...maneuvers[randomIndex] };
 }
 
-export function Map({ navigation }) {
-  const [navigationSession, setNavigationSession] = useState<NavigationSession>(null);
+export function Map() {
+  const [navigationSession, setNavigationSession] = useState<NavigationSession | null>(null);
 
   const mapTemplate = useRef<MapTemplate>();
 
   const onShowAlertPress = () => {
-    mapTemplate.current.presentNavigationAlert({
+    mapTemplate.current?.presentNavigationAlert({
       titleVariants: ['Test 1'],
       primaryAction: { title: 'Test 2' },
       secondaryAction: { title: 'Test 3' },
@@ -110,35 +110,35 @@ export function Map({ navigation }) {
   };
 
   const onDismissAlertPress = () => {
-    mapTemplate.current.dismissNavigationAlert(true);
+    mapTemplate.current?.dismissNavigationAlert(true);
   };
 
   const onShowPanningPress = () => {
-    mapTemplate.current.showPanningInterface(true);
+    mapTemplate.current?.showPanningInterface(true);
   };
 
   const onDismissPanningPress = () => {
-    mapTemplate.current.dismissPanningInterface(true);
+    mapTemplate.current?.dismissPanningInterface(true);
   };
 
   const onShowRouteChoicesPreviewPress = () => {
-    mapTemplate.current.showRouteChoicesPreviewForTrip(trip);
+    mapTemplate.current?.showRouteChoicesPreviewForTrip(trip);
   };
 
   const onDismissRouteChoicesPreviewPress = () => {
-    mapTemplate.current.hideTripPreviews();
+    mapTemplate.current?.hideTripPreviews();
   };
 
   const onStartNavigation = async () => {
-    mapTemplate.current.hideTripPreviews();
-    const newNavigationSession = await mapTemplate.current.startNavigationSession(trip);
-    newNavigationSession.updateManeuvers([getRandomManeuver()]);
-    mapTemplate.current.updateTravelEstimates(
+    mapTemplate.current?.hideTripPreviews();
+    const newNavigationSession = await mapTemplate.current?.startNavigationSession(trip);
+    newNavigationSession?.updateManeuvers([getRandomManeuver()]);
+    mapTemplate.current?.updateTravelEstimates(
       trip,
       getTravelEstimates(),
       Math.floor(Math.random() * 4) as TimeRemainingColor,
     );
-    setNavigationSession(newNavigationSession);
+    setNavigationSession(newNavigationSession ?? null);
   };
 
   useEffect(() => {
@@ -210,7 +210,7 @@ export function Map({ navigation }) {
           <Button
             title="Change Trip Estimates"
             onPress={() => {
-              mapTemplate.current.updateTravelEstimates(
+              mapTemplate.current?.updateTravelEstimates(
                 trip,
                 getTravelEstimates(),
                 Math.floor(Math.random() * 4) as TimeRemainingColor,
