@@ -963,14 +963,20 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     NSMutableArray *_items = [NSMutableArray array];
     int index = startIndex;
     for (NSDictionary *item in items) {
-        BOOL _showsDisclosureIndicator = [item objectForKey:@"showsDisclosureIndicator"];
+        BOOL _showsDisclosureIndicator = [[item objectForKey:@"showsDisclosureIndicator"] isEqualToNumber:[NSNumber numberWithInt:1]];
         NSString *_detailText = [item objectForKey:@"detailText"];
         NSString *_text = [item objectForKey:@"text"];
         UIImage *_image = [RCTConvert UIImage:[item objectForKey:@"image"]];
         if (item[@"imgUrl"]) {
             _image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[RCTConvert NSString:item[@"imgUrl"]]]]];
         }
-        CPListItem *_item = [[CPListItem alloc] initWithText:_text detailText:_detailText image:_image showsDisclosureIndicator:_showsDisclosureIndicator];
+        CPListItem *_item;
+        if (@available(iOS 14.0, *)) {
+            CPListItemAccessoryType accessoryType = _showsDisclosureIndicator ? CPListItemAccessoryTypeDisclosureIndicator : CPListItemAccessoryTypeNone;
+            _item = [[CPListItem alloc] initWithText:_text detailText:_detailText image:_image accessoryImage:nil accessoryType:accessoryType];
+        } else {
+            _item = [[CPListItem alloc] initWithText:_text detailText:_detailText image:_image showsDisclosureIndicator:_showsDisclosureIndicator];
+        }
         if ([item objectForKey:@"isPlaying"]) {
             [_item setPlaying:[RCTConvert BOOL:[item objectForKey:@"isPlaying"]]];
         }
