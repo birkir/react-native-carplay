@@ -153,11 +153,14 @@ RCT_EXPORT_MODULE();
 }
 
 - (UIImage *)imageWithSize:(UIImage *)image convertToSize:(CGSize)size {
-    UIGraphicsBeginImageContext(size);
-    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    UIImage *destImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return destImage;
+    UIGraphicsImageRendererFormat *renderFormat = [UIGraphicsImageRendererFormat defaultFormat];
+    renderFormat.opaque = NO;
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:size format:renderFormat];
+    
+    UIImage *resizedImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    }];
+    return resizedImage;
 }
 
 - (void)updateItemImageWithURL:(CPListItem *)item imgUrl:(NSString *)imgUrlString {
@@ -1087,15 +1090,12 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 
     if ([json objectForKey:@"symbolImage"]) {
         UIImage *symbolImage = [RCTConvert UIImage:json[@"symbolImage"]];
-      
-        if ([json objectForKey:@"resizeSymbolImage"]) {
-            NSString *resizeType = [RCTConvert NSString:json[@"resizeSymbolImage"]];
-            if ([resizeType isEqualToString: @"primary"]) {
-                symbolImage = [self imageWithSize:symbolImage convertToSize:CGSizeMake(100, 100)];
-            }
-            if ([resizeType isEqualToString: @"secondary"]) {
-                symbolImage = [self imageWithSize:symbolImage convertToSize:CGSizeMake(50, 50)];
-            }
+
+        if ([json objectForKey:@"symbolImageSize"]) {
+            NSDictionary *size = [RCTConvert NSDictionary:json[@"symbolImageSize"]];
+            double width = [RCTConvert double:size[@"width"]];
+            double height = [RCTConvert double:size[@"height"]];
+            symbolImage = [self imageWithSize:symbolImage convertToSize:CGSizeMake(width, height)];
         }
 
         BOOL shouldTint = [RCTConvert BOOL:json[@"tintSymbolImage"]];

@@ -9,14 +9,10 @@ export interface Maneuver {
   initialTravelEstimates?: TravelEstimates;
   symbolImage?: ImageSourcePropType;
   /**
-   * Allows the supplied symbol image to be resized
-   * to the suitable scal for it's use as a primary
-   * or secondary image. This functionality would usually
-   * be available via the `<Image>` tag but carplay
-   * requires an image asset, so this resizing is done
-   * on the native side.
+   * The size of the image in points. Please read the CarPlay App Programming Guide
+   * to get the recommended size.
    */
-  resizeSymbolImage?: 'primary' | 'secondary';
+  symbolImageSize?: { width: number, height: number }
   /**
    * Allows the supplied symbol image to be tinted
    * via a color, ie. 'red'. This functionality would usually
