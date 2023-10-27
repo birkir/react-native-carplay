@@ -1,6 +1,26 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { NativeModules, DeviceEventEmitter, Text, Button, View } from 'react-native';
+
+export function AndroidAutoModule() {
+  console.log('RNCP started');
+
+  DeviceEventEmitter.addListener('RNCarPlay.DidConnect', () => {
+    NativeModules.RNCarPlay.createTemplate('TestTemplate', { title: 'Test screen 3' });
+  });
+
+  return;
+}
 
 export function AndroidAuto() {
-  return <Text>Hello Android Auto</Text>;
+  return (
+    <View>
+      <Text>Hello Android Auto</Text>
+      <Button
+        title="Reload"
+        onPress={() => {
+          NativeModules.RNCarPlay.reload();
+        }}
+      />
+    </View>
+  );
 }

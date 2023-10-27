@@ -1,4 +1,9 @@
 buildscript {
+
+  def kotlin_version = rootProject.ext.has('kotlinVersion')
+    ? rootProject.ext.get('kotlinVersion')
+    : project.properties['RnAndroidAuto_kotlinVersion']
+
   repositories {
     mavenLocal()
     mavenCentral()
@@ -8,6 +13,7 @@ buildscript {
 
   dependencies {
     classpath "com.android.tools.build:gradle:7.2.1"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
 }
 
@@ -16,7 +22,7 @@ def isNewArchitectureEnabled() {
 }
 
 apply plugin: "com.android.library"
-
+apply plugin: "kotlin-android"
 
 def appProject = rootProject.allprojects.find { it.plugins.hasPlugin('com.android.application') }
 
@@ -89,6 +95,7 @@ repositories {
   jcenter()
 }
 
+def kotlin_version = getExtOrDefault('kotlinVersion')
 
 dependencies {
   // For < 0.71, this will be from the local maven repo
@@ -97,5 +104,7 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation "androidx.car.app:app-projected:1.2.0"
   implementation "androidx.car.app:app:1.2.0"
+  implementation "org.greenrobot:eventbus:3.2.0"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
