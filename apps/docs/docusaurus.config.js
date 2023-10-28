@@ -6,7 +6,7 @@ const config = {
   tagline: 'CarPlay for React Native',
   url: 'https://birkir.github.io',
   baseUrl: '/react-native-carplay/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'log',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'birkir',

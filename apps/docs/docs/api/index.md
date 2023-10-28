@@ -30,16 +30,21 @@ This version of `react-native-carplay` supports iOS 14. If you need support for 
 <th></th>
 <th>List</th>
 <th>Grid</th>
-<th>TabBar</th>
+<th title="TabBar">T B</th>
+
 <th>Alert</th>
-<th>ActionSheet</th>
-<th>VoiceControl</th>
-<th>NowPlaying</th>
+<th title="Action Sheet">A S</th>
+
+<th title="Voice Controller">🎤</th>
+<th title="Now Playing">▶️</th>
+
 <th>Map</th>
-<th>Search</th>
-<th>POI</th>
-<th>Information</th>
-<th>Contact</th>
+<th title="Search">🔎</th>
+
+<th title="Point of Interest">POI</th>
+<th title="Information">Info</th>
+
+<th title="Contact">📇</th>
 </tr>
 </thead>
 <tbody>
@@ -239,7 +244,7 @@ pod 'react-native-carplay', path: '../node_modules/react-native-carplay'
 
 ## Basic Usage
 
-[See full example](https://github.com/birkir/react-native-carplay/blob/master/example/src/App.tsx)
+[See full example](https://github.com/birkir/react-native-carplay/blob/master/apps/example/src/App.tsx)
 
 The exported `CarPlay` class gives you the API needed to add / remove templates from the CarPlay view hierarchy.
 
@@ -584,7 +589,7 @@ CarPlay.setRootTemplate(tabBarTemplate);
 
 ## Example App
 
-A working example app can be found [here](https://github.com/birkir/react-native-carplay/blob/master/example/src/App.tsx).
+A working example app can be found [here](https://github.com/birkir/react-native-carplay/blob/master/apps/example/src/App.tsx).
 
 To run it you must first install dependencies and pods.
 
