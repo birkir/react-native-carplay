@@ -28,15 +28,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
         with:
-          source: ./apps/docs
-          destination: ./_site
+          fetch-depth: 0
+      - name: Use Node.js 14
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Setup Pages
+        run: yarn workspaces focus @carplay/docs
+
+      - name: Build
+        uses: yarn workspace @carplay/docs build
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./apps/docs/build
 
   # Deployment job
   deploy:
