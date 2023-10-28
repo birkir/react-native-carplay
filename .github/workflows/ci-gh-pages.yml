@@ -39,7 +39,7 @@ jobs:
         run: yarn workspaces focus @carplay/docs
 
       - name: Build
-        uses: yarn workspace @carplay/docs build
+        run: yarn workspace @carplay/docs build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
