@@ -1,4 +1,4 @@
-import { AppRegistry } from 'react-native';
+import { AppRegistry, Platform } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { MapButton } from '../interfaces/MapButton';
 import { NavigationAlert } from '../interfaces/NavigationAlert';
@@ -83,9 +83,16 @@ export class MapTemplate extends Template<MapTemplateConfig> {
       AppRegistry.registerComponent(this.id, () => config.component);
     }
 
+    const callbackFn = Platform.select({
+      android: ({ error }: { error?: string } = {}) => {
+        error && console.error(error);
+      },
+    });
+
     CarPlay.bridge.createTemplate(
       this.id,
       this.parseConfig({ type: this.type, ...config, render: true }),
+      callbackFn,
     );
   }
 

@@ -1,10 +1,10 @@
 import { ColorValue } from 'react-native';
 
-type ActionType = 'appIcon' | 'back' | 'composeMessage' | 'pan' | 'custom';
+type ActionType = 'appIcon' | 'back' | 'pan' | 'custom';
 
 export interface Action<T extends ActionType> {
-  id: string;
-  title: string;
+  id?: string;
+  title?: string;
   icon?: string;
   backgroundColor?: ColorValue;
   visibility?: 'default' | 'persistent' | 'primary';

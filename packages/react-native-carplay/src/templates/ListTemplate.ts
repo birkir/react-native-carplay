@@ -4,6 +4,7 @@ import { ListItemUpdate } from '../interfaces/ListItemUpdate';
 import { ListSection } from '../interfaces/ListSection';
 import { Template, TemplateConfig } from './Template';
 import { Action } from 'src/interfaces/Action';
+import { Platform } from 'react-native';
 
 export interface ListTemplateConfig extends TemplateConfig {
   /**
@@ -118,7 +119,9 @@ export class ListTemplate extends Template<ListTemplateConfig> {
     CarPlay.emitter.addListener('didSelectListItem', (e: { templateId: string; index: number }) => {
       if (config.onItemSelect && e.templateId === this.id) {
         void Promise.resolve(config.onItemSelect(e)).then(() => {
-          CarPlay.bridge.reactToSelectedResult(true);
+          if (Platform.OS === 'ios') {
+            CarPlay.bridge.reactToSelectedResult(true);
+          }
         });
       }
     });

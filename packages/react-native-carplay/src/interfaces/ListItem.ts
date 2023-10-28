@@ -6,6 +6,10 @@ import { Action } from './Action';
  */
 export interface ListItem {
   /**
+   * References the item by id
+   */
+  id?: string;
+  /**
    * The primary text displayed in the list item cell.
    */
   text: string;

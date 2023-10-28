@@ -2,7 +2,9 @@
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "composite": false,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
     "noEmit": false,
     "outDir": "lib"
   },

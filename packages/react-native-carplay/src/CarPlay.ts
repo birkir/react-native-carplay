@@ -1,4 +1,4 @@
-import { NativeEventEmitter, NativeModule, NativeModules, Platform } from 'react-native';
+import { NativeEventEmitter, NativeModule, NativeModules } from 'react-native';
 import { ActionSheetTemplate } from './templates/ActionSheetTemplate';
 import { AlertTemplate } from './templates/AlertTemplate';
 import { ContactTemplate } from './templates/ContactTemplate';
@@ -40,7 +40,9 @@ interface InternalCarPlay extends NativeModule {
   createTrip(id: string, config: TripConfig): void;
   updateInformationTemplateItems(id: string, config: unknown): void;
   updateInformationTemplateActions(id: string, config: unknown): void;
-  createTemplate(id: string, config: unknown): void;
+  createTemplate(id: string, config: unknown, callback?: unknown): void;
+  updateTemplate(id: string, config: unknown): void;
+  invalidate(id: string): void;
   startNavigationSession(
     id: string,
     tripId: string,
@@ -108,7 +110,7 @@ class CarPlayInterface {
    * Boolean to denote if carplay is currently connected.
    */
   public connected = false;
-  public window: WindowInformation | undefined
+  public window: WindowInformation | undefined;
 
   /**
    * CarPlay Event Emitter
@@ -119,20 +121,17 @@ class CarPlayInterface {
   private onDisconnectCallbacks = new Set<OnDisconnectCallback>();
 
   constructor() {
-    if (Platform.OS !== 'ios') {
-      return;
-    }
-
     this.emitter.addListener('didConnect', (window: WindowInformation) => {
+      console.log('we are connected yes!');
       this.connected = true;
-      this.window = window
+      this.window = window;
       this.onConnectCallbacks.forEach(callback => {
         callback(window);
       });
     });
     this.emitter.addListener('didDisconnect', () => {
       this.connected = false;
-      this.window = undefined
+      this.window = undefined;
       this.onDisconnectCallbacks.forEach(callback => {
         callback();
       });

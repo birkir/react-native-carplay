@@ -1,28 +1,24 @@
 package org.birkir.carplay
 
-import ReloadEvent
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.car.app.Screen
 import androidx.car.app.Session
-import androidx.car.app.connection.CarConnection
 import com.facebook.react.ReactInstanceManager
+import com.facebook.react.ReactInstanceManagerBuilder
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableNativeMap
+import com.facebook.react.common.LifecycleState
+import com.facebook.react.devsupport.HMRClient
 import com.facebook.react.modules.appregistry.AppRegistry
 import com.facebook.react.modules.core.TimingModule
-import com.facebook.react.modules.debug.DevSettingsModule
 import org.birkir.carplay.screens.CarScreen
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+
 
 class CarPlaySession(private val reactInstanceManager: ReactInstanceManager) : Session() {
   private lateinit var screen: CarScreen
@@ -34,6 +30,7 @@ class CarPlaySession(private val reactInstanceManager: ReactInstanceManager) : S
     val filter = IntentFilter("org.birkir.carplay.RELOAD_EVENT")
     carContext.registerReceiver(reloadIntentReceiver, filter);
     runJsApplication()
+
     return screen
   }
 
@@ -83,8 +80,10 @@ class CarPlaySession(private val reactInstanceManager: ReactInstanceManager) : S
       if (appProperties != null) {
         appParams.putMap("initialProps", Arguments.fromBundle(appProperties))
       }
+
       catalystInstance.getJSModule(AppRegistry::class.java)
         .runApplication(jsAppModuleName, appParams)
+
       val timingModule = reactContext.getNativeModule(
         TimingModule::class.java
       )

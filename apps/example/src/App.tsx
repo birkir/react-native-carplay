@@ -17,7 +17,6 @@ import { Information } from './screens/Information';
 import { NowPlaying } from './screens/NowPlaying';
 import { POI } from './screens/POI';
 import { CarPlay } from 'react-native-carplay';
-import { NativeEventEmitter, NativeModules } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -32,11 +31,6 @@ export const App = () => {
     function onDisconnect() {
       setCarPlayConnected(false);
     }
-
-    const emt = new NativeEventEmitter(NativeModules.RNCarPlay);
-    emt.addListener('didConnect', () => {
-      console.log('CONNECTED!');
-    });
 
     CarPlay.registerOnConnect(onConnect);
     CarPlay.registerOnDisconnect(onDisconnect);

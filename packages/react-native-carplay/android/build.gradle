@@ -102,8 +102,8 @@ dependencies {
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
-  implementation "androidx.car.app:app-projected:1.2.0"
-  implementation "androidx.car.app:app:1.2.0"
+  implementation "androidx.car.app:app-projected:1.4.0-beta02"
+  implementation "androidx.car.app:app:1.4.0-beta02"
   implementation "org.greenrobot:eventbus:3.2.0"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

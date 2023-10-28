@@ -6,6 +6,7 @@ import androidx.car.app.Screen
 import androidx.car.app.model.Pane
 import androidx.car.app.model.PaneTemplate
 import androidx.car.app.model.Template
+import androidx.car.app.navigation.model.MapTemplate
 import androidx.car.app.navigation.model.NavigationTemplate
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -15,7 +16,7 @@ import org.birkir.carplay.render.VirtualRenderer
 
 class CarScreen(carContext: CarContext) : Screen(carContext) {
 
-  private var template: Template? = null
+  public var template: Template? = null
   private var virtualRenderer: VirtualRenderer? = null
 
   init {
@@ -29,23 +30,23 @@ class CarScreen(carContext: CarContext) : Screen(carContext) {
     })
   }
 
-  fun setTemplate(template: Template?, args: ReadableMap) {
-    if (template is NavigationTemplate && virtualRenderer == null) {
-      Log.d(TAG, "setTemplate: received navigation template with args: $args")
-      val moduleName = args.getString("id")
-      if (moduleName == null) {
+  fun setTemplate(template: Template?, templateId: String) {
+    if (template is MapTemplate && virtualRenderer == null) {
+      Log.d(TAG, "setTemplate: received navigation template with args: $templateId")
+      if (templateId == null) {
         Log.w(
           TAG,
           "setTemplate: moduleName is null, please make sure you are setting id for map-template in ReactNative",
         )
         return
       }
-      virtualRenderer = VirtualRenderer(carContext, moduleName)
+      virtualRenderer = VirtualRenderer(carContext, templateId)
     }
     this.template = template
   }
 
   override fun onGetTemplate(): Template {
+    Log.d(TAG, "onGetTemplate for $marker")
     return template ?: PaneTemplate.Builder(
       Pane.Builder().setLoading(true).build()
     ).setTitle("RNCarPlay loading...").build()
