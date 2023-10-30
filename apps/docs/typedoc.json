@@ -4,5 +4,6 @@
   "plugin": ["typedoc-plugin-markdown", "typedoc-github-wiki-theme"],
   "theme": "github-wiki",
   "out": "./pages/docs",
-  "publicPath": "/docs/"
+  "publicPath": "/docs/",
+  "gitRevision": "master"
 }

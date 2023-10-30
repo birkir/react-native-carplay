@@ -1,4 +1,9 @@
 #!/bin/sh
 
+scriptdir="$(dirname "$0")"
+
 # Remove unused md files
-rm pages/docs/{_Sidebar.md,Home.md,Exports.md,.nojekyll}
+rm "$scriptdir/../pages/docs/Home.md" || true
+rm "$scriptdir/../pages/docs/Exports.md" || true
+rm "$scriptdir/../pages/docs/_Sidebar.md" || true
+rm "$scriptdir/../pages/docs/.nojekyll" || true
