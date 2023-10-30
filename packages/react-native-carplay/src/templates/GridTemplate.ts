@@ -1,7 +1,7 @@
 import { GridButton } from '../interfaces/GridButton';
 import { BaseEvent, Template, TemplateConfig } from './Template';
 
-interface ButtonPressedEvent extends BaseEvent {
+export interface ButtonPressedEvent extends BaseEvent {
   /**
    * Button ID
    */

@@ -12,7 +12,7 @@ export interface BaseEvent {
   templateId: string;
 }
 
-interface BarButtonEvent extends BaseEvent {
+export interface BarButtonEvent extends BaseEvent {
   id: string;
 }
 

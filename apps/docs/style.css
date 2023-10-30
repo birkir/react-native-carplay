@@ -1,0 +1,5 @@
+@media (min-width: 768px) {
+  .nextra-sidebar-container {
+    width: 18rem;
+  }
+}

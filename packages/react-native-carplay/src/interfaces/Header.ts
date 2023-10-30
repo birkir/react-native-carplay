@@ -1,6 +1,4 @@
-import { Action } from './Action';
-
-type HeaderAction = Action<'appIcon' | 'back' | 'custom'>;
+import { Action, HeaderAction } from './Action';
 
 export interface Header {
   title: string;

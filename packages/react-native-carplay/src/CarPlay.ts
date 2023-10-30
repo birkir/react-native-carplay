@@ -23,7 +23,7 @@ import { TimeRemainingColor } from './interfaces/TimeRemainingColor';
 import { TextConfiguration } from './interfaces/TextConfiguration';
 import { Action } from './interfaces/Action';
 
-interface InternalCarPlay extends NativeModule {
+export interface InternalCarPlay extends NativeModule {
   checkForConnection(): void;
   setRootTemplate(templateId: string, animated: boolean): void;
   pushTemplate(templateId: string, animated: boolean): void;
@@ -93,7 +93,7 @@ interface InternalCarPlay extends NativeModule {
 
 const { RNCarPlay } = NativeModules as { RNCarPlay: InternalCarPlay };
 
-type PushableTemplates =
+export type PushableTemplates =
   | MapTemplate
   | SearchTemplate
   | GridTemplate
@@ -106,21 +106,22 @@ type PushableTemplates =
   | PlaceListMapTemplate
   | PlaceListNavigationTemplate
   | RoutePreviewNavigationTemplate;
-type PresentableTemplates = AlertTemplate | ActionSheetTemplate | VoiceControlTemplate;
 
-type WindowInformation = {
+export type PresentableTemplates = AlertTemplate | ActionSheetTemplate | VoiceControlTemplate;
+
+export type WindowInformation = {
   width: number;
   height: number;
   scale: number;
 };
 
-type OnConnectCallback = (window: WindowInformation) => void;
-type OnDisconnectCallback = () => void;
+export type OnConnectCallback = (window: WindowInformation) => void;
+export type OnDisconnectCallback = () => void;
 
 /**
  * A controller that manages all user interface elements appearing on your map displayed on the CarPlay screen.
  */
-class CarPlayInterface {
+export class CarPlayInterface {
   /**
    * React Native bridge to the CarPlay interface
    */

@@ -1,0 +1,10 @@
+{
+  "index": "Introduction",
+  "carplay": "Apple CarPlay",
+  "android-auto": "Android Auto",
+  "-- API": {
+    "type": "separator",
+    "title": "API"
+  },
+  "docs": "TypeScript API"
+}
