@@ -13896,7 +13896,6 @@ __metadata:
     "@types/node": 17.0.25
     "@types/react": 18.0.6
     "@types/react-native": 0.67.5
-    babel-jest: ^29.2.1
     cross-env: 7.0.3
     docusaurus-plugin-typedoc: 0.19.2
     eslint: ^8.19.0

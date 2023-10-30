@@ -8,10 +8,10 @@ import { TravelEstimates } from '../interfaces/TravelEstimates';
 import { NavigationSession } from '../navigation/NavigationSession';
 import { Trip } from '../navigation/Trip';
 import { Template, TemplateConfig } from './Template';
-import { ListItem } from 'src/interfaces/ListItem';
-import { Action } from 'src/interfaces/Action';
-import { Header } from 'src/interfaces/Header';
-import { Pane } from 'src/interfaces/Pane';
+import { ListItem } from '../interfaces/ListItem';
+import { Action } from '../interfaces/Action';
+import { Header } from '../interfaces/Header';
+import { Pane } from '../interfaces/Pane';
 
 export interface MapTemplateConfig extends TemplateConfig {
   /**

@@ -1,5 +1,5 @@
-import { ImageResolvedAssetSource } from "react-native";
-import { NavigationStep } from "./NavigationStep";
+import { ImageResolvedAssetSource } from 'react-native';
+import { NavigationStep } from './NavigationStep';
 
 export type NavigationRoutingInfo = {
   type: 'routingInfo';
@@ -7,13 +7,13 @@ export type NavigationRoutingInfo = {
   junctionImage?: ImageResolvedAssetSource;
   nextStep?: NavigationStep;
   distance: number;
-  distanceUnits: number,
-}
+  distanceUnits: number;
+};
 
 export type NavigationMessageInfo = {
   type: 'messageInfo';
   title: string;
   icon?: ImageResolvedAssetSource;
-}
+};
 
 export type NavigationInfo = NavigationRoutingInfo | NavigationMessageInfo;

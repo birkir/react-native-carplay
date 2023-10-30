@@ -1,4 +1,4 @@
-import { Action, HeaderAction } from 'src/interfaces/Action';
+import { Action, HeaderAction } from '../../interfaces/Action';
 import { Template, TemplateConfig } from '../Template';
 import { ImageSourcePropType } from 'react-native';
 

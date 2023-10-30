@@ -1,9 +1,9 @@
-import { ListItem } from 'src/interfaces/ListItem';
+import { ListItem } from '../interfaces/ListItem';
 import { CarPlay } from '../CarPlay';
 import { ListItemUpdate } from '../interfaces/ListItemUpdate';
 import { ListSection } from '../interfaces/ListSection';
 import { Template, TemplateConfig } from './Template';
-import { Action } from 'src/interfaces/Action';
+import { Action } from '../interfaces/Action';
 import { Platform } from 'react-native';
 
 export interface ListTemplateConfig extends TemplateConfig {

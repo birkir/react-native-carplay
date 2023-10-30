@@ -1,4 +1,4 @@
-import { Action, HeaderAction } from 'src/interfaces/Action';
+import { Action, HeaderAction } from '../../interfaces/Action';
 import {
   AndroidNavigationBaseTemplate,
   AndroidNavigationBaseTemplateConfig,

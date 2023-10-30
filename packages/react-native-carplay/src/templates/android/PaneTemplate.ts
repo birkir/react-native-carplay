@@ -1,6 +1,6 @@
-import { Action, HeaderAction } from 'src/interfaces/Action';
+import { Action, HeaderAction } from '../../interfaces/Action';
 import { Template, TemplateConfig } from '../Template';
-import { Pane } from 'src/interfaces/Pane';
+import { Pane } from '../../interfaces/Pane';
 
 export interface PaneTemplateConfig extends TemplateConfig {
   pane: Pane;

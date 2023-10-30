@@ -1,4 +1,4 @@
-import { CarColor } from "./CarColor";
+import { CarColor } from './CarColor';
 
 export type DistanceUnits = 'meters' | 'miles' | 'kilometers' | 'yards' | 'feet';
 
@@ -35,5 +35,5 @@ export interface TravelEstimates {
   destinationTime?: {
     timeSinceEpochMillis: number;
     id: string;
-  }
+  };
 }

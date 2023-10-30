@@ -1,6 +1,6 @@
-import { ImageSourcePropType } from "react-native";
-import { Action } from "./Action";
-import { ListItem } from "./ListItem";
+import { ImageSourcePropType } from 'react-native';
+import { Action } from './Action';
+import { ListItem } from './ListItem';
 
 /**
  * Represents a list of rows used for displaying informational content and a set of Actions that users can perform based on such content.
