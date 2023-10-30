@@ -11,7 +11,7 @@ interface BarButtonBase {
   disabled?: boolean;
 }
 
-interface BarButtonText extends BarButtonBase {
+export interface BarButtonText extends BarButtonBase {
   /**
    * A text style bar button.
    */
@@ -22,7 +22,7 @@ interface BarButtonText extends BarButtonBase {
   title: string;
 }
 
-interface BarButtonImage extends BarButtonBase {
+export interface BarButtonImage extends BarButtonBase {
   /**
    * An image style bar button.
    */

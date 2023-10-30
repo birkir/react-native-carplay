@@ -5,7 +5,11 @@ import { ListTemplate } from './ListTemplate';
 import { PointOfInterestTemplate } from './PointOfInterestTemplate';
 import { Template, TemplateConfig } from './Template';
 
-type TabBarTemplates = ListTemplate | GridTemplate | InformationTemplate | PointOfInterestTemplate;
+export type TabBarTemplates =
+  | ListTemplate
+  | GridTemplate
+  | InformationTemplate
+  | PointOfInterestTemplate;
 
 export interface TabBarTemplateConfig extends TemplateConfig {
   /**

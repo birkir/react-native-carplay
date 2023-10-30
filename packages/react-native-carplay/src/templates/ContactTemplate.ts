@@ -1,24 +1,24 @@
 import { ImageSourcePropType } from 'react-native';
 import { Template, TemplateConfig } from './Template';
 
-interface ContactButtonEvent {
+export interface ContactButtonEvent {
   id: string;
   templateId: string;
 }
 
-interface ContactActionBase {
+export interface ContactActionBase {
   id: string;
   type: 'call' | 'directions' | 'message';
   disabled?: boolean;
   title?: string;
 }
 
-interface ContactActionMessage extends ContactActionBase {
+export interface ContactActionMessage extends ContactActionBase {
   type: 'message';
   phoneOrEmail: string;
 }
 
-type ContactAction = ContactActionBase | ContactActionMessage;
+export type ContactAction = ContactActionBase | ContactActionMessage;
 
 export interface ContactTemplateConfig extends TemplateConfig {
   name: string;

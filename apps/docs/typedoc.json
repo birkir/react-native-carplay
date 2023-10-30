@@ -1,0 +1,8 @@
+{
+  "entryPoints": ["../../packages/react-native-carplay/src/index.ts"],
+  "tsconfig": "../../packages/react-native-carplay/tsconfig.build.json",
+  "plugin": ["typedoc-plugin-markdown", "typedoc-github-wiki-theme"],
+  "theme": "github-wiki",
+  "out": "./pages/docs",
+  "publicPath": "/docs/"
+}

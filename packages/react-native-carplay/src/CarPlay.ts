@@ -1,10 +1,14 @@
-import { NativeEventEmitter, NativeModule, NativeModules, Platform } from 'react-native';
+import { ImageSourcePropType, NativeEventEmitter, NativeModule, NativeModules } from 'react-native';
 import { ActionSheetTemplate } from './templates/ActionSheetTemplate';
 import { AlertTemplate } from './templates/AlertTemplate';
 import { ContactTemplate } from './templates/ContactTemplate';
 import { GridTemplate } from './templates/GridTemplate';
 import { InformationTemplate } from './templates/InformationTemplate';
 import { ListTemplate } from './templates/ListTemplate';
+import { NavigationTemplate } from './templates/android/NavigationTemplate';
+import { PlaceListMapTemplate } from './templates/android/PlaceListMapTemplate';
+import { PlaceListNavigationTemplate } from './templates/android/PlaceListNavigationTemplate';
+import { RoutePreviewNavigationTemplate } from './templates/android/RoutePreviewNavigationTemplate';
 import { MapTemplate } from './templates/MapTemplate';
 import { PointOfInterestTemplate } from './templates/PointOfInterestTemplate';
 import { SearchTemplate } from './templates/SearchTemplate';
@@ -17,8 +21,9 @@ import { PauseReason } from './interfaces/PauseReason';
 import { TripConfig } from './navigation/Trip';
 import { TimeRemainingColor } from './interfaces/TimeRemainingColor';
 import { TextConfiguration } from './interfaces/TextConfiguration';
+import { Action } from './interfaces/Action';
 
-interface InternalCarPlay extends NativeModule {
+export interface InternalCarPlay extends NativeModule {
   checkForConnection(): void;
   setRootTemplate(templateId: string, animated: boolean): void;
   pushTemplate(templateId: string, animated: boolean): void;
@@ -40,7 +45,9 @@ interface InternalCarPlay extends NativeModule {
   createTrip(id: string, config: TripConfig): void;
   updateInformationTemplateItems(id: string, config: unknown): void;
   updateInformationTemplateActions(id: string, config: unknown): void;
-  createTemplate(id: string, config: unknown): void;
+  createTemplate(id: string, config: unknown, callback?: unknown): void;
+  updateTemplate(id: string, config: unknown): void;
+  invalidate(id: string): void;
   startNavigationSession(
     id: string,
     tripId: string,
@@ -71,11 +78,22 @@ interface InternalCarPlay extends NativeModule {
   reactToUpdatedSearchText(items: unknown): void;
   updateTabBarTemplates(id: string, config: unknown): void;
   activateVoiceControlState(id: string, identifier: string): void;
+  // Android
+  reload(): void;
+  toast(message: string, duration: number): void;
+  alert(config: {
+    id: number;
+    title: string;
+    duration: number;
+    subtitle?: string;
+    icon?: ImageSourcePropType;
+    actions?: Action[];
+  }): void;
 }
 
 const { RNCarPlay } = NativeModules as { RNCarPlay: InternalCarPlay };
 
-type PushableTemplates =
+export type PushableTemplates =
   | MapTemplate
   | SearchTemplate
   | GridTemplate
@@ -83,22 +101,27 @@ type PushableTemplates =
   | ListTemplate
   | InformationTemplate
   | ContactTemplate
-  | NowPlayingTemplate;
-type PresentableTemplates = AlertTemplate | ActionSheetTemplate | VoiceControlTemplate;
+  | NowPlayingTemplate
+  | NavigationTemplate
+  | PlaceListMapTemplate
+  | PlaceListNavigationTemplate
+  | RoutePreviewNavigationTemplate;
 
-type WindowInformation = {
+export type PresentableTemplates = AlertTemplate | ActionSheetTemplate | VoiceControlTemplate;
+
+export type WindowInformation = {
   width: number;
   height: number;
   scale: number;
 };
 
-type OnConnectCallback = (window: WindowInformation) => void;
-type OnDisconnectCallback = () => void;
+export type OnConnectCallback = (window: WindowInformation) => void;
+export type OnDisconnectCallback = () => void;
 
 /**
  * A controller that manages all user interface elements appearing on your map displayed on the CarPlay screen.
  */
-class CarPlayInterface {
+export class CarPlayInterface {
   /**
    * React Native bridge to the CarPlay interface
    */
@@ -108,7 +131,7 @@ class CarPlayInterface {
    * Boolean to denote if carplay is currently connected.
    */
   public connected = false;
-  public window: WindowInformation | undefined
+  public window: WindowInformation | undefined;
 
   /**
    * CarPlay Event Emitter
@@ -119,23 +142,25 @@ class CarPlayInterface {
   private onDisconnectCallbacks = new Set<OnDisconnectCallback>();
 
   constructor() {
-    if (Platform.OS !== 'ios') {
-      return;
-    }
-
     this.emitter.addListener('didConnect', (window: WindowInformation) => {
+      console.log('we are connected yes!');
       this.connected = true;
-      this.window = window
+      this.window = window;
       this.onConnectCallbacks.forEach(callback => {
         callback(window);
       });
     });
     this.emitter.addListener('didDisconnect', () => {
       this.connected = false;
-      this.window = undefined
+      this.window = undefined;
       this.onDisconnectCallbacks.forEach(callback => {
         callback();
       });
+    });
+    this.emitter.addListener('didPressMenuItem', e => {
+      if (e?.title === 'Reload Android Auto') {
+        this.bridge.reload();
+      }
     });
 
     // check if already connected this will fire any 'didConnect' events

@@ -12,7 +12,7 @@ export interface Maneuver {
    * The size of the image in points. Please read the CarPlay App Programming Guide
    * to get the recommended size.
    */
-  symbolImageSize?: { width: number, height: number }
+  symbolImageSize?: { width: number; height: number };
   /**
    * Allows the supplied symbol image to be tinted
    * via a color, ie. 'red'. This functionality would usually

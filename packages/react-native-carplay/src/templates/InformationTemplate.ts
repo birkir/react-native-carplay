@@ -1,12 +1,12 @@
 import { Template, TemplateConfig } from './Template';
 import { CarPlay } from '../CarPlay';
 
-interface InformationItem {
+export interface InformationItem {
   title: string;
   detail: string;
 }
 
-interface InformationAction {
+export interface InformationAction {
   id: string;
   title: string;
 }
