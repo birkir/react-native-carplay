@@ -5,6 +5,7 @@ const withNextra = require('nextra')({
 
 module.exports = withNextra({
   output: 'export',
+  basePath: '/react-native-carplay',
   images: {
     unoptimized: true,
   }
