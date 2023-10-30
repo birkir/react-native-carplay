@@ -26,9 +26,9 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.4.1",
-    "@tsconfig/docusaurus": "1.0.7",
-    "@tsconfig/react-native": "3.0.2",
     "@types/react-native": "0.67.5",
+    "@tsconfig/react-native": "3.0.2",
+    "@tsconfig/docusaurus": "1.0.7",
     "docusaurus-plugin-typedoc": "0.19.2",
     "typedoc": "0.24.7",
     "typedoc-github-wiki-theme": "1.1.0",
