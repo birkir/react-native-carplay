@@ -1546,6 +1546,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@carplay/docs@workspace:apps/docs":
+  version: 0.0.0-use.local
+  resolution: "@carplay/docs@workspace:apps/docs"
+  dependencies:
+    "@types/node": 18.11.10
+    next: ^13.0.6
+    nextra: latest
+    nextra-theme-docs: latest
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    typedoc: ^0.25.3
+    typedoc-github-wiki-theme: ^1.1.0
+    typedoc-plugin-markdown: ^3.16.0
+    typescript: ^4.9.3
+  languageName: unknown
+  linkType: soft
+
 "@carplay/example@workspace:apps/example":
   version: 0.0.0-use.local
   resolution: "@carplay/example@workspace:apps/example"
@@ -1573,23 +1590,6 @@ __metadata:
     react-native-screens: ^3.20.0
     react-test-renderer: 18.2.0
     typescript: 4.8.4
-  languageName: unknown
-  linkType: soft
-
-"@carplay/foo@workspace:apps/docs":
-  version: 0.0.0-use.local
-  resolution: "@carplay/foo@workspace:apps/docs"
-  dependencies:
-    "@types/node": 18.11.10
-    next: ^13.0.6
-    nextra: latest
-    nextra-theme-docs: latest
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    typedoc: ^0.25.3
-    typedoc-github-wiki-theme: ^1.1.0
-    typedoc-plugin-markdown: ^3.16.0
-    typescript: ^4.9.3
   languageName: unknown
   linkType: soft
 
