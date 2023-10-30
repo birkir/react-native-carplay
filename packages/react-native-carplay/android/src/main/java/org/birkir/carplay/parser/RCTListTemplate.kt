@@ -4,43 +4,39 @@ import androidx.car.app.CarContext
 import androidx.car.app.model.ListTemplate
 import androidx.car.app.model.SectionedItemList
 import com.facebook.react.bridge.ReadableMap
-import org.birkir.carplay.render.ReactCarRenderContext
-import org.birkir.carplay.utils.EventEmitter
+import org.birkir.carplay.screens.CarScreenContext
 
 class RCTListTemplate(
   context: CarContext,
-  renderContext: ReactCarRenderContext,
-  eventEmitter: EventEmitter?
-) : RCTTemplate(context, renderContext, eventEmitter) {
+  screenContext: CarScreenContext
+) : RCTTemplate(context, screenContext) {
 
-  override fun parse(config: ReadableMap): ListTemplate {
+  override fun parse(props: ReadableMap): ListTemplate {
     return ListTemplate.Builder().apply {
-      config.getString("title")?.let { setTitle(it) }
+      props.getString("title")?.let { setTitle(it) }
 
       // Actions
-      config.getArray("actions")?.let {
+      props.getArray("actions")?.let {
         setActionStrip(
           parseActionStrip(it)
         )
       }
 
       // Header Action
-      config.getMap("headerAction")?.let {
+      props.getMap("headerAction")?.let {
         setHeaderAction(
           parseAction(it)
         )
       }
 
       // Loading
-      if (config.hasKey("loading")) {
-        setLoading(config.getBoolean("loading"))
-      }
+      setLoading(props.isLoading())
 
       // Sections
-      config.getArray("sections")?.let {
+      props.getArray("sections")?.let {
         for (i in 0 until it.size()) {
           val section = it.getMap(i)
-          val header = section.getString("header");
+          val header = section.getString("header")
           addSectionedList(
             SectionedItemList.create(
               parseItemList(section.getArray("items")),
@@ -48,11 +44,11 @@ class RCTListTemplate(
             )
           )
         }
-      };
+      }
 
       // Single List
       // @todo handle when sections and items are defined at once.
-      config.getArray("items")?.let {
+      props.getArray("items")?.let {
         setSingleList(
           parseItemList(it)
         )

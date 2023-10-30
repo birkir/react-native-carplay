@@ -12,7 +12,4 @@ export const listTemplate = new ListTemplate({
   sections,
   title: 'List Template',
   headerAction: { type: 'back' },
-  onBackButtonPressed: () => {
-    CarPlay.popTemplate();
-  },
 });

@@ -2,7 +2,7 @@ import { ColorValue } from 'react-native';
 
 type ActionType = 'appIcon' | 'back' | 'pan' | 'custom';
 
-export interface Action<T extends ActionType> {
+export interface Action<T extends ActionType = ActionType> {
   id?: string;
   title?: string;
   icon?: string;
@@ -11,3 +11,5 @@ export interface Action<T extends ActionType> {
   enabled?: boolean;
   type?: T;
 }
+
+export type HeaderAction = Action<'appIcon' | 'back'>;

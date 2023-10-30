@@ -39,6 +39,7 @@ export class GridTemplate extends Template<GridTemplateConfig> {
   get eventMap() {
     return {
       gridButtonPressed: 'onButtonPressed',
+      backButtonPressed: 'onBackButtonPressed',
     };
   }
 }

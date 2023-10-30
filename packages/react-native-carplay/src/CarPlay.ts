@@ -1,10 +1,14 @@
-import { NativeEventEmitter, NativeModule, NativeModules } from 'react-native';
+import { ImageSourcePropType, NativeEventEmitter, NativeModule, NativeModules } from 'react-native';
 import { ActionSheetTemplate } from './templates/ActionSheetTemplate';
 import { AlertTemplate } from './templates/AlertTemplate';
 import { ContactTemplate } from './templates/ContactTemplate';
 import { GridTemplate } from './templates/GridTemplate';
 import { InformationTemplate } from './templates/InformationTemplate';
 import { ListTemplate } from './templates/ListTemplate';
+import { NavigationTemplate } from './templates/android/NavigationTemplate';
+import { PlaceListMapTemplate } from './templates/android/PlaceListMapTemplate';
+import { PlaceListNavigationTemplate } from './templates/android/PlaceListNavigationTemplate';
+import { RoutePreviewNavigationTemplate } from './templates/android/RoutePreviewNavigationTemplate';
 import { MapTemplate } from './templates/MapTemplate';
 import { PointOfInterestTemplate } from './templates/PointOfInterestTemplate';
 import { SearchTemplate } from './templates/SearchTemplate';
@@ -17,6 +21,7 @@ import { PauseReason } from './interfaces/PauseReason';
 import { TripConfig } from './navigation/Trip';
 import { TimeRemainingColor } from './interfaces/TimeRemainingColor';
 import { TextConfiguration } from './interfaces/TextConfiguration';
+import { Action } from './interfaces/Action';
 
 interface InternalCarPlay extends NativeModule {
   checkForConnection(): void;
@@ -73,6 +78,17 @@ interface InternalCarPlay extends NativeModule {
   reactToUpdatedSearchText(items: unknown): void;
   updateTabBarTemplates(id: string, config: unknown): void;
   activateVoiceControlState(id: string, identifier: string): void;
+  // Android
+  reload(): void;
+  toast(message: string, duration: number): void;
+  alert(config: {
+    id: number;
+    title: string;
+    duration: number;
+    subtitle?: string;
+    icon?: ImageSourcePropType;
+    actions?: Action[];
+  }): void;
 }
 
 const { RNCarPlay } = NativeModules as { RNCarPlay: InternalCarPlay };
@@ -85,7 +101,11 @@ type PushableTemplates =
   | ListTemplate
   | InformationTemplate
   | ContactTemplate
-  | NowPlayingTemplate;
+  | NowPlayingTemplate
+  | NavigationTemplate
+  | PlaceListMapTemplate
+  | PlaceListNavigationTemplate
+  | RoutePreviewNavigationTemplate;
 type PresentableTemplates = AlertTemplate | ActionSheetTemplate | VoiceControlTemplate;
 
 type WindowInformation = {
@@ -135,6 +155,11 @@ class CarPlayInterface {
       this.onDisconnectCallbacks.forEach(callback => {
         callback();
       });
+    });
+    this.emitter.addListener('didPressMenuItem', e => {
+      if (e?.title === 'Reload Android Auto') {
+        this.bridge.reload();
+      }
     });
 
     // check if already connected this will fire any 'didConnect' events

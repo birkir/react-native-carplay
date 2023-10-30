@@ -12,6 +12,14 @@ export { InformationTemplate } from './templates/InformationTemplate';
 export { NowPlayingTemplate } from './templates/NowPlayingTemplate';
 export { PointOfInterestTemplate } from './templates/PointOfInterestTemplate';
 
+// Android Templates
+export { NavigationTemplate } from './templates/android/NavigationTemplate';
+export { PlaceListMapTemplate } from './templates/android/PlaceListMapTemplate';
+export { PlaceListNavigationTemplate } from './templates/android/PlaceListNavigationTemplate';
+export { RoutePreviewNavigationTemplate } from './templates/android/RoutePreviewNavigationTemplate';
+export { MessageTemplate } from './templates/android/MessageTemplate';
+export { PaneTemplate } from './templates/android/PaneTemplate';
+
 // Others
 export { NavigationSession } from './navigation/NavigationSession';
 export { Trip } from './navigation/Trip';
@@ -28,6 +36,12 @@ export type { ContactTemplateConfig } from './templates/ContactTemplate';
 export type { ActionSheetTemplateConfig } from './templates/ActionSheetTemplate';
 export type { AlertTemplateConfig } from './templates/AlertTemplate';
 export type { InformationTemplateConfig } from './templates/InformationTemplate';
+export type { NavigationTemplateConfig } from './templates/android/NavigationTemplate';
+export type { PlaceListMapTemplateConfig } from './templates/android/PlaceListMapTemplate';
+export type { PlaceListNavigationTemplateConfig } from './templates/android/PlaceListNavigationTemplate';
+export type { RoutePreviewNavigationTemplateConfig } from './templates/android/RoutePreviewNavigationTemplate';
+export type { MessageTemplateConfig } from './templates/android/MessageTemplate';
+export type { PaneTemplateConfig } from './templates/android/PaneTemplate';
 export type {
   PointOfInterestTemplateConfig,
   PointOfInterestItem,

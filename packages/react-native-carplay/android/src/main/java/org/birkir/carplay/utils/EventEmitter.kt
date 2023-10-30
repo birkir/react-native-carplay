@@ -1,6 +1,5 @@
 package org.birkir.carplay.utils
 
-import android.R.id
 import android.util.Log
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
@@ -8,7 +7,10 @@ import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter
 
 
-class EventEmitter(private var reactContext: ReactContext? = null) {
+class EventEmitter(
+  private var reactContext: ReactContext? = null,
+  private var templateId: String? = null
+) {
 
   companion object {
     const val DidConnect = "didConnect"
@@ -69,58 +71,97 @@ class EventEmitter(private var reactContext: ReactContext? = null) {
   }
 
   fun didConnect() {
-    Log.d("EventEmitter", "Did connect");
-    emit(EventEmitter.DidConnect, Arguments.createMap())
+    Log.d("EventEmitter", "Did connect")
+    emit(DidConnect)
   }
 
   fun didDisconnect() {
-    emit(EventEmitter.DidDisconnect, Arguments.createMap());
+    emit(DidDisconnect)
   }
 
-  fun buttonPressed(templateId: String, buttonId: String) {
-    val event = Arguments.createMap();
-    event.putString("templateId", templateId);
-    event.putString("buttonId", buttonId);
-    emit(EventEmitter.ButtonPressed, Arguments.createMap())
+  fun buttonPressed(buttonId: String) {
+    emit(ButtonPressed, Arguments.createMap().apply {
+      putString("buttonId", buttonId)
+    })
   }
 
   fun barButtonPressed(templateId: String, buttonId: String) {
-    val event = Arguments.createMap();
-    event.putString("templateId", templateId);
-    event.putString("buttonId", buttonId);
-    emit(EventEmitter.BarButtonPressed, event)
+    emit(BarButtonPressed, Arguments.createMap().apply {
+      putString("buttonId", buttonId)
+    })
   }
 
   fun backButtonPressed(templateId: String?) {
-    val event = Arguments.createMap();
-    event.putString("templateId", templateId);
-    emit(EventEmitter.BackButtonPressed, event)
+    emit(BackButtonPressed, Arguments.createMap().apply {
+      templateId?.let { putString("templateId", templateId) }
+    })
   }
 
-  fun didSelectListItem(templateId: String, id: String, index: Int) {
-    val event = Arguments.createMap();
-    event.putString("templateId", templateId);
-    event.putString("id", id);
-    event.putInt("index", index);
-    emit(EventEmitter.DidSelectListItem, event);
+  fun didSelectListItem(id: String, index: Int) {
+    emit(DidSelectListItem, Arguments.createMap().apply {
+      putString("id", id)
+      putInt("index", index)
+    })
   }
 
-  fun gridButtonPressed(templateId: String, id: String, index: Int) {
-    val event = Arguments.createMap();
-    event.putString("templateId", templateId);
-    event.putString("id", id);
-    event.putInt("index", index);
-    emit(EventEmitter.GridButtonPressed, event);
+  fun didSelectTemplate(selectedTemplateId: String) {
+    emit(DidSelectTemplate, Arguments.createMap().apply {
+      putString("selectedTemplateId", selectedTemplateId)
+    })
   }
 
+  fun updatedSearchText(searchText: String) {
+    emit(UpdatedSearchText, Arguments.createMap().apply {
+      putString("searchText", searchText)
+    })
+  }
 
-  private fun emit(eventName: String, data: WritableMap) {
+  fun searchButtonPressed(searchText: String) {
+    emit(SearchButtonPressed, Arguments.createMap().apply {
+      putString("searchText", searchText)
+    })
+  }
+
+  fun alertActionPressed(type: String, reason: String? = null) {
+    emit(AlertActionPressed, Arguments.createMap().apply {
+      putString("type", type);
+      reason?.let { putString("reason", reason) }
+    });
+  }
+
+  fun selectedResult(index: Int, id: String?) {
+    emit(SelectedResult, Arguments.createMap().apply {
+      id?.let { putString("id", id) }
+      putInt("index", index)
+    })
+  }
+
+  fun gridButtonPressed(id: String, index: Int) {
+    val event = Arguments.createMap()
+    event.putString("id", id)
+    event.putInt("index", index)
+    emit(GridButtonPressed, event)
+  }
+
+  fun didShowPanningInterface() {
+    emit(DidShowPanningInterface)
+  }
+
+  fun didDismissPanningInterface() {
+    emit(DidDismissPanningInterface)
+  }
+
+  private fun emit(eventName: String, data: WritableMap = Arguments.createMap()) {
     if (reactContext == null) {
       Log.e("RNCarPlay", "Could not send event $eventName. React context is null!")
       return
+    }
+    if (templateId != null && !data.hasKey("templateId")) {
+      data.putString("templateId", templateId)
     }
     reactContext!!
       .getJSModule(RCTDeviceEventEmitter::class.java)
       .emit(eventName, data)
   }
+
 }

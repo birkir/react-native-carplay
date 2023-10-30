@@ -3,14 +3,12 @@ package org.birkir.carplay.parser
 import androidx.car.app.CarContext
 import androidx.car.app.model.GridTemplate
 import com.facebook.react.bridge.ReadableMap
-import org.birkir.carplay.render.ReactCarRenderContext
-import org.birkir.carplay.utils.EventEmitter
+import org.birkir.carplay.screens.CarScreenContext
 
 class RCTGridTemplate(
   context: CarContext,
-  renderContext: ReactCarRenderContext,
-  eventEmitter: EventEmitter?
-) : RCTTemplate(context, renderContext, eventEmitter) {
+  carScreenContext: CarScreenContext
+) : RCTTemplate(context, carScreenContext) {
 
   override fun parse(props: ReadableMap): GridTemplate {
     return GridTemplate.Builder().apply {

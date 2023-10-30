@@ -1,4 +1,4 @@
-package org.birkir.carplay.render
+package org.birkir.carplay.utils
 
 import android.app.Presentation
 import android.content.Context

@@ -4,8 +4,8 @@ import com.facebook.react.bridge.ReadableMap
 
 fun ReadableMap.isLoading(): Boolean {
   return try {
-    getBoolean("isLoading")
+    getBoolean("loading")
   } catch (e: Exception) {
-    return false;
+    return false
   }
 }

@@ -1,7 +1,7 @@
 import { CarPlay } from '../CarPlay';
 import { ListItem } from '../interfaces/ListItem';
 import { BaseEvent, Template, TemplateConfig } from './Template';
-import { Image } from 'react-native';
+import { Image, Platform } from 'react-native';
 
 export interface SearchTemplateConfig extends TemplateConfig {
   /**
@@ -44,22 +44,27 @@ export class SearchTemplate extends Template<SearchTemplateConfig> {
       (e: { searchText: string; templateId: string }) => {
         if (config.onSearch && e.templateId === this.id) {
           void Promise.resolve(config.onSearch(e.searchText)).then((result = []) => {
-            const parsedResults = result.map(item => ({
-              ...item,
-              image: item.image ? Image.resolveAssetSource(item.image) : undefined,
-            }));
-            CarPlay.bridge.reactToUpdatedSearchText(parsedResults);
+            if (Platform.OS === 'ios') {
+              const parsedResults = result.map(item => ({
+                ...item,
+                image: item.image ? Image.resolveAssetSource(item.image) : undefined,
+              }));
+              CarPlay.bridge.reactToUpdatedSearchText(parsedResults);
+            }
           });
         }
       },
     );
 
-    CarPlay.emitter.addListener('selectedResult', (e: { templateId: string; index: number }) => {
-      if (config.onItemSelect && e.templateId === this.id) {
-        void Promise.resolve(config.onItemSelect(e)).then(() =>
-          CarPlay.bridge.reactToSelectedResult(true),
-        );
-      }
-    });
+    CarPlay.emitter.addListener(
+      'selectedResult',
+      (e: { templateId: string; index: number; id?: string }) => {
+        if (config.onItemSelect && e.templateId === this.id) {
+          void Promise.resolve(config.onItemSelect(e)).then(
+            () => Platform.OS === 'ios' && CarPlay.bridge.reactToSelectedResult(true),
+          );
+        }
+      },
+    );
   }
 }
