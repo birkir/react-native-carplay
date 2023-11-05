@@ -34,7 +34,7 @@ export class PointOfInterestTemplate extends Template<PointOfInterestTemplateCon
   get eventMap() {
     return {
       didSelectPointOfInterest: 'onPointOfInterestSelect',
-      didChangeMapRegion: 'onChangeMapRegion',
+      //didChangeMapRegion: 'onChangeMapRegion',
     };
   }
 }

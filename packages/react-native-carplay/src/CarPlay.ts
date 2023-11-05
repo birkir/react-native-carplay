@@ -45,6 +45,7 @@ export interface InternalCarPlay extends NativeModule {
   createTrip(id: string, config: TripConfig): void;
   updateInformationTemplateItems(id: string, config: unknown): void;
   updateInformationTemplateActions(id: string, config: unknown): void;
+  openUrl(url: string): void;
   createTemplate(id: string, config: unknown, callback?: unknown): void;
   updateTemplate(id: string, config: unknown): void;
   invalidate(id: string): void;
@@ -157,11 +158,11 @@ export class CarPlayInterface {
         callback();
       });
     });
-    this.emitter.addListener('didPressMenuItem', e => {
-      if (e?.title === 'Reload Android Auto') {
-        this.bridge.reload();
-      }
-    });
+    // this.emitter.addListener('didPressMenuItem', e => {
+    //   if (e?.title === 'Reload Android Auto') {
+    //     this.bridge.reload();
+    //   }
+    // });
 
     // check if already connected this will fire any 'didConnect' events
     // if a connected is already present.
@@ -272,6 +273,14 @@ export class CarPlayInterface {
    */
   public enableNowPlaying(enable = true) {
     return this.bridge.enableNowPlaying(enable);
+  }
+
+  /**
+   * Open url on Car device
+   * @param url A Boolean value that indicates whether the system use now playing template.
+   */
+  public openUrl(url) {
+    return this.bridge.openUrl(url);
   }
 }
 

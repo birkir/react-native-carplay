@@ -4,10 +4,12 @@
 @interface RNCPStore : NSObject {
     CPInterfaceController *interfaceController;
     CPWindow *window;
+    CPTemplateApplicationScene *scene;
 }
 
 @property (nonatomic, retain) CPInterfaceController *interfaceController;
 @property (nonatomic, retain) CPWindow *window;
+@property (nonatomic, retain) CPTemplateApplicationScene *scene;
 
 + (id)sharedManager;
 - (CPTemplate*) findTemplateById: (NSString*)templateId;

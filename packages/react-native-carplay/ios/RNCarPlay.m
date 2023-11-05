@@ -29,10 +29,11 @@
     };
 }
 
-+ (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window {
++ (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window scene:(CPTemplateApplicationScene*)scene {
     RNCPStore * store = [RNCPStore sharedManager];
     store.interfaceController = interfaceController;
     store.window = window;
+    store.scene = scene;
     [store setConnected:true];
     RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
     if (cp.bridge) {
@@ -186,7 +187,18 @@ RCT_EXPORT_METHOD(checkForConnection) {
     }
 }
 
-RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config) {
+RCT_EXPORT_METHOD(openUrl:(NSString *)url) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplateApplicationScene *templateApplicationScene = store.scene;
+    NSURL *URL = [NSURL URLWithString:url];
+    [templateApplicationScene openURL:URL options:NULL completionHandler:^(BOOL success) {
+        if (success) {
+                NSLog(@"Opened url %@", url);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config callback:(NSString *)callback) {
     // Get the shared instance of the RNCPStore class
     RNCPStore *store = [RNCPStore sharedManager];
 
