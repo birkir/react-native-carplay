@@ -40,7 +40,7 @@ export const menuTemplate = new GridTemplate({
       image: gridItemImage,
     },
   ],
-  title: 'Hello, world 4',
+  title: 'Hello from react-native-carplay',
   onButtonPressed: e => {
     if (e.id === 'List') {
       CarPlay.pushTemplate(listTemplate);
