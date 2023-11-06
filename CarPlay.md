@@ -1,10 +1,26 @@
 # CarPlay with React Native
 
+## Welcome to CarPlay Development!
+
+Begin your journey with the [App Programming Guidelines for CarPlay](https://developer.apple.com/carplay/documentation/CarPlay-App-Programming-Guide.pdf), a comprehensive 50-page manual by Apple detailing the essentials for CarPlay apps.
+
+For additional details while developing or contributing, refer to the [CarPlay Documentation](https://developer.apple.com/documentation/carplay?language=objc).
+
+🚀 **Quickstart:** Utilize the simulator to test CarPlay capabilities without waiting for Apple's entitlement approval.
+
+🔑 **Entitlements:** To deploy on a device or distribute via App Store Connect or TestFlight, obtain a CarPlay entitlement [here](https://developer.apple.com/contact/carplay/). The approval duration varies, and participation in the MFi program may expedite the process. Incorporate the entitlement into your app's provisioning profile in Xcode.
+
+🖥 **Simulator:** In Xcode, navigate to the Simulator window, choose IO > External Displays > CarPlay to launch the CarPlay simulator.
+
+### Important:
+
+Ensure your `Entitlements.plist` within the `iOS/` directory contains the correct entitlement key, whether for simulation or actual deployment.
+
 ## Installing
 
 You need to convert your project to using [Scenes](https://developer.apple.com/documentation/uikit/app_and_environment/scenes/), as this is the standard when managing multiple windows in iOS 13+. This is a requirement for CarPlay apps.
 
-### Add your PhoneScene
+### 1. Add your PhoneScene
 
 This is where your app will run on the phone.
 
@@ -40,7 +56,7 @@ This is where your app will run on the phone.
 @end
 ```
 
-### Add your CarScene
+### 2. Add your CarScene
 
 This is where your app will run on CarPlay.
 
@@ -72,13 +88,50 @@ This is where your app will run on CarPlay.
 - (void)templateApplicationScene:(CPTemplateApplicationScene *)templateApplicationScene
       didDisconnectInterfaceController:(CPInterfaceController *)interfaceController {
     // Dispatch disconnect to RNCarPlay
-    [RNCarPlay disconnect];
+ in   [RNCarPlay disconnect];
 }
 
 @end
 ```
 
-### Entitlement matrix
+### 3. Add Scene Manifest to Info.plist
+
+`ios/App/Info.plist`
+
+```xml
+<key>UIApplicationSceneManifest</key>
+<dict>
+  <key>UIApplicationSupportsMultipleScenes</key>
+  <true/>
+  <key>UISceneConfigurations</key>
+  <dict>
+    <key>CPTemplateApplicationSceneSessionRoleApplication</key>
+    <array>
+      <dict>
+        <key>UISceneClassName</key>
+        <string>CPTemplateApplicationScene</string>
+        <key>UISceneConfigurationName</key>
+        <string>CarPlay</string>
+        <key>UISceneDelegateClassName</key>
+        <string>$(PRODUCT_MODULE_NAME).CarSceneDelegate</string>
+      </dict>
+    </array>
+    <key>UIWindowSceneSessionRoleApplication</key>
+    <array>
+      <dict>
+        <key>UISceneClassName</key>
+        <string>UIWindowScene</string>
+        <key>UISceneConfigurationName</key>
+        <string>Phone</string>
+        <key>UISceneDelegateClassName</key>
+        <string>$(PRODUCT_MODULE_NAME).PhoneSceneDelegate</string>
+      </dict>
+    </array>
+  </dict>
+</dict>
+```
+
+## Entitlement matrix
 
 <table>
 <thead>
@@ -229,107 +282,23 @@ com.apple.developer.carplay-audio
 </tbody>
 </table>
 
-#### Read this section if you are new to CarPlay!
-
-One of the most useful resources for undertanding the requirements, constraints and capabilities of CarPlay apps is the official [App Programming Guidelines](https://developer.apple.com/carplay/documentation/CarPlay-App-Programming-Guide.pdf) from Apple. It's a 50-page document that clearly lays out steps required and you are strongly encouraged to read it if you are new to CarPlay. Further to the above guide, when developing a CarPlay app or if contributing to this package; you'll find the [CarPlay Documentation](https://developer.apple.com/documentation/carplay?language=objc) invaluable.
-
-_You can develop CarPlay capabilities with this project without waiting for Apple to send you back an entitlement, through the simulator._
-
-If you want to build and run your app on an iPhone or share it with others through the App Store Connect or TestFlight, you will need to request a CarPlay entitlement from Apple first. The process will take anywhere from a few days to weeks - your mileage will vary. This depends on the type of Entitlement you are requesting. If you are part of the MFi program, this may help speed things up too. You then need to add the entitlement to your provisioning profile or signing certificate that you use for signing your app in XCode.
-
-You can go to [this Apple CarPlay entitlement request page](https://developer.apple.com/contact/carplay/) to request a CarPlay Entitlement. You need to be logged in with an Apple Developer account.
-
-To start a CarPlay simulator in XCode, within the Simulator window, go to the menu option IO, click on External Displays, then select CarPlay.
-
-#### NB:
-
-Whether you are running through a simulator or building the app for distribution, you need to ensure that the correct entitlement key is added in your `Entitlements.plist` file. If you don't have an Entitlements.plist file, create one in your `iOS/` directory.
-
-## Basic Usage
-
-[See full example](https://github.com/birkir/react-native-carplay/blob/master/apps/example/src/App.tsx)
-
-The exported `CarPlay` class gives you the API needed to add / remove templates from the CarPlay view hierarchy.
-
-```jsx
-import { CarPlay, GridTemplate } from 'react-native-carplay';
-
-const template = new GridTemplate({
-  title: 'Hello, World',
-  buttons: [],
-});
-
-CarPlay.setRootTemplate(template);
-```
-
 ## Connect / Disconnect
 
-When working with CarPlay it is important to detect and respond to the connect / disconnect events. The CarPlay class provides both a `connected` boolean and an on connect / disconnect event you can register a callback to.
-
-When you are creating and displaying a template within your existing app screens you may want to ensure CarPlay is connected before calling any carplay apis. This can be done within a `useEffect`.
+Efficiently manage CarPlay connections by utilizing the `connected` status and on-connect/disconnect events. Ensure to check the connection state before invoking CarPlay APIs, ideally within a `useEffect` hook or by using a non-React function.
 
 ```jsx
+// react
 useEffect(() => {
-  function onConnect() {
-    // Do things now that carplay is connected
-  }
-
-  function onDisconnect() {
-    // Do things now that carplay is disconnected
-  }
-
   CarPlay.registerOnConnect(onConnect);
-  CarPlay.registerOnDisconnect(onDisconnect);
-
   return () => {
     CarPlay.unregisterOnConnect(onConnect);
-    CarPlay.unregisterOnDisconnect(onDisconnect);
   };
 });
-```
 
-## CarPlay API
-
-### CarPlay.setRootTemplate
-
-Sets the root template of CarPlay.
-This must be called before running any other CarPlay commands. Can be called multiple times.
-
-```tsx
-CarPlay.setRootTemplate(template, /* animated */ false);
-```
-
-### CarPlay.pushTemplate
-
-Pushes a new template to the navigation stack.
-**Note** you cannot push the same template twice.
-
-```tsx
-CarPlay.pushTemplate(template, /* animated */ true);
-```
-
-### CarPlay.popTemplate
-
-Pop currently presented template from the stack.
-
-```tsx
-CarPlay.popTemplate(/* animated */ false);
-```
-
-### CarPlay.popToTemplate
-
-Pop currently presented template from the stack to a specific template. The template must be in the stack.
-
-```tsx
-CarPlay.popToTemplate(template, /* animated */ false);
-```
-
-### CarPlay.popToRoot
-
-Pop the stack to root template.
-
-```tsx
-CarPlay.popToRoot(/* animated */ false);
+// imperative
+CarPlay.registerOnConnect(() => {
+  CarPlay.setRootTemplate(/* template */);
+});
 ```
 
 ## Templates
@@ -338,168 +307,200 @@ Templates are used to render contents on the CarPlay screen from your app. Detai
 
 ### MapTemplate
 
+A template that displays a navigation overlay that your app draws on the map.
+
+#### Visual Previews
+
 ![Map Template](/.github/images/mapTemplateRoutes.png)
 ![Map Template](/.github/images/mapTemplateNavigation.png)
 
+#### Example Usage
+
 ```jsx
-import { CarPlay } from 'react-native-carplay';
-
-const mapTemplate = new MapTemplate({
+new MapTemplate({
   component: /* react native view */ MapView,
-  onAlertActionPressed(e) {
-    console.log(e);
-  },
-  onStartedTrip({ tripId, routeIndex }) {
-    // start your navigation code
-    onStartNavigation(routeIndex);
-  },
+  guidanceBackgroundColor: '#eeff00',
+  onAlertActionPressed() {},
+  onStartedTrip() {},
 });
-
-CarPlay.setRootTemplate(mapTemplate);
 ```
+
+See more configuration options in the [TypeScript Docs](/docs/MapTemplateConfig)
+
+#### Relevant Links
+
+- [CPMapTemplate](https://developer.apple.com/documentation/carplay/cpmaptemplate): Learn more about the capabilities and limitations of the MapTemplate in CarPlay.
+- [CPMapTemplateDelegate](https://developer.apple.com/documentation/carplay/cpmaptemplatedelegate): Understand the delegate callbacks that can be used to manage user interactions with the MapTemplate.
 
 ### ListTemplate
 
+A template that displays and manages a list of items.
+
+#### Visual Previews
+
 ![List Template](/.github/images/listTemplate.png)
 
+#### Example Usage
+
 ```jsx
-import { CarPlay } from 'react-native-carplay';
-
-const listTemplate = new ListTemplate({
-  sections: [],
+new ListTemplate({
+  sections: [
+    {
+      header: 'Header A',
+      items: [
+        {
+          text: 'Item 1',
+        },
+      ],
+    },
+  ],
   title: 'List Template',
-  async onItemSelect({ index }) {
-    // use the selected index
-    setSelected(index);
-  },
+  async onItemSelect() {},
 });
-
-CarPlay.pushTemplate(listTemplate, true);
 ```
+
+See more configuration options in the [TypeScript Docs](/docs/ListTemplateConfig)
+
+#### Relevant Links
+
+- [CPListTemplate](https://developer.apple.com/documentation/carplay/cplisttemplate): Learn more about the capabilities and limitations of the ListTemplate in CarPlay.
+- [CPListTemplateDelegate](https://developer.apple.com/documentation/carplay/cplisttemplatedelegate): Understand the delegate callbacks that can be used to manage user interactions with the ListTemplate.
 
 ### InformationTemplate
 
+A template that provides information for a point of interest, food order, parking location, or charging location.
+
+#### Visual Previews
+
 ![Information Template](/.github/images/informationTemplate.png)
 
+#### Example Usage
+
 ```jsx
-import { CarPlay } from 'react-native-carplay';
-
-const template = new InformationTemplate({
+new InformationTemplate({
   title: 'Information',
-  items: Array.from({ length: 30 }).fill({ title: 'foo', detail: 'bar' }),
-  actions: [
-    { id: 'u', title: 'Update List' },
-    { id: 'r', title: 'Random #:' },
-  ],
-  onActionButtonPressed(action) {
-    console.log('pressed', action);
-    if (action.id == 'u') {
-      const numOfItems = Math.floor(Math.random() * 6);
-      template.updateInformationTemplateItems(
-        Array.from({ length: numOfItems }).fill({ title: 'foo', detail: 'bar' }),
-      );
-    } else if (action.id == 'r') {
-      template.updateInformationTemplateActions([
-        { id: 'u', title: 'Update List' },
-        { id: 'r', title: 'Random #:' + Math.floor(Math.random() * 100) },
-      ]);
-    }
-  },
+  items: [{ title: 'foo', detail: 'bar' }],
+  actions: [{ id: 'demo', title: 'Demo' }],
+  onActionButtonPressed() {},
 });
-
-CarPlay.pushTemplate(informationTemplate);
 ```
+
+See more configuration options in the [TypeScript Docs](/docs/InformationTemplateConfig)
+
+#### Relevant Links
+
+- [CPInformationTemplate](https://developer.apple.com/documentation/carplay/cpinformationtemplate): Learn more about the capabilities and limitations of the InformationTemplate in CarPlay.
+- [CPInformationTemplateDelegate](https://developer.apple.com/documentation/carplay/cpinformationtemplatedelegate): Understand the delegate callbacks that can be used to manage user interactions with the InformationTemplate.
 
 ### GridTemplate
 
+A template that displays and manages a grid of items.
+
+#### Visual Previews
+
 ![Grid Template](/.github/images/gridTemplate.png)
 
-```jsx
-import { CarPlay } from 'react-native-carplay';
+#### Example Usage
 
-const gridTemplate = new GridTemplate({
-  trailingNavigationBarButtons: [],
+```jsx
+new GridTemplate({
+  trailingNavigationBarButtons: [
+    {
+      id: 'a',
+      type: 'image',
+      image: require('star.jpg'),
+    },
+  ],
   buttons: [
     {
-      id: 'List',
-      titleVariants: ['List'],
-      image: listImage,
-    },
-    {
-      id: 'Grid',
-      titleVariants: ['Grid'],
-      image: gridImage,
+      id: '0',
+      titleVariants: ['Item 0'],
+      image: require('click.jpg'),
     },
   ],
   title: 'Grid Template',
-  onButtonPressed({ id }) {
-    // id of button pressed
-    setSelected(id);
-  },
-  onBarButtonPressed({ id }) {
-    // id of bar button pressed
-    setSelected(id);
-  },
+  onButtonPressed() {},
+  onBarButtonPressed() {},
 });
-
-CarPlay.pushTemplate(gridTemplate, true);
 ```
+
+See more configuration options in the [TypeScript Docs](/docs/GridTemplateConfig)
+
+#### Relevant Links
+
+- [CPGridTemplate](https://developer.apple.com/documentation/carplay/cpgridtemplate): Discover the capabilities and constraints of the CPGridTemplate in CarPlay.
+- [CPGridTemplateDelegate](https://developer.apple.com/documentation/carplay/cpgridtemplatedelegate): Delve into the delegate callbacks available for handling user interactions within the CPGridTemplate.
 
 ### SearchTemplate
 
+A template that provides the ability to search for a destination and see a list of search results.
+
+#### Visual Previews
+
 ![Search Template](/.github/images/searchTemplate.png)
 
-```jsx
-const searchTemplate = new SearchTemplate({
-  async onSearch(query) {
-    // use the query to search
-    // and return item array
-    return performSearch(query);
-  },
-  async onItemSelect({ index }) {
-    // index of the selected item
-    setSelected(index);
-  },
-  onSearchButtonPressed() {
-    // on search button pressed, should display
-    // list template with results
-    navigation.navigate('List');
-  },
-});
+#### Example Usage
 
-CarPlay.pushTemplate(searchTemplate, true);
+```jsx
+new SearchTemplate({
+  async onSearch(query) {},
+  async onItemSelect({ index }) {},
+  onSearchButtonPressed() {},
+});
 ```
+
+See more configuration options in the [TypeScript Docs](/docs/SearchTemplateConfig)
+
+#### Relevant Links
+
+- [CPSearchTemplate](https://developer.apple.com/documentation/carplay/cpsearchtemplate): Explore the features and limitations of the CPSearchTemplate in CarPlay.
+- [CPSearchTemplateDelegate](https://developer.apple.com/documentation/carplay/cpsearchtemplatedelegate): Learn about the delegate callbacks for managing interactions within the CPSearchTemplate.
 
 ### VoiceTemplate
 
-![Voice Template](/.github/images/voiceTemplate.png)
+A template that displays a voice control indicator during audio input.
 
 This template is presented via `CarPlay.presentTemplate`. In order to implement voice recognition, take a look at the [`@react-native-voice/voice`](https://github.com/react-native-voice/voice) package.
 
+#### Visual Previews
+
+![Voice Template](/.github/images/voiceTemplate.png)
+
+#### Example Usage
+
 ```jsx
-const voiceControlTemplate = new VoiceControlTemplate({
-  // pass the control states
+new VoiceControlTemplate({
   voiceControlStates: [
     {
-      identifier: 'TEST',
-      image: require('../images/cat.jpg'),
+      identifier: 'a',
+      image: require('cat.jpg'),
       repeats: true,
       titleVariants: ['Searching...'],
     },
   ],
 });
-
-CarPlay.presentTemplate(voiceControlTemplate, true);
 ```
+
+See more configuration options in the [TypeScript Docs](/docs/VoiceTemplateConfig)
+
+#### Relevant Links
+
+- [CPVoiceControlTemplate](https://developer.apple.com/documentation/carplay/cpvoicecontroltemplate): Investigate the functionalities and boundaries of the CPVoiceControlTemplate in CarPlay.
+- [CPVoiceControlTemplateDelegate](https://developer.apple.com/documentation/carplay/cpvoicecontroltemplatedelegate): Gain insights into the delegate methods designed to handle user voice commands in the CPVoiceControlTemplate.
+- [SFSpeechRecognizer](https://developer.apple.com/documentation/speech/sfspeechrecognizer): Learn about speech recognition tasks and integrations with CarPlay applications.
 
 ### AlertTemplate
 
+A template that displays a modal alert and should be presented via `CarPlay.presentTemplate`.
+
+#### Visual Previews
+
 ![Alert Template](/.github/images/alertTemplate.png)
 
-This template is presented via `CarPlay.presentTemplate`.
+#### Example Usage
 
 ```jsx
-const alertTemplate = new AlertTemplate({
+new AlertTemplate({
   titleVariants: ['Hello world'],
   actions: [
     {
@@ -507,32 +508,36 @@ const alertTemplate = new AlertTemplate({
       title: 'Ok',
     },
     {
+      id: 'ok',
+      title: 'Cancel',
+    },
+    {
       id: 'remove',
       title: 'Remove',
       style: 'destructive',
     },
   ],
-  onActionButtonPressed({ id }) {
-    // id of the pressed button
-    if (id === 'remove') {
-      // presentable templates can be
-      // dismissed
-      CarPlay.dismissTemplate();
-    }
-  },
+  onActionButtonPressed() {},
 });
-
-CarPlay.presentTemplate(alertTemplate);
 ```
+
+#### Relevant Links
+
+- [CPAlertTemplate](https://developer.apple.com/documentation/carplay/cpalerttemplate): Explore the functionality of CPAlertTemplate for displaying alerts in CarPlay.
+- [CPAlertTemplateDelegate](https://developer.apple.com/documentation/carplay/cpalerttemplatedelegate): Learn about delegate methods for managing user interactions with CarPlay alerts.
 
 ### ActionSheetTemplate
 
+A template that displays a modal action sheet and should be presented via `CarPlay.presentTemplate`.
+
+#### Visual Previews
+
 ![ActionSheet Template](/.github/images/actionSheetTemplate.png)
 
-This template is presented via `CarPlay.presentTemplate`.
+#### Example Usage
 
 ```jsx
-const actionSheetTemplate = new ActionSheetTemplate({
+new ActionSheetTemplate({
   title: 'Example',
   message: 'This is an message for you',
   actions: [
@@ -546,49 +551,44 @@ const actionSheetTemplate = new ActionSheetTemplate({
       style: 'destructive',
     },
   ],
-  onActionButtonPressed({ id }) {
-    // the id of the button pressed
-  },
+  onActionButtonPressed() {},
 });
-
-CarPlay.presentTemplate(actionSheetTemplate);
 ```
 
-### TabTemplate
+#### Relevant Links
 
-![Tab Template](/.github/images/tabTemplate.png)
+- [CPActionSheetTemplate](https://developer.apple.com/documentation/carplay/cpactionsheettemplate): Discover how to present an action sheet in CarPlay using the CPActionSheetTemplate.
+- [CPActionSheetTemplateDelegate](https://developer.apple.com/documentation/carplay/cpactionsheettemplatedelegate): Delve into the delegate methods to manage selections and handle user actions within a CPActionSheetTemplate.
 
-This template must be set as the root template and cannot be pushed on top of other templates.
+### TabBarTemplate
+
+A container template that displays and manages other templates, presenting them as tabs.
+
+**Note:** This template must be set as the root template and cannot be pushed on top of other templates.
+
+#### Visual Previews
+
+![TabBar Template](/.github/images/tabTemplate.png)
+
+#### Example Usage
 
 ```jsx
-const template1 = new ListTemplate({
-  sections: [
-    {
-      header: 'Test 1',
-      items: [{ text: 'Hello world 1' }],
-    },
-  ],
-  title: 'AA',
-});
-const template2 = new ListTemplate({
-  sections: [
-    {
-      header: 'Test 2',
-      items: [{ text: 'Hello world 3' }],
-    },
-  ],
-  title: 'BB',
-});
+// Define tab templates
+const tpl1 = new ListTemplate(/* ... */);
+const tpl2 = new ListTemplate(/* ... */);
 
-const tabBarTemplate = new TabBarTemplate({
-  templates: [template1, template2],
-  onTemplateSelect(e: any) {
-    console.log('selected', e);
-  },
+// Setup the tab container template
+new TabBarTemplate({
+  templates: [tpl1, tpl2],
+  onTemplateSelect() {},
 });
-
-CarPlay.setRootTemplate(tabBarTemplate);
 ```
+
+#### Relevant Links
+
+- [CPTabBarTemplate](https://developer.apple.com/documentation/carplay/cptabbartemplate): Investigate the features and usage of CPTabBarTemplate to create a tab bar interface in CarPlay.
+- [CPTabBarTemplateDelegate](https://developer.apple.com/documentation/carplay/cptabbartemplatedelegate): Explore the delegate methods for responding to tab selection events in the CPTabBarTemplate.
+  ``
 
 ## Troubleshooting
 

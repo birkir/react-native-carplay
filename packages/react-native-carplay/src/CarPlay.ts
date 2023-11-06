@@ -22,6 +22,8 @@ import { TripConfig } from './navigation/Trip';
 import { TimeRemainingColor } from './interfaces/TimeRemainingColor';
 import { TextConfiguration } from './interfaces/TextConfiguration';
 import { Action } from './interfaces/Action';
+import { MessageTemplate } from './templates/android/MessageTemplate';
+import { PaneTemplate } from './templates/android/PaneTemplate';
 
 export interface InternalCarPlay extends NativeModule {
   checkForConnection(): void;
@@ -99,6 +101,8 @@ export type PushableTemplates =
   | GridTemplate
   | PointOfInterestTemplate
   | ListTemplate
+  | MessageTemplate
+  | PaneTemplate
   | InformationTemplate
   | ContactTemplate
   | NowPlayingTemplate
