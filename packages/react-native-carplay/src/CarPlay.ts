@@ -45,6 +45,8 @@ export interface InternalCarPlay extends NativeModule {
   createTrip(id: string, config: TripConfig): void;
   updateInformationTemplateItems(id: string, config: unknown): void;
   updateInformationTemplateActions(id: string, config: unknown): void;
+  setPointsOfInterest(id: string, config: unknown): void;
+  setPointOfInterestTitle(id: string, title: string): void;
   openUrl(url: string): void;
   createTemplate(id: string, config: unknown, callback?: unknown): void;
   updateTemplate(id: string, config: unknown): void;
