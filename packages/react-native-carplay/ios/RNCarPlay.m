@@ -195,50 +195,32 @@ RCT_EXPORT_MODULE();
         NSString *detailSubtitle = [RCTConvert NSString:item[@"detailSubtitle"]];
         NSString *detailSummary = [RCTConvert NSString:item[@"detailSummary"]];
         
-        CPPointOfInterest *poi = [[CPPointOfInterest alloc] initWithLocation:location
-                                                                      title:title
-                                                                   subtitle:subtitle
-                                                                    summary:summary
-                                                                 detailTitle:detailTitle
-                                                              detailSubtitle:detailSubtitle
-                                                               detailSummary:detailSummary
-                                                                   pinImage:image
-                                                          selectedPinImage:selectedImage];
+        CPPointOfInterest *poi = [[CPPointOfInterest alloc] initWithLocation:location title:title subtitle:subtitle summary:summary detailTitle:detailTitle detailSubtitle:detailSubtitle detailSummary:detailSummary pinImage:image selectedPinImage:selectedImage];
         
         if ([item objectForKey:@"primaryButton"]) {
             NSString *primaryButtonText = [RCTConvert NSString:item[@"primaryButton"]];
-            CPTextButton *primaryButton = [[CPTextButton alloc] initWithTitle:primaryButtonText
-                                                                    textStyle:CPTextButtonStyleConfirm
-                                                                      handler:^(CPTextButton * _Nonnull primaryButton) {
-                                                                          if (self->hasListeners) {
-                                                                              [self sendEventWithName:@"actionButtonPressed"
-                                                                                                 body:@{@"templateId":templateId,
-                                                                                                        @"id": @"primary",
-                                                                                                        @"item": item}];
-                                                                          }
-                                                                      }];
+            CPTextButton *primaryButton = [[CPTextButton alloc] initWithTitle:primaryButtonText textStyle:CPTextButtonStyleConfirm handler:^(CPTextButton * _Nonnull primaryButton) {
+                if (self->hasListeners) {
+                    [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": @"primary", @"item": item}];
+                }
+            }];
             [poi setPrimaryButton:primaryButton];
         }
         
         if ([item objectForKey:@"secondaryButton"]) {
             NSString *secondaryButtonText = [RCTConvert NSString:item[@"secondaryButton"]];
-            CPTextButton *secondaryButton = [[CPTextButton alloc] initWithTitle:secondaryButtonText
-                                                                      textStyle:CPTextButtonStyleNormal
-                                                                        handler:^(CPTextButton * _Nonnull secondaryButton) {
-                                                                            if (self->hasListeners) {
-                                                                                [self sendEventWithName:@"actionButtonPressed"
-                                                                                                   body:@{@"templateId":templateId,
-                                                                                                          @"id": @"secondary",
-                                                                                                          @"item": item}];
-                                                                            }
-                                                                        }];
+            CPTextButton *secondaryButton = [[CPTextButton alloc] initWithTitle:secondaryButtonText textStyle:CPTextButtonStyleNormal handler:^(CPTextButton * _Nonnull secondaryButton) {
+                if (self->hasListeners) {
+                    [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": @"secondary", @"item": item}];
+                }
+            }];
             [poi setSecondaryButton:secondaryButton];
         }
         
         [poi setUserInfo:item];
         [result addObject:poi];
     }
-    
+
     return [result copy];
 }
 
@@ -255,7 +237,6 @@ RCT_EXPORT_METHOD(openUrl:(NSString *)url) {
     NSURL *URL = [NSURL URLWithString:url];
     [templateApplicationScene openURL:URL options:NULL completionHandler:^(BOOL success) {
         if (success) {
-                NSLog(@"Opened url %@", url);
         }
     }];
 }

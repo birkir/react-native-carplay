@@ -160,11 +160,6 @@ export class CarPlayInterface {
         callback();
       });
     });
-    // this.emitter.addListener('didPressMenuItem', e => {
-    //   if (e?.title === 'Reload Android Auto') {
-    //     this.bridge.reload();
-    //   }
-    // });
 
     // check if already connected this will fire any 'didConnect' events
     // if a connected is already present.
@@ -279,7 +274,7 @@ export class CarPlayInterface {
 
   /**
    * Open url on Car device
-   * @param url A Boolean value that indicates whether the system use now playing template.
+   * @param url A string value with the URL to open on the device (example maps:// and comgooglemaps://)
    */
   public openUrl(url) {
     return this.bridge.openUrl(url);

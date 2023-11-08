@@ -2,11 +2,6 @@ import { Template, TemplateConfig } from './Template';
 import { ImageSourcePropType } from 'react-native';
 import { CarPlay } from '../CarPlay';
 
-export interface PointOfInterestAction {
-  id: string;
-  title: string;
-}
-
 export interface PointOfInterestItem {
   id: string;
   location: {
@@ -22,6 +17,7 @@ export interface PointOfInterestItem {
   detailSubtitle?: string;
   detailSummary?: string;
   primaryButton?: string;
+  secondaryButton?: string;
 }
 
 export interface PointOfInterestTemplateConfig extends TemplateConfig {
