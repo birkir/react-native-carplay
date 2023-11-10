@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.text.Spannable
 import android.text.SpannableString
 import android.util.Log
+import android.graphics.Color
 import androidx.car.app.CarContext
 import androidx.car.app.model.Action
 import androidx.car.app.model.Action.FLAG_IS_PERSISTENT
@@ -167,7 +168,13 @@ abstract class RCTTemplate(
       item.getString("text")?.let { setTitle(it) }
       item.getString("detailText")?.let { addText(it) }
       item.getMap("image")?.let { setImage(parseCarIcon(it)) }
+      item.getMap("location")?.let { setMetadata(
+                    Metadata.Builder()
+                        .setPlace(parsePlace(it))
+                        .build()
+                )}
       if (item.hasKey("browsable") && item.getBoolean("browsable")) {
+        setBrowsable(true)
         setOnClickListener {
           eventEmitter.didSelectListItem(
             id,
@@ -211,7 +218,17 @@ abstract class RCTTemplate(
       )
     )
     PlaceMarker.Builder().apply {
-      setIcon(parseCarIcon(props.getMap("icon")!!), PlaceMarker.TYPE_IMAGE)
+      props.getMap("icon")?.let {
+        setIcon(parseCarIcon(props.getMap("icon")!!), PlaceMarker.TYPE_IMAGE)
+      }
+      props.getString("color")?.let {
+        setColor(
+          CarColor.createCustom(
+            Color.parseColor(props.getString("color")),
+            Color.parseColor(props.getString("color"))
+          )
+        )
+      }
       builder.setMarker(this.build())
 
     }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.net.Uri
 import androidx.activity.OnBackPressedCallback
 import androidx.car.app.AppManager
 import androidx.car.app.CarContext
@@ -98,6 +99,22 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
   }
 
   @ReactMethod
+  fun openUrl(url: String) {
+    Log.d(TAG, "openUrl  $url")
+  }
+
+  @ReactMethod
+  fun navigateTo(latitude: Double, longitude: Double, name: String, app: String){
+    var url = "geo:0,0?q=${latitude},${longitude}(${name})"
+    Log.d(TAG, "navigateTo $url")
+    val intent = Intent(CarContext.ACTION_NAVIGATE, Uri.parse("geo:0,0?q=${latitude},${longitude}(${name})"))
+    if (app != null) {
+      intent.setPackage(app)
+    }
+    carContext.startCarApp(intent)
+  }
+
+  @ReactMethod
   fun createTemplate(templateId: String, config: ReadableMap, callback: Callback?) {
     handler.post {
       Log.d(TAG, "Creating template $templateId")
@@ -118,9 +135,10 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
 
   @ReactMethod
   fun updateTemplate(templateId: String, config: ReadableMap) {
+    Log.d(TAG, "updateTemplate for $templateId")
     handler.post {
       carTemplates[templateId] = config;
-      val screen = carScreens[name]
+      val screen = carScreens[templateId]
       if (screen != null) {
         val carScreenContext = carScreenContexts[screen];
         if (carScreenContext != null) {
@@ -160,6 +178,13 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
   fun popToTemplate(templateId: String, animated: Boolean?) {
     handler.post {
       screenManager?.popTo(templateId);
+    }
+  }
+
+  @ReactMethod
+  fun popToRootTemplate(animated: Boolean?) {
+    handler.post {
+      Log.d(TAG, "popToRootTemplate not supported")
     }
   }
 

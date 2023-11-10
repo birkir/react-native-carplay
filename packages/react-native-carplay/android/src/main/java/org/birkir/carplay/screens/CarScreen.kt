@@ -59,7 +59,7 @@ class CarScreen(carContext: CarContext) : Screen(carContext) {
     Log.d(TAG, "onGetTemplate for $marker")
     return template ?: PaneTemplate.Builder(
       Pane.Builder().setLoading(true).build()
-    ).setTitle("RNCarPlay loading...").build()
+    ).setTitle("Loading...").build()
     // @todo allow set the loading title by translatable resource.
   }
 

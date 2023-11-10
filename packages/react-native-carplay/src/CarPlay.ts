@@ -83,6 +83,7 @@ export interface InternalCarPlay extends NativeModule {
   activateVoiceControlState(id: string, identifier: string): void;
   // Android
   reload(): void;
+  navigateTo(latitude: number, longitude: number, name: string): void;
   toast(message: string, duration: number): void;
   alert(config: {
     id: number;
@@ -279,6 +280,25 @@ export class CarPlayInterface {
   public openUrl(url) {
     return this.bridge.openUrl(url);
   }
+
+  /**
+   * Navigate to location on Android Auto device
+   * @param latitude A double value with the latitude of location 
+   * @param longitude A double value with the longitude of location 
+   * @param name A string value with the name of location to open on the device
+   */
+  public navigateTo(latitude, longitude, name) {
+    return this.bridge.navigateTo(latitude, longitude, name);
+  }
+
+  /**
+   * Show toast message on Android Auto
+   * @param message A string value with the message to show
+   * @param duration A integer value with the number of milliseconds to display toast
+   */
+    public toast(message, duration) {
+      return this.bridge.toast(message, duration);
+    }
 }
 
 export const CarPlay = new CarPlayInterface();
