@@ -95,7 +95,9 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
 
   @ReactMethod
   fun checkForConnection() {
-    eventEmitter?.didConnect()
+    if (::carContext.isInitialized){
+      eventEmitter?.didConnect()
+    }
   }
 
   @ReactMethod
