@@ -106,13 +106,10 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
   }
 
   @ReactMethod
-  fun navigateTo(latitude: Double, longitude: Double, name: String, app: String){
+  fun navigateTo(latitude: Double, longitude: Double, name: String){
     var url = "geo:0,0?q=${latitude},${longitude}(${name})"
     Log.d(TAG, "navigateTo $url")
-    val intent = Intent(CarContext.ACTION_NAVIGATE, Uri.parse("geo:0,0?q=${latitude},${longitude}(${name})"))
-    if (app != null) {
-      intent.setPackage(app)
-    }
+    val intent = Intent(CarContext.ACTION_NAVIGATE, Uri.parse(url))
     carContext.startCarApp(intent)
   }
 
