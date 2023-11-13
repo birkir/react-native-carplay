@@ -1,283 +1,66 @@
-# CarPlay with React Native
+# React Native CarPlay and Android Auto
 
-What if you could create CarPlay with React Native. Well, now you can.
+Extend your React Native applications to car infotainment systems with `react-native-carplay`. Now supporting both Apple CarPlay and Android Auto.
 
-![Animated Demo](https://media.giphy.com/media/Ffa4hukA3YMLh6U8fl/giphy.gif)
+### CarPlay
+
+![CarPlay Demo](https://media.giphy.com/media/Ffa4hukA3YMLh6U8fl/giphy.gif)
+
+### Android Auto
+
+![Android Auto Demo](https://media.giphy.com/media/jAml2yehNwQ1mjFnxK/giphy.gif)
 
 ## Discord Channel
 
 Come join us on our discord channel: https://discord.gg/b235pv6QHM
 
-## Support
+## Minimum version target requirements
 
-This version of `react-native-carplay` supports iOS 14. If you need support for versions before this please refer to version 1.3.1 of this package.
-
-## CarPlay Entitlement and XCode Project Setup
-
-### Entitlement matrix
-
-<table>
-<thead>
-<tr>
-<th></th>
-<th>List</th>
-<th>Grid</th>
-<th title="TabBar">T B</th>
-
-<th>Alert</th>
-<th title="Action Sheet">A S</th>
-
-<th title="Voice Controller">🎤</th>
-<th title="Now Playing">▶️</th>
-
-<th>Map</th>
-<th title="Search">🔎</th>
-
-<th title="Point of Interest">POI</th>
-<th title="Information">Info</th>
-
-<th title="Contact">📇</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-com.apple.developer.carplay-audio
-</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-<td>❌</td>
-
-<td>✅</td>
-<td>✅</td>
-
-<td>❌</td>
-<td>❌</td>
-
-<td>❌</td>
-<td>❌</td>
-
-<td>❌</td>
-</tr>
-<tr>
-<td>com.apple.developer.carplay-communication</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-<td>❌</td>
-
-<td>❌</td>
-<td>❌</td>
-
-<td>❌</td>
-<td>✅</td>
-
-<td>✅</td>
-</tr>
-<tr>
-<td>com.apple.developer.carplay-charging</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-<td>✅</td>
-
-<td>❌</td>
-<td>❌</td>
-
-<td>❌</td>
-<td>❌</td>
-
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-</tr>
-<tr>
-<td>com.apple.developer.carplay-maps</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-<td>❌</td>
-
-<td>✅</td>
-<td>✅</td>
-
-<td>❌</td>
-<td>✅</td>
-
-<td>✅</td>
-</tr>
-<tr>
-<td>com.apple.developer.carplay-parking</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-<td>✅</td>
-
-<td>❌</td>
-<td>❌</td>
-
-<td>❌</td>
-<td>❌</td>
-
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-</tr>
-<tr>
-<td>com.apple.developer.carplay-quick-ordering</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-<td>✅</td>
-
-<td>❌</td>
-<td>❌</td>
-
-<td>❌</td>
-<td>❌</td>
-
-<td>✅</td>
-<td>✅</td>
-
-<td>✅</td>
-</tr>
-</tbody>
-</table>
-
-#### Read this section if you are new to CarPlay!
-
-One of the most useful resources for undertanding the requirements, constraints and capabilities of CarPlay apps is the official [App Programming Guidelines](https://developer.apple.com/carplay/documentation/CarPlay-App-Programming-Guide.pdf) from Apple. It's a 50-page document that clearly lays out steps required and you are strongly encouraged to read it if you are new to CarPlay. Further to the above guide, when developing a CarPlay app or if contributing to this package; you'll find the [CarPlay Documentation](https://developer.apple.com/documentation/carplay?language=objc) invaluable.
-
-_You can develop CarPlay capabilities with this project without waiting for Apple to send you back an entitlement, through the simulator._
-
-If you want to build and run your app on an iPhone or share it with others through the App Store Connect or TestFlight, you will need to request a CarPlay entitlement from Apple first. The process will take anywhere from a few days to weeks - your mileage will vary. This depends on the type of Entitlement you are requesting. If you are part of the MFi program, this may help speed things up too. You then need to add the entitlement to your provisioning profile or signing certificate that you use for signing your app in XCode.
-
-You can go to [this Apple CarPlay entitlement request page](https://developer.apple.com/contact/carplay/) to request a CarPlay Entitlement. You need to be logged in with an Apple Developer account.
-
-To start a CarPlay simulator in XCode, within the Simulator window, go to the menu option IO, click on External Displays, then select CarPlay.
-
-#### NB:
-
-Whether you are running through a simulator or building the app for distribution, you need to ensure that the correct entitlement key is added in your `Entitlements.plist` file. If you don't have an Entitlements.plist file, create one in your `iOS/` directory.
+- Minimum iOS target is 14
+- Minimum Android target is 30
+- _No Expo support due to Scenes_
 
 ## Installing
 
-1. Install the library
+Add `react-native-carplay` to your project:
 
 ```bash
+# via yarn
 yarn add react-native-carplay --save
+
+# or via npm
+npm install react-native-carplay --save
 ```
 
-2. Link using normal or cocoapods method
+### CarPlay Specific Setup (iOS)
 
-```bash
-react-native link react-native-carplay
-```
+Refer to the [CarPlay Documentation](/CarPlay.md#installing) for detailed setup instructions for iOS.
 
-```ruby
-# in ios/Podfile:
+### Android Auto Specific Setup
 
-pod 'react-native-carplay', path: '../node_modules/react-native-carplay'
-```
-
-3. Edit your AppDelegate
-
-```objc
-// AppDelegate.h
-
-// [step 1] add this line to the top
-#import <CarPlay/CarPlay.h>
-
-// [step 2] add the "CPApplicationDelegate" to the end, before ">":
-@interface AppDelegate : UIResponder <UIApplicationDelegate, CPApplicationDelegate>
-```
-
-```objc
-// AppDelegate.m
-
-// [step 1] add this line to the top
-#import <RNCarPlay.h>
-
-// ...
-
-// [step 2] add the following two methods before @end
-
-- (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window {
-  [RNCarPlay connectWithInterfaceController:interfaceController window:window];
-}
-
-- (void)application:(nonnull UIApplication *)application didDisconnectCarInterfaceController:(nonnull CPInterfaceController *)interfaceController fromWindow:(nonnull CPWindow *)window {
-  [RNCarPlay disconnect];
-}
-
-@end
-```
+Refer to the [Android Auto Documentation](/AndroidAuto.md#installing) for detailed setup instructions for Android.
 
 ## Basic Usage
 
-[See full example](https://github.com/birkir/react-native-carplay/blob/master/apps/example/src/App.tsx)
-
-The exported `CarPlay` class gives you the API needed to add / remove templates from the CarPlay view hierarchy.
+This is the most basic example of how to use this library. Create templates and then push/pop them to the navigation stack natively.
 
 ```jsx
 import { CarPlay, GridTemplate } from 'react-native-carplay';
 
+// Creates your template in the car app on the fly.
 const template = new GridTemplate({
   title: 'Hello, World',
-  buttons: [],
 });
 
+// Sets the root template for your car app.
 CarPlay.setRootTemplate(template);
 ```
 
-## Connect / Disconnect
-
-When working with CarPlay it is important to detect and respond to the connect / disconnect events. The CarPlay class provides both a `connected` boolean and an on connect / disconnect event you can register a callback to.
-
-When you are creating and displaying a template within your existing app screens you may want to ensure CarPlay is connected before calling any carplay apis. This can be done within a `useEffect`.
-
-```jsx
-useEffect(() => {
-  function onConnect() {
-    // Do things now that carplay is connected
-  }
-
-  function onDisconnect() {
-    // Do things now that carplay is disconnected
-  }
-
-  CarPlay.registerOnConnect(onConnect);
-  CarPlay.registerOnDisconnect(onDisconnect);
-
-  return () => {
-    CarPlay.unregisterOnConnect(onConnect);
-    CarPlay.unregisterOnDisconnect(onDisconnect);
-  };
-});
-```
+For more examples and detailed API usage, refer to [CarPlay Usage](/CarPlay.md#usage) and [Android Auto Usage](/AndroidAuto.md#usage).
 
 ## CarPlay API
+
+For more details on the CarPlay API, refer to the CarPlay API Docs.
 
 ### CarPlay.setRootTemplate
 
@@ -321,313 +104,74 @@ Pop the stack to root template.
 CarPlay.popToRoot(/* animated */ false);
 ```
 
-## Templates
+### CarPlay.presentTemplate
 
-Templates are used to render contents on the CarPlay screen from your app. Details of the templates supported by apple can be found in the [developer guide](https://developer.apple.com/carplay/documentation/CarPlay-App-Programming-Guide.pdf)
+Present a template modally (Alerts and ActionSheets)
 
-### MapTemplate
-
-![Map Template](/.github/images/mapTemplateRoutes.png)
-![Map Template](/.github/images/mapTemplateNavigation.png)
-
-```jsx
-import { CarPlay } from 'react-native-carplay';
-
-const mapTemplate = new MapTemplate({
-  component: /* react native view */ MapView,
-  onAlertActionPressed(e) {
-    console.log(e);
-  },
-  onStartedTrip({ tripId, routeIndex }) {
-    // start your navigation code
-    onStartNavigation(routeIndex);
-  },
-});
-
-CarPlay.setRootTemplate(mapTemplate);
+```tsx
+CarPlay.presentTemplate(template, /* animated */ true);
 ```
 
-### ListTemplate
+### CarPlay.dismissTemplate
 
-![List Template](/.github/images/listTemplate.png)
+Dismisses the current presented template
 
-```jsx
-import { CarPlay } from 'react-native-carplay';
-
-const listTemplate = new ListTemplate({
-  sections: [],
-  title: 'List Template',
-  async onItemSelect({ index }) {
-    // use the selected index
-    setSelected(index);
-  },
-});
-
-CarPlay.pushTemplate(listTemplate, true);
+```tsx
+CarPlay.dismissTemplate(/* animated */ true);
 ```
 
-### InformationTemplate
+### CarPlay.registerOnConnect
 
-![Information Template](/.github/images/informationTemplate.png)
+Register event listener for when CarPlay connects.
 
-```jsx
-import { CarPlay } from 'react-native-carplay';
-
-const template = new InformationTemplate({
-  title: 'Information',
-  items: Array.from({ length: 30 }).fill({ title: 'foo', detail: 'bar' }),
-  actions: [
-    { id: 'u', title: 'Update List' },
-    { id: 'r', title: 'Random #:' },
-  ],
-  onActionButtonPressed(action) {
-    console.log('pressed', action);
-    if (action.id == 'u') {
-      const numOfItems = Math.floor(Math.random() * 6);
-      template.updateInformationTemplateItems(
-        Array.from({ length: numOfItems }).fill({ title: 'foo', detail: 'bar' }),
-      );
-    } else if (action.id == 'r') {
-      template.updateInformationTemplateActions([
-        { id: 'u', title: 'Update List' },
-        { id: 'r', title: 'Random #:' + Math.floor(Math.random() * 100) },
-      ]);
-    }
-  },
+```tsx
+CarPlay.registerOnConnect(() => {
+  console.log('CarPlay connected');
+  CarPlay.setRootTemplate(/* template */);
 });
-
-CarPlay.pushTemplate(informationTemplate);
-```
-
-### GridTemplate
-
-![Grid Template](/.github/images/gridTemplate.png)
-
-```jsx
-import { CarPlay } from 'react-native-carplay';
-
-const gridTemplate = new GridTemplate({
-  trailingNavigationBarButtons: [],
-  buttons: [
-    {
-      id: 'List',
-      titleVariants: ['List'],
-      image: listImage,
-    },
-    {
-      id: 'Grid',
-      titleVariants: ['Grid'],
-      image: gridImage,
-    },
-  ],
-  title: 'Grid Template',
-  onButtonPressed({ id }) {
-    // id of button pressed
-    setSelected(id);
-  },
-  onBarButtonPressed({ id }) {
-    // id of bar button pressed
-    setSelected(id);
-  },
-});
-
-CarPlay.pushTemplate(gridTemplate, true);
-```
-
-### SearchTemplate
-
-![Search Template](/.github/images/searchTemplate.png)
-
-```jsx
-const searchTemplate = new SearchTemplate({
-  async onSearch(query) {
-    // use the query to search
-    // and return item array
-    return performSearch(query);
-  },
-  async onItemSelect({ index }) {
-    // index of the selected item
-    setSelected(index);
-  },
-  onSearchButtonPressed() {
-    // on search button pressed, should display
-    // list template with results
-    navigation.navigate('List');
-  },
-});
-
-CarPlay.pushTemplate(searchTemplate, true);
-```
-
-### VoiceTemplate
-
-![Voice Template](/.github/images/voiceTemplate.png)
-
-This template is presented via `CarPlay.presentTemplate`. In order to implement voice recognition, take a look at the [`@react-native-voice/voice`](https://github.com/react-native-voice/voice) package.
-
-```jsx
-const voiceControlTemplate = new VoiceControlTemplate({
-  // pass the control states
-  voiceControlStates: [
-    {
-      identifier: 'TEST',
-      image: require('../images/cat.jpg'),
-      repeats: true,
-      titleVariants: ['Searching...'],
-    },
-  ],
-});
-
-CarPlay.presentTemplate(voiceControlTemplate, true);
-```
-
-### AlertTemplate
-
-![Alert Template](/.github/images/alertTemplate.png)
-
-This template is presented via `CarPlay.presentTemplate`.
-
-```jsx
-const alertTemplate = new AlertTemplate({
-  titleVariants: ['Hello world'],
-  actions: [
-    {
-      id: 'ok',
-      title: 'Ok',
-    },
-    {
-      id: 'remove',
-      title: 'Remove',
-      style: 'destructive',
-    },
-  ],
-  onActionButtonPressed({ id }) {
-    // id of the pressed button
-    if (id === 'remove') {
-      // presentable templates can be
-      // dismissed
-      CarPlay.dismissTemplate();
-    }
-  },
-});
-
-CarPlay.presentTemplate(alertTemplate);
-```
-
-### ActionSheetTemplate
-
-![ActionSheet Template](/.github/images/actionSheetTemplate.png)
-
-This template is presented via `CarPlay.presentTemplate`.
-
-```jsx
-const actionSheetTemplate = new ActionSheetTemplate({
-  title: 'Example',
-  message: 'This is an message for you',
-  actions: [
-    {
-      id: 'ok',
-      title: 'Ok',
-    },
-    {
-      id: 'remove',
-      title: 'Remove',
-      style: 'destructive',
-    },
-  ],
-  onActionButtonPressed({ id }) {
-    // the id of the button pressed
-  },
-});
-
-CarPlay.presentTemplate(actionSheetTemplate);
-```
-
-### TabTemplate
-
-![Tab Template](/.github/images/tabTemplate.png)
-
-This template must be set as the root template and cannot be pushed on top of other templates.
-
-```jsx
-const template1 = new ListTemplate({
-  sections: [
-    {
-      header: 'Test 1',
-      items: [{ text: 'Hello world 1' }],
-    },
-  ],
-  title: 'AA',
-});
-const template2 = new ListTemplate({
-  sections: [
-    {
-      header: 'Test 2',
-      items: [{ text: 'Hello world 3' }],
-    },
-  ],
-  title: 'BB',
-});
-
-const tabBarTemplate = new TabBarTemplate({
-  templates: [template1, template2],
-  onTemplateSelect(e: any) {
-    console.log('selected', e);
-  },
-});
-
-CarPlay.setRootTemplate(tabBarTemplate);
 ```
 
 ## Example App
 
-A working example app can be found [here](https://github.com/birkir/react-native-carplay/blob/master/apps/example/src/App.tsx).
+Browse the example app source code [here](/apps/example/).
 
-To run it you must first install dependencies and pods.
-
-1. install dependencies and build `react-native-carplay`
+To run the example app:
 
 ```bash
+# Clone the repository
+git clone https://github.com/birkir/react-native-carplay.git
+
+# Navigate to the example directory
+cd react-native-carplay/apps/example
+
+# Install dependencies
 yarn install
+
+# Install Cocoapods
+npx pod-install
+
+# Run the iOS or Android app
+yarn run ios|android
 ```
 
-2. move to example dir and install dependencies
+## Declarative vs. Imperative
 
-```bash
-cd example
-yarn install
-```
+This library is a wrapper around the template-based native CarPlay and Android Auto SDKs.
 
-3. run build dev in root dir, this will copy the output to the examples node modules.
+We provide imperative APIs, as native templates are not designed for continuous updates, which would conflict with car display regulations. We expose limited template update capabilities [as allowed](https://developer.android.com/static/training/cars/Android%20for%20Cars%20App%20Library%20design%20guidelines.pdf#page=11&zoom=100,0,0) by each platform.
 
-```base
-cd ..
-yarn build:dev
-```
+Declarative React is available for map screens where UI freshness is unrestricted.
 
-4. install pods in example app and start the metro bundler
+We are open to expanding our declarative APIs in response to community feedback and where it aligns with platform constraints.
 
-```base
-cd example/ios
-pod install
-yarn start
-```
+## Contributing
 
-5. start xcode and run the project on your simulator or device
+Contributions are welcome! Please read our contributing guidelines and code of conduct.
 
-## Image Size and Resolution
+A big thank you to all our contributors!
 
-Quirks observed where PNG image resolutions should be specfied with scale factor of 3.0 (i.e. append with `@3x`) with ListTemplate image sizing suggested around 80 x 80 px per [Issue #6](https://github.com/birkir/react-native-carplay/issues/6)
+![List of contributors](https://contrib.rocks/image?repo=birkir/react-native-carplay)
 
-## Not working / In progress
+## License
 
-### UI Elements
-
-- [ ] Contact Template
-- [ ] Now Playing Template
-- [ ] Point of Interest Template
-
-### Getters
-
-- [ ] topTemplate
-- [ ] rootTemplate
+This project is licensed under the MIT License - see the LICENSE file for details.
