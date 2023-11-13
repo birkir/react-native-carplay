@@ -172,7 +172,7 @@ A template to show a list of places on a map.
 
 #### Visual Previews
 
-![Temporary PlaceListMap Template](image-link.png)
+![Temporary PlaceListMap Template](https://developers.google.com/static/cars/design/create-apps/apps-for-drivers/templates/images/map-template-list.png)
 
 See more configuration options in the [TypeScript Docs](/docs/PlaceListMapTemplateConfig)
 
@@ -186,7 +186,7 @@ A template for displaying a list of navigable places.
 
 #### Visual Previews
 
-![Temporary PlaceListNavigation Template](image-link.png)
+![Temporary PlaceListNavigation Template](https://developers.google.com/static/cars/design/create-apps/apps-for-drivers/templates/images/map-template-pane.png)
 
 See more configuration options in the [TypeScript Docs](/docs/PlaceListNavigationTemplateConfig)
 
@@ -200,7 +200,7 @@ A template for previewing a route.
 
 #### Visual Previews
 
-![Temporary RoutePreview Template](image-link.png)
+![Temporary RoutePreview Template](https://developers.google.com/static/cars/design/create-apps/apps-for-drivers/templates/images/map-template-pane.png)
 
 See more configuration options in the [TypeScript Docs](/docs/RoutePreviewTemplateConfig)
 
@@ -214,7 +214,7 @@ A template to display content in a pane layout.
 
 #### Visual Previews
 
-![Temporary Pane Template](image-link.png)
+![Temporary Pane Template](https://developers.google.com/static/cars/design/create-apps/apps-for-drivers/templates/images/pane-template-details.png)
 
 See more configuration options in the [TypeScript Docs](/docs/PaneTemplateConfig)
 
@@ -228,7 +228,7 @@ A template for search functionality.
 
 #### Visual Previews
 
-![Temporary Search Template](image-link.png)
+![Temporary Search Template](https://developers.google.com/static/cars/design/create-apps/apps-for-drivers/templates/images/search-template-driving.png)
 
 See more configuration options in the [TypeScript Docs](/docs/SearchTemplateConfig)
 
@@ -242,7 +242,7 @@ A template for tabbed navigation.
 
 #### Visual Previews
 
-![Temporary Tab Template](image-link.png)
+![Temporary Tab Template](https://developers.google.com/static/cars/design/create-apps/apps-for-drivers/templates/images/tab-template-fig-3.png)
 
 See more configuration options in the [TypeScript Docs](/docs/TabTemplateConfig)
 
@@ -256,7 +256,7 @@ A template for displaying messages.
 
 #### Visual Previews
 
-![Temporary Message Template](image-link.png)
+![Temporary Message Template](https://developers.google.com/static/cars/design/create-apps/apps-for-drivers/templates/images/message-template-error.png)
 
 See more configuration options in the [TypeScript Docs](/docs/MessageTemplateConfig)
 
