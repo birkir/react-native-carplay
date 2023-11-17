@@ -187,7 +187,6 @@ RCT_EXPORT_MODULE();
     for (NSDictionary *item in items) {
         MKMapItem *location = [RCTConvert MKMapItem:item[@"location"]];
         UIImage *image = [RCTConvert UIImage:item[@"pinImage"]];
-        UIImage *selectedImage = [RCTConvert UIImage:item[@"selectedPinImage"]];
         NSString *title = [RCTConvert NSString:item[@"title"]];
         NSString *subtitle = [RCTConvert NSString:item[@"subtitle"]];
         NSString *summary = [RCTConvert NSString:item[@"summary"]];
@@ -195,7 +194,16 @@ RCT_EXPORT_MODULE();
         NSString *detailSubtitle = [RCTConvert NSString:item[@"detailSubtitle"]];
         NSString *detailSummary = [RCTConvert NSString:item[@"detailSummary"]];
         
-        CPPointOfInterest *poi = [[CPPointOfInterest alloc] initWithLocation:location title:title subtitle:subtitle summary:summary detailTitle:detailTitle detailSubtitle:detailSubtitle detailSummary:detailSummary pinImage:image selectedPinImage:selectedImage];
+        CPPointOfInterest *poi = [[CPPointOfInterest alloc] initWithLocation:location title:title subtitle:subtitle summary:summary detailTitle:detailTitle detailSubtitle:detailSubtitle detailSummary:detailSummary pinImage:image];
+
+        if ([item objectForKey:@"selectedPinImage"]) {
+            UIImage *selectedImage = [RCTConvert UIImage:item[@"selectedPinImage"]];
+            if (@available(iOS 16.0, *)) {
+                [poi setSelectedPinImage: selectedImage];
+            } else {
+                // Fallback on earlier versions
+            }
+        }
         
         if ([item objectForKey:@"primaryButton"]) {
             NSString *primaryButtonText = [RCTConvert NSString:item[@"primaryButton"]];
@@ -216,7 +224,7 @@ RCT_EXPORT_MODULE();
             }];
             [poi setSecondaryButton:secondaryButton];
         }
-        
+
         [poi setUserInfo:item];
         [result addObject:poi];
     }
@@ -421,7 +429,8 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
 
         NSArray<NSDictionary*> *_actions = [RCTConvert NSDictionaryArray:config[@"actions"]];
         for (NSDictionary *_action in _actions) {
-            CPTextButton *action = [[CPTextButton alloc] initWithTitle:_action[@"title"] textStyle:CPTextButtonStyleNormal handler:^(__kindof CPTextButton * _Nonnull contactButton) {
+            CPTextButtonStyle buttonStyle = [_action[@"visibility"] isEqualToString:@"primary"] ? CPTextButtonStyleConfirm : CPTextButtonStyleNormal;
+            CPTextButton *action = [[CPTextButton alloc] initWithTitle:_action[@"title"] textStyle:buttonStyle handler:^(__kindof CPTextButton * _Nonnull contactButton) {
                 if (self->hasListeners) {
                     [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": _action[@"id"] }];
                 }
