@@ -72,7 +72,8 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
   }
 
   fun setCarContext(carContext: CarContext, currentCarScreen: CarScreen) {
-    parser = Parser(carContext, CarScreenContext("", eventEmitter!!, carScreens));
+    // @todo Parser will crash if phone app is not open when launching car app
+    // parser = Parser(carContext, CarScreenContext("", eventEmitter!!, carScreens));
     this.carContext = carContext
     this.currentCarScreen = currentCarScreen
     screenManager = currentCarScreen.screenManager
@@ -296,7 +297,7 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
 
   private fun createScreen(templateId: String): CarScreen? {
     val config = carTemplates[templateId];
-    if (config != null) {
+    if (config != null && ::carContext.isInitialized) {
       val screen = CarScreen(carContext)
       screen.marker = templateId;
 
