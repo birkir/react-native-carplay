@@ -14,6 +14,7 @@ export interface AndroidNavigationBaseTemplateConfig extends TemplateConfig {
   onDidDismissPanningInterface?(): void;
   onItemSelect?(item: { index: number }): Promise<void>;
   onBackButtonPressed?(): void;
+  onButtonPressed?(): void;
 }
 
 export class AndroidNavigationBaseTemplate<
@@ -25,6 +26,7 @@ export class AndroidNavigationBaseTemplate<
       didDismissPanningInterface: 'onDidDismissPanningInterface',
       didSelectListItem: 'onItemSelect',
       backButtonPressed: 'onBackButtonPressed',
+      buttonPressed: 'onButtonPressed',
     };
   }
 
