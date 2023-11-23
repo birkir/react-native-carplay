@@ -10,13 +10,6 @@
       <intent-filter>
         <action android:name="org.birkir.carplay.APP_RELOAD" />
       </intent-filter>
-      <intent-filter>
-        <action android:name="androidx.car.app.CarAppService" />
-        <category android:name="androidx.car.app.category.NAVIGATION" />
-      </intent-filter>
     </service>
-    <meta-data
-      android:name="androidx.car.app.minCarApiLevel"
-      android:value="1" />
   </application>
 </manifest>
