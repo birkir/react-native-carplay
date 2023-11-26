@@ -22,6 +22,7 @@ import com.facebook.react.modules.appregistry.AppRegistry
 import com.facebook.react.modules.core.TimingModule
 import com.facebook.react.modules.debug.DevSettingsModule
 import org.birkir.carplay.screens.CarScreen
+import org.birkir.carplay.utils.EventEmitter
 
 
 class CarPlaySession(private val reactInstanceManager: ReactInstanceManager) : Session(), DefaultLifecycleObserver {
@@ -94,9 +95,9 @@ class CarPlaySession(private val reactInstanceManager: ReactInstanceManager) : S
 
   override fun onDestroy(owner: LifecycleOwner) {
     Log.i(TAG, "onDestroy")
-    val context = carContext
-    // stop services here, if any
-  }
+    var eventEmitter: EventEmitter? = EventEmitter(reactInstanceManager.currentReactContext!!)
+    eventEmitter?.didDisconnect()
+}
 
   override fun onNewIntent(intent: Intent) {
     // handle intents
