@@ -1,7 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.birkir.carplay">
-  <uses-permission android:name="androidx.car.app.MAP_TEMPLATES" />
-  <uses-permission android:name="androidx.car.app.ACCESS_SURFACE" />
   <uses-permission android:name="android.permission.WAKE_LOCK" />
   <application>
     <service
