@@ -37,7 +37,6 @@ class CarScreen(carContext: CarContext) : Screen(carContext) {
     // allow MapTemplate, NavigationTemplate and PlaceListMapTemplate
     val isSurfaceTemplate = template is MapTemplate
       || template is NavigationTemplate
-      || template is PlaceListMapTemplate
       || template is PlaceListNavigationTemplate
       || template is RoutePreviewNavigationTemplate
 
