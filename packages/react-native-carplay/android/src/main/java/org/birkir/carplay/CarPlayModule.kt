@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.net.Uri
 import androidx.activity.OnBackPressedCallback
 import androidx.car.app.AppManager
 import androidx.car.app.CarContext
@@ -71,7 +72,8 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
   }
 
   fun setCarContext(carContext: CarContext, currentCarScreen: CarScreen) {
-    parser = Parser(carContext, CarScreenContext("", eventEmitter!!, carScreens));
+    // @todo Parser will crash if phone app is not open when launching car app
+    // parser = Parser(carContext, CarScreenContext("", eventEmitter!!, carScreens));
     this.carContext = carContext
     this.currentCarScreen = currentCarScreen
     screenManager = currentCarScreen.screenManager
@@ -94,7 +96,22 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
 
   @ReactMethod
   fun checkForConnection() {
-    eventEmitter?.didConnect()
+    if (::carContext.isInitialized){
+      eventEmitter?.didConnect()
+    }
+  }
+
+  @ReactMethod
+  fun openUrl(url: String) {
+    Log.d(TAG, "openUrl  $url")
+  }
+
+  @ReactMethod
+  fun navigateTo(latitude: Double, longitude: Double, name: String){
+    var url = "geo:0,0?q=${latitude},${longitude}(${name})"
+    Log.d(TAG, "navigateTo $url")
+    val intent = Intent(CarContext.ACTION_NAVIGATE, Uri.parse(url))
+    carContext.startCarApp(intent)
   }
 
   @ReactMethod
@@ -118,9 +135,10 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
 
   @ReactMethod
   fun updateTemplate(templateId: String, config: ReadableMap) {
+    Log.d(TAG, "updateTemplate for $templateId")
     handler.post {
       carTemplates[templateId] = config;
-      val screen = carScreens[name]
+      val screen = carScreens[templateId]
       if (screen != null) {
         val carScreenContext = carScreenContexts[screen];
         if (carScreenContext != null) {
@@ -160,6 +178,13 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
   fun popToTemplate(templateId: String, animated: Boolean?) {
     handler.post {
       screenManager?.popTo(templateId);
+    }
+  }
+
+  @ReactMethod
+  fun popToRootTemplate(animated: Boolean?) {
+    handler.post {
+      screenManager?.popTo("root");
     }
   }
 
@@ -272,7 +297,7 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
 
   private fun createScreen(templateId: String): CarScreen? {
     val config = carTemplates[templateId];
-    if (config != null) {
+    if (config != null && ::carContext.isInitialized) {
       val screen = CarScreen(carContext)
       screen.marker = templateId;
 

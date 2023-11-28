@@ -22,7 +22,7 @@ typedef void(^SelectedResultBlock)(void);
 @property (nonatomic, copy) SelectedResultBlock selectedResultBlock;
 @property (nonatomic) BOOL isNowPlayingActive;
 
-+ (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window;
++ (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window scene:(CPTemplateApplicationScene*)scene;
 + (void) disconnect;
 - (NSArray<CPListSection*>*) parseSections:(NSArray*)sections;
 

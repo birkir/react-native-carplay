@@ -97,6 +97,12 @@ class EventEmitter(
     })
   }
 
+  fun actionButtonPressed(templateId: String?) {
+    emit(ActionButtonPressed, Arguments.createMap().apply {
+      templateId?.let { putString("templateId", templateId) }
+    })
+  }
+
   fun didSelectListItem(id: String, index: Int) {
     emit(DidSelectListItem, Arguments.createMap().apply {
       putString("id", id)

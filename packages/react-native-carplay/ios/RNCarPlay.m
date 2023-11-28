@@ -29,10 +29,11 @@
     };
 }
 
-+ (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window {
++ (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window scene:(CPTemplateApplicationScene*)scene {
     RNCPStore * store = [RNCPStore sharedManager];
     store.interfaceController = interfaceController;
     store.window = window;
+    store.scene = scene;
     [store setConnected:true];
     RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
     if (cp.bridge) {
@@ -92,6 +93,7 @@ RCT_EXPORT_MODULE();
         @"albumArtistButtonPressed",
         // poi
         @"didSelectPointOfInterest",
+        @"didChangeMapRegion",
         // map
         @"mapButtonPressed",
         @"didUpdatePanGestureWithTranslation",
@@ -179,6 +181,57 @@ RCT_EXPORT_MODULE();
     [task resume];
 }
 
+- (NSArray<CPPointOfInterest *> *)createPointsOfInterestFromItems:(NSArray<NSDictionary *> *)items withTemplateId:(NSString *)templateId {
+    NSMutableArray<CPPointOfInterest *> *result = [NSMutableArray array];
+    
+    for (NSDictionary *item in items) {
+        MKMapItem *location = [RCTConvert MKMapItem:item[@"location"]];
+        UIImage *image = [RCTConvert UIImage:item[@"pinImage"]];
+        NSString *title = [RCTConvert NSString:item[@"title"]];
+        NSString *subtitle = [RCTConvert NSString:item[@"subtitle"]];
+        NSString *summary = [RCTConvert NSString:item[@"summary"]];
+        NSString *detailTitle = [RCTConvert NSString:item[@"detailTitle"]];
+        NSString *detailSubtitle = [RCTConvert NSString:item[@"detailSubtitle"]];
+        NSString *detailSummary = [RCTConvert NSString:item[@"detailSummary"]];
+        
+        CPPointOfInterest *poi = [[CPPointOfInterest alloc] initWithLocation:location title:title subtitle:subtitle summary:summary detailTitle:detailTitle detailSubtitle:detailSubtitle detailSummary:detailSummary pinImage:image];
+
+        if ([item objectForKey:@"selectedPinImage"]) {
+            UIImage *selectedImage = [RCTConvert UIImage:item[@"selectedPinImage"]];
+            if (@available(iOS 16.0, *)) {
+                [poi setSelectedPinImage: selectedImage];
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+        
+        if ([item objectForKey:@"primaryButton"]) {
+            NSString *primaryButtonText = [RCTConvert NSString:item[@"primaryButton"]];
+            CPTextButton *primaryButton = [[CPTextButton alloc] initWithTitle:primaryButtonText textStyle:CPTextButtonStyleConfirm handler:^(CPTextButton * _Nonnull primaryButton) {
+                if (self->hasListeners) {
+                    [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": @"primary", @"item": item}];
+                }
+            }];
+            [poi setPrimaryButton:primaryButton];
+        }
+        
+        if ([item objectForKey:@"secondaryButton"]) {
+            NSString *secondaryButtonText = [RCTConvert NSString:item[@"secondaryButton"]];
+            CPTextButton *secondaryButton = [[CPTextButton alloc] initWithTitle:secondaryButtonText textStyle:CPTextButtonStyleNormal handler:^(CPTextButton * _Nonnull secondaryButton) {
+                if (self->hasListeners) {
+                    [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": @"secondary", @"item": item}];
+                }
+            }];
+            [poi setSecondaryButton:secondaryButton];
+        }
+
+        [poi setUserInfo:item];
+        [result addObject:poi];
+    }
+
+    return [result copy];
+}
+
 RCT_EXPORT_METHOD(checkForConnection) {
     RNCPStore *store = [RNCPStore sharedManager];
     if ([store isConnected] && hasListeners) {
@@ -186,7 +239,17 @@ RCT_EXPORT_METHOD(checkForConnection) {
     }
 }
 
-RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config) {
+RCT_EXPORT_METHOD(openUrl:(NSString *)url) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplateApplicationScene *templateApplicationScene = store.scene;
+    NSURL *URL = [NSURL URLWithString:url];
+    [templateApplicationScene openURL:URL options:NULL completionHandler:^(BOOL success) {
+        if (success) {
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config callback:(NSString *)callback) {
     // Get the shared instance of the RNCPStore class
     RNCPStore *store = [RNCPStore sharedManager];
 
@@ -342,18 +405,16 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         carPlayTemplate = alertTemplate;
     } else if ([type isEqualToString:@"poi"]) {
         NSString *title = [RCTConvert NSString:config[@"title"]];
-        NSMutableArray<__kindof CPPointOfInterest *> * items = [NSMutableArray new];
-        NSUInteger selectedIndex = 0;
+        NSUInteger selectedIndex = NSNotFound;
+        NSArray<NSDictionary*> *items = [RCTConvert NSDictionaryArray:config[@"items"]];
+        NSArray<CPPointOfInterest *> *poiItems = [self createPointsOfInterestFromItems:items withTemplateId:templateId];
 
-        NSArray<NSDictionary*> *_items = [RCTConvert NSDictionaryArray:config[@"items"]];
-        for (NSDictionary *_item in _items) {
-            CPPointOfInterest *poi = [RCTConvert CPPointOfInterest:_item];
-            [poi setUserInfo:_item];
-            [items addObject:poi];
-        }
-
-        CPPointOfInterestTemplate *poiTemplate = [[CPPointOfInterestTemplate alloc] initWithTitle:title pointsOfInterest:items selectedIndex:selectedIndex];
+        CPPointOfInterestTemplate *poiTemplate = [[CPPointOfInterestTemplate alloc] initWithTitle:title pointsOfInterest:poiItems selectedIndex:selectedIndex];
         poiTemplate.pointOfInterestDelegate = self;
+        
+        [poiTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
+        [poiTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
+
         carPlayTemplate = poiTemplate;
     } else if ([type isEqualToString:@"information"]) {
         NSString *title = [RCTConvert NSString:config[@"title"]];
@@ -368,7 +429,8 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
 
         NSArray<NSDictionary*> *_actions = [RCTConvert NSDictionaryArray:config[@"actions"]];
         for (NSDictionary *_action in _actions) {
-            CPTextButton *action = [[CPTextButton alloc] initWithTitle:_action[@"title"] textStyle:CPTextButtonStyleNormal handler:^(__kindof CPTextButton * _Nonnull contactButton) {
+            CPTextButtonStyle buttonStyle = [_action[@"visibility"] isEqualToString:@"primary"] ? CPTextButtonStyleConfirm : CPTextButtonStyleNormal;
+            CPTextButton *action = [[CPTextButton alloc] initWithTitle:_action[@"title"] textStyle:buttonStyle handler:^(__kindof CPTextButton * _Nonnull contactButton) {
                 if (self->hasListeners) {
                     [self sendEventWithName:@"actionButtonPressed" body:@{@"templateId":templateId, @"id": _action[@"id"] }];
                 }
@@ -644,6 +706,31 @@ RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictio
         if (config[@"isPlaying"]) {
             [item setPlaying:[RCTConvert BOOL:config[@"isPlaying"]]];
         }
+    } else {
+        NSLog(@"Failed to find template %@", template);
+    }
+}
+
+RCT_EXPORT_METHOD(setPointsOfInterest:(NSString *)templateId items:(NSArray*)items) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPPointOfInterestTemplate *poiTemplate = (CPPointOfInterestTemplate*) template;
+        NSUInteger selectedIndex = NSNotFound;
+        NSArray<CPPointOfInterest *> *poiItems = [self createPointsOfInterestFromItems:items withTemplateId:templateId];
+
+        [poiTemplate setPointsOfInterest:poiItems selectedIndex:selectedIndex];
+    } else {
+        NSLog(@"Failed to find template %@", template);
+    }
+}
+
+RCT_EXPORT_METHOD(setPointOfInterestTitle:(NSString *)templateId title:(NSString*)title) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPPointOfInterestTemplate *poiTemplate = (CPPointOfInterestTemplate*) template;
+        [poiTemplate setTitle:title];
     } else {
         NSLog(@"Failed to find template %@", template);
     }
@@ -1337,8 +1424,16 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 }
 
 # pragma PointOfInterest
--(void)pointOfInterestTemplate:(CPPointOfInterestTemplate *)pointOfInterestTemplate didChangeMapRegion:(MKCoordinateRegion)region {
-    // noop
+-(void)pointOfInterestTemplate:(CPPointOfInterestTemplate *)pointOfInterestTemplate
+            didChangeMapRegion:(MKCoordinateRegion)region {
+    NSDictionary *regionDictionary = @{
+                @"latitude": @(region.center.latitude),
+                @"longitude": @(region.center.longitude),
+                @"latitudeDelta": @(region.span.latitudeDelta),
+                @"longitudeDelta": @(region.span.longitudeDelta)
+            };
+
+    [self sendTemplateEventWithName:pointOfInterestTemplate name:@"didChangeMapRegion" json:regionDictionary];
 }
 
 -(void)pointOfInterestTemplate:(CPPointOfInterestTemplate *)pointOfInterestTemplate didSelectPointOfInterest:(CPPointOfInterest *)pointOfInterest {

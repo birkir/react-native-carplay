@@ -58,6 +58,12 @@ export interface ListTemplateConfig extends TemplateConfig {
   onBackButtonPressed?(): void;
 
   /**
+   * Fired when action button is pressed
+   * @namespace Android
+   */
+  onButtonPressed?(): void;
+
+  /**
    * Option to hide back button
    * @default false
    */
@@ -110,6 +116,7 @@ export class ListTemplate extends Template<ListTemplateConfig> {
   get eventMap() {
     return {
       backButtonPressed: 'onBackButtonPressed',
+      buttonPressed: 'onButtonPressed',
     };
   }
 

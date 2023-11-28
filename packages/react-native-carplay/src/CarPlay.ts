@@ -47,6 +47,9 @@ export interface InternalCarPlay extends NativeModule {
   createTrip(id: string, config: TripConfig): void;
   updateInformationTemplateItems(id: string, config: unknown): void;
   updateInformationTemplateActions(id: string, config: unknown): void;
+  setPointsOfInterest(id: string, config: unknown): void;
+  setPointOfInterestTitle(id: string, title: string): void;
+  openUrl(url: string): void;
   createTemplate(id: string, config: unknown, callback?: unknown): void;
   updateTemplate(id: string, config: unknown): void;
   invalidate(id: string): void;
@@ -82,6 +85,7 @@ export interface InternalCarPlay extends NativeModule {
   activateVoiceControlState(id: string, identifier: string): void;
   // Android
   reload(): void;
+  navigateTo(latitude: number, longitude: number, name: string): void;
   toast(message: string, duration: number): void;
   alert(config: {
     id: number;
@@ -160,11 +164,6 @@ export class CarPlayInterface {
       this.onDisconnectCallbacks.forEach(callback => {
         callback();
       });
-    });
-    this.emitter.addListener('didPressMenuItem', e => {
-      if (e?.title === 'Reload Android Auto') {
-        this.bridge.reload();
-      }
     });
 
     // check if already connected this will fire any 'didConnect' events
@@ -277,6 +276,33 @@ export class CarPlayInterface {
   public enableNowPlaying(enable = true) {
     return this.bridge.enableNowPlaying(enable);
   }
+
+  /**
+   * Open url on Car device
+   * @param url A string value with the URL to open on the device (example maps:// and comgooglemaps://)
+   */
+  public openUrl(url) {
+    return this.bridge.openUrl(url);
+  }
+
+  /**
+   * Navigate to location on Android Auto device
+   * @param latitude A double value with the latitude of location 
+   * @param longitude A double value with the longitude of location 
+   * @param name A string value with the name of location to open on the device
+   */
+  public navigateTo(latitude, longitude, name) {
+    return this.bridge.navigateTo(latitude, longitude, name);
+  }
+
+  /**
+   * Show toast message on Android Auto
+   * @param message A string value with the message to show
+   * @param duration A integer value with the number of milliseconds to display toast
+   */
+    public toast(message, duration) {
+      return this.bridge.toast(message, duration);
+    }
 }
 
 export const CarPlay = new CarPlayInterface();
