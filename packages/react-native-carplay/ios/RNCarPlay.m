@@ -644,6 +644,12 @@ RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictio
         if (config[@"isPlaying"]) {
             [item setPlaying:[RCTConvert BOOL:config[@"isPlaying"]]];
         }
+        if (@available(iOS 14.0, *) && config[@"playbackProgress"]) {
+            [item setPlaybackProgress:[RCTConvert CGFloat:config[@"playbackProgress"]]];
+        }
+        if (@available(iOS 14.0, *) && config[@"accessoryImage"]) {
+            [item setAccessoryImage:[RCTConvert UIImage:config[@"accessoryImage"]]];
+        }
     } else {
         NSLog(@"Failed to find template %@", template);
     }
@@ -996,6 +1002,12 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         }
         if ([item objectForKey:@"isPlaying"]) {
             [_item setPlaying:[RCTConvert BOOL:[item objectForKey:@"isPlaying"]]];
+        }
+        if (@available(iOS 14.0, *) && [item objectForKey:@"playbackProgress"]) {
+            [_item setPlaybackProgress:[RCTConvert CGFloat:[item objectForKey:@"playbackProgress"]]];
+        }
+        if (@available(iOS 14.0, *) && [item objectForKey:@"accessoryImage"]) {
+            [_item setAccessoryImage:[RCTConvert UIImage:[item objectForKey:@"accessoryImage"]]];
         }
         if (item[@"imgUrl"]) {
             NSString *imgUrlString = [RCTConvert NSString:item[@"imgUrl"]];

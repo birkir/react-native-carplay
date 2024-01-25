@@ -36,6 +36,16 @@ export interface ListItem {
    */
   isPlaying?: boolean;
   /**
+   ** Value between 0.0 and 1.0 for progress bar of the list item cell.
+   * @namespace iOS
+   */
+  playbackProgress?: number;
+  /**
+   * The image from file system displayed on the trailing edge of the list item cell.
+   * @namespace iOS
+   */
+  accessoryImage?: ImageSourcePropType;
+  /**
    * Sets the initial enabled state for Row.
    * @default true
    * @namespace Android
