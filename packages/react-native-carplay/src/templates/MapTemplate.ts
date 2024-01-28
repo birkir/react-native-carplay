@@ -134,11 +134,18 @@ export class MapTemplate extends Template<MapTemplateConfig> {
       },
     });
 
-    CarPlay.bridge.createTemplate(
-      this.id,
-      this.parseConfig({ type: this.type, ...config, render: true }),
-      callbackFn,
-    );
+    if (callbackFn) {
+      CarPlay.bridge.createTemplate(
+        this.id,
+        this.parseConfig({ type: this.type, ...config, render: true }),
+        callbackFn,
+      );
+    } else {
+      CarPlay.bridge.createTemplate(
+        this.id,
+        this.parseConfig({ type: this.type, ...config, render: true })
+      );
+    }
   }
 
   /**

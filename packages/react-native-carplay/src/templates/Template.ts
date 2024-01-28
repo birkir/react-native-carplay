@@ -130,11 +130,18 @@ export class Template<P> {
           error && console.error(error);
         },
       });
-      CarPlay.bridge.createTemplate(
-        this.id,
-        this.parseConfig({ type: this.type, ...config }),
-        callbackFn,
-      );
+      if (callbackFn) {
+        CarPlay.bridge.createTemplate(
+          this.id,
+          this.parseConfig({ type: this.type, ...config }),
+          callbackFn,
+        );
+      } else {
+        CarPlay.bridge.createTemplate(
+          this.id,
+          this.parseConfig({ type: this.type, ...config }),
+        );
+      }
     }
   }
 
