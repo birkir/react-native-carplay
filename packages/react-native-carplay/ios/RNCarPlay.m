@@ -186,7 +186,7 @@ RCT_EXPORT_METHOD(checkForConnection) {
     }
 }
 
-RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config) {
+RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config callback:(id)callback) {
     // Get the shared instance of the RNCPStore class
     RNCPStore *store = [RNCPStore sharedManager];
 
