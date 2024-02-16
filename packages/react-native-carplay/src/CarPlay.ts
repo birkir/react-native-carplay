@@ -1,4 +1,4 @@
-import { ImageSourcePropType, NativeEventEmitter, NativeModule, NativeModules } from 'react-native';
+import { ImageSourcePropType, NativeEventEmitter, NativeModule, NativeModules, Platform } from 'react-native';
 import { ActionSheetTemplate } from './templates/ActionSheetTemplate';
 import { AlertTemplate } from './templates/AlertTemplate';
 import { ContactTemplate } from './templates/ContactTemplate';
@@ -161,11 +161,13 @@ export class CarPlayInterface {
         callback();
       });
     });
-    this.emitter.addListener('didPressMenuItem', e => {
-      if (e?.title === 'Reload Android Auto') {
-        this.bridge.reload();
-      }
-    });
+    if (Platform.OS === 'android') {
+      this.emitter.addListener('didPressMenuItem', e => {
+        if (e?.title === 'Reload Android Auto') {
+          this.bridge.reload();
+        }
+      });
+    }
 
     // check if already connected this will fire any 'didConnect' events
     // if a connected is already present.
