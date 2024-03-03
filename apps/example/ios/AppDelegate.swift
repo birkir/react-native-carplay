@@ -17,7 +17,7 @@ class AppDelegate: RCTAppDelegate {
   static var shared: AppDelegate { return UIApplication.shared.delegate as! AppDelegate }
 
   override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    moduleName = "Example"
+    moduleName = "RNCarPlayScene"
     let app = super.application(application, didFinishLaunchingWithOptions: launchOptions);
     self.rootView = self.createRootView(
       with: self.bridge,
