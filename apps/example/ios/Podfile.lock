@@ -73,9 +73,9 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - hermes-engine (0.71.8):
-    - hermes-engine/Pre-built (= 0.71.8)
-  - hermes-engine/Pre-built (0.71.8)
+  - hermes-engine (0.71.13):
+    - hermes-engine/Pre-built (= 0.71.13)
+  - hermes-engine/Pre-built (0.71.13)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
@@ -329,7 +329,7 @@ PODS:
   - React-jsinspector (0.71.13)
   - React-logger (0.71.13):
     - glog
-  - react-native-carplay (2.3.0):
+  - react-native-carplay (2.4.0-beta.2):
     - React
   - react-native-safe-area-context (4.5.3):
     - RCT-Folly
@@ -609,7 +609,7 @@ SPEC CHECKSUMS:
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  hermes-engine: 47986d26692ae75ee7a17ab049caee8864f855de
+  hermes-engine: 8b9dc37355d2e12879267382f4256afd356349a1
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
@@ -626,7 +626,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: a2867f1f81301b1f56ad968632b6ebc45c64a530
   React-jsinspector: 7e58fe86c7cc442fd11da0c9d8bef12a8d63f771
   React-logger: a3f6ca0d018749852a2a6f07c154bfc6fcd4195a
-  react-native-carplay: c0327ae947e4a12c7d66315d54254fdf87a982ec
+  react-native-carplay: 6ea89d662dad1fcc0a29302c5a37868acb6a7dad
   react-native-safe-area-context: b8979f5eda6ed5903d4dbc885be3846ea3daa753
   React-perflogger: 431a655960a02f01257d631b2a9bfbb02fd21064
   React-RCTActionSheet: 38c8d496d0faa63013d16f709e10a3acf6b5f100
@@ -649,4 +649,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 43e7fb543401ed760473db1db278bb0e99013d1c
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.15.2
