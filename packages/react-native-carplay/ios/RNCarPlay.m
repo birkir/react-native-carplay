@@ -1,4 +1,5 @@
 #import "RNCarPlay.h"
+#import "RNCarPlayViewController.h"
 #import <React/RCTConvert.h>
 #import <React/RCTRootView.h>
 
@@ -44,7 +45,7 @@
     RNCarPlay *cp = [RNCarPlay allocWithZone:nil];
     RNCPStore *store = [RNCPStore sharedManager];
     [store setConnected:false];
-    [[store.window subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    store.window.rootViewController = nil;
 
     if (cp.bridge) {
         [cp sendEventWithName:@"didDisconnect" body:@{}];
@@ -887,9 +888,8 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 
     if ([config objectForKey:@"render"]) {
         RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:templateId initialProperties:@{}];
-        [rootView setFrame:store.window.frame];
-        [[store.window subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-        [store.window addSubview:rootView];
+        RNCarPlayViewController *viewController = [[RNCarPlayViewController alloc] initWithRootView:rootView];
+        store.window.rootViewController = viewController;
     }
 }
 

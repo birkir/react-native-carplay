@@ -1,4 +1,10 @@
-import { ImageSourcePropType, NativeEventEmitter, NativeModule, NativeModules, Platform } from 'react-native';
+import {
+  ImageSourcePropType,
+  NativeEventEmitter,
+  NativeModule,
+  NativeModules,
+  Platform,
+} from 'react-native';
 import { ActionSheetTemplate } from './templates/ActionSheetTemplate';
 import { AlertTemplate } from './templates/AlertTemplate';
 import { ContactTemplate } from './templates/ContactTemplate';
