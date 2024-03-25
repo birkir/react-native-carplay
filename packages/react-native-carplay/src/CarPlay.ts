@@ -80,7 +80,9 @@ export interface InternalCarPlay extends NativeModule {
   dismissPanningInterface(id: string, animated: boolean): void;
   getMaximumListSectionCount(id: string): Promise<number>;
   getMaximumListItemCount(id: string): Promise<number>;
+  getMaximumListItemImageSize(id: string): Promise<number>;
   getMaximumNumberOfGridImages(id: string): Promise<number>;
+  getMaximumListImageRowItemImageSize(id: string): Promise<number>;
   reactToSelectedResult(status: boolean): void;
   updateListTemplateSections(id: string, config: unknown): void;
   updateListTemplateItem(id: string, config: unknown): void;
