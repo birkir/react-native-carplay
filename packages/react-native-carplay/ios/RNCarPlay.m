@@ -726,7 +726,11 @@ RCT_EXPORT_METHOD(getMaximumListItemImageSize:(NSString *)templateId
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
         CPListTemplate *listTemplate = (CPListTemplate*) template;
-        resolve(@(CPListItem.maximumImageSize));
+        NSDictionary *sizeDict = @{
+            @"width": @(CPlistItem.maximumImageSize.width),
+            @"height": @(CPlistItem.maximumImageSize.height)
+        };
+        resolve(sizeDict);        
     } else {
         NSLog(@"Failed to find template %@", template);
         reject(@"template_not_found", @"Template not found in store", nil);
@@ -767,7 +771,11 @@ RCT_EXPORT_METHOD(getMaximumListImageRowItemImageSize:(NSString *)templateId
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
         CPListTemplate *listTemplate = (CPListTemplate*) template;
-        resolve(@(CPListImageRowItem.maximumImageSize));
+        NSDictionary *sizeDict = @{
+            @"width": @(CPListImageRowItem.maximumImageSize.width),
+            @"height": @(CPListImageRowItem.maximumImageSize.height)
+        };
+        resolve(sizeDict);    
     } else {
         NSLog(@"Failed to find template %@", template);
         reject(@"template_not_found", @"Template not found in store", nil);
