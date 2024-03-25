@@ -49,7 +49,7 @@ export class SearchTemplate extends Template<SearchTemplateConfig> {
                 ...item,
                 image: item.image ? Image.resolveAssetSource(item.image) : undefined,
               }));
-              CarPlay.bridge.reactToUpdatedSearchText(templateId, parsedResults);
+              CarPlay.bridge.reactToUpdatedSearchText(e.templateId, parsedResults);
             }
           });
         }

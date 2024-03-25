@@ -50,7 +50,7 @@ export interface ListTemplateConfig extends TemplateConfig {
    * When the returned promise is resolved the spinner will hide.
    * @param item Object with the selected index
    */
-  onItemSelect?(item: { templateId: string, index: number }): Promise<void>;
+  onItemSelect?(item: { templateId: string; index: number }): Promise<void>;
 
   /**
    * Fired when image row item is selected.
@@ -58,7 +58,11 @@ export interface ListTemplateConfig extends TemplateConfig {
    * When the returned promise is resolved the spinner will hide.
    * @param item Object with the selected index
    */
-  onImageRowItemSelect?(item: { templateId: string, index: number, imageIndex: number}): Promise<void>;
+  onImageRowItemSelect?(item: {
+    templateId: string;
+    index: number;
+    imageIndex: number;
+  }): Promise<void>;
 
   /**
    * Fired when the back button is pressed
@@ -134,16 +138,18 @@ export class ListTemplate extends Template<ListTemplateConfig> {
       }
     });
 
-    CarPlay.emitter.addListener('didSelectListItemRowImage', (e: { templateId: string; index: number, imageIndex: number }) => {
-      console.log("didSelectListItemRowImage!!!", e)
-      if (config.onImageRowItemSelect && e.templateId === this.id) {
-        void Promise.resolve(config.onImageRowItemSelect(e)).then(() => {
-          if (Platform.OS === 'ios') {
-            CarPlay.bridge.reactToSelectedResult(true);
-          }
-        });
-      }
-    });
+    CarPlay.emitter.addListener(
+      'didSelectListItemRowImage',
+      (e: { templateId: string; index: number; imageIndex: number }) => {
+        if (config.onImageRowItemSelect && e.templateId === this.id) {
+          void Promise.resolve(config.onImageRowItemSelect(e)).then(() => {
+            if (Platform.OS === 'ios') {
+              CarPlay.bridge.reactToSelectedResult(true);
+            }
+          });
+        }
+      },
+    );
   }
 
   public updateSections = (sections: ListSection[]) => {

@@ -1,4 +1,10 @@
-import { ImageSourcePropType, NativeEventEmitter, NativeModule, NativeModules, Platform } from 'react-native';
+import {
+  ImageSourcePropType,
+  NativeEventEmitter,
+  NativeModule,
+  NativeModules,
+  Platform,
+} from 'react-native';
 import { Action } from './interfaces/Action';
 import { Maneuver } from './interfaces/Maneuver';
 import { PauseReason } from './interfaces/PauseReason';
