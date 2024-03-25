@@ -719,6 +719,20 @@ RCT_EXPORT_METHOD(getMaximumListItemCount:(NSString *)templateId
     }
 }
 
+RCT_EXPORT_METHOD(getMaximumListItemImageSize:(NSString *)templateId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPListTemplate *listTemplate = (CPListTemplate*) template;
+        resolve(@(CPListItem.maximumImageSize));
+    } else {
+        NSLog(@"Failed to find template %@", template);
+        reject(@"template_not_found", @"Template not found in store", nil);
+    }
+}
+
 RCT_EXPORT_METHOD(getMaximumListSectionCount:(NSString *)templateId
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
@@ -740,6 +754,20 @@ RCT_EXPORT_METHOD(getMaximumNumberOfGridImages:(NSString *)templateId
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
         resolve(@(CPMaximumNumberOfGridImages));
+    } else {
+        NSLog(@"Failed to find template %@", template);
+        reject(@"template_not_found", @"Template not found in store", nil);
+    }
+}
+
+RCT_EXPORT_METHOD(getMaximumListImageRowItemImageSize:(NSString *)templateId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        CPListTemplate *listTemplate = (CPListTemplate*) template;
+        resolve(@(CPListImageRowItem.maximumImageSize));
     } else {
         NSLog(@"Failed to find template %@", template);
         reject(@"template_not_found", @"Template not found in store", nil);

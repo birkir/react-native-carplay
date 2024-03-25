@@ -173,7 +173,15 @@ export class ListTemplate extends Template<ListTemplateConfig> {
     return CarPlay.bridge.getMaximumListSectionCount(this.id);
   }
 
+  public getMaximumListItemImageSize() {
+    return CarPlay.bridge.getMaximumListItemImageSize(this.id);
+  }
+
   public getMaximumNumberOfGridImages() {
     return CarPlay.bridge.getMaximumNumberOfGridImages(this.id);
+  }
+
+  public getMaximumListImageRowItemImageSize() {
+    return CarPlay.bridge.getMaximumListImageRowItemImageSize(this.id);
   }
 }
