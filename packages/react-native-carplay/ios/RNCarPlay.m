@@ -179,6 +179,59 @@ RCT_EXPORT_MODULE();
     [task resume];
 }
 
+- (void)updateListRowItemImageWithURL:(CPListImageRowItem *)item imgUrl:(NSString *)imgUrlString index:(int)index {
+    NSLog(@"FM: Updating image in updateListRowItemImageWithURL at index: %d and url %@", index, imgUrlString);
+    NSURL *imgUrl = [NSURL URLWithString:imgUrlString];
+    
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:imgUrl completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (data) {
+            NSLog(@"FM: Got data in updateListRowItemImageWithURL at index: %d", index);
+            UIImage *image = [UIImage imageWithData:data];
+            
+            NSLog(@"FM: created UIImage from the data");
+            NSMutableArray* newImages = [item.gridImages mutableCopy];
+            NSLog(@"FM: retrieved existing uiimages from gridImages. count: %lu", newImages.count);
+            
+            
+            @try {
+               
+                newImages[index] = image;
+            }
+            @catch (NSException *exception) {
+                NSLog(@"%@", exception);
+                NSLog(@"%@", [exception callStackSymbols]);
+                NSLog(@"cant set at index at index %d cannot be found", index);
+                NSLog(@"Max index is: %lu", newImages.count - 1);
+                
+                @try {
+                    [newImages insertObject:image atIndex:index];
+                }
+                @catch(NSException *exc2) {
+                    NSLog(@"cant insert at index at index %d cannot be found", index);
+                    NSLog(@"%@", exc2);
+                    NSLog(@"%@", [exc2 callStackSymbols]);
+                    
+                }
+               
+            }
+            @finally {
+               NSLog(@"Finally condition");
+            }
+            
+            NSLog(@"FM: set the image to index %d", index);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"FM: Dispatching to main queue in updateListRowItemImageWithURL at index: %d", index);
+                [item updateImages:newImages];
+                NSLog(@"FM: Finished Dispatching to main queue in updateListRowItemImageWithURL");
+            });
+        } else {
+            NSLog(@"FM: in updateListRowItemImageWithURL Failed to load image from URL: %@", imgUrl);
+        }
+    }];
+    [task resume];
+}
+
 RCT_EXPORT_METHOD(checkForConnection) {
     RNCPStore *store = [RNCPStore sharedManager];
     if ([store isConnected] && hasListeners) {
@@ -985,36 +1038,90 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     return result;
 }
 
-- (NSArray<CPListItem*>*)parseListItems:(NSArray*)items startIndex:(int)startIndex {
+- (NSArray<CPSelectableListItem>*)parseListItems:(NSArray*)items startIndex:(int)startIndex {
     NSMutableArray *_items = [NSMutableArray array];
     int index = startIndex;
     for (NSDictionary *item in items) {
         BOOL _showsDisclosureIndicator = [[item objectForKey:@"showsDisclosureIndicator"] isEqualToNumber:[NSNumber numberWithInt:1]];
         NSString *_detailText = [item objectForKey:@"detailText"];
         NSString *_text = [item objectForKey:@"text"];
-        UIImage *_image = [RCTConvert UIImage:[item objectForKey:@"image"]];
-        CPListItem *_item;
-        if (@available(iOS 14.0, *)) {
-            CPListItemAccessoryType accessoryType = _showsDisclosureIndicator ? CPListItemAccessoryTypeDisclosureIndicator : CPListItemAccessoryTypeNone;
-            _item = [[CPListItem alloc] initWithText:_text detailText:_detailText image:_image accessoryImage:nil accessoryType:accessoryType];
+        NSObject *_imageObj = [item objectForKey:@"image"];
+        
+        NSArray *_imageItems = [item objectForKey:@"images"];
+        NSArray *_imageUrls = [item objectForKey:@"imgUrls"];
+        
+        if(_imageItems == nil && _imageUrls == nil) {
+            NSLog(@"FM: creating regular CPListItem");
+            UIImage *_image = [RCTConvert UIImage:_imageObj];
+            CPListItem *_item;
+            if (@available(iOS 14.0, *)) {
+                CPListItemAccessoryType accessoryType = _showsDisclosureIndicator ? CPListItemAccessoryTypeDisclosureIndicator : CPListItemAccessoryTypeNone;
+                _item = [[CPListItem alloc] initWithText:_text detailText:_detailText image:_image accessoryImage:nil accessoryType:accessoryType];
+            } else {
+                _item = [[CPListItem alloc] initWithText:_text detailText:_detailText image:_image showsDisclosureIndicator:_showsDisclosureIndicator];
+            }
+            if ([item objectForKey:@"isPlaying"]) {
+                [_item setPlaying:[RCTConvert BOOL:[item objectForKey:@"isPlaying"]]];
+            }
+            if (item[@"imgUrl"]) {
+                NSString *imgUrlString = [RCTConvert NSString:item[@"imgUrl"]];
+                [self updateItemImageWithURL:_item imgUrl:imgUrlString];
+            }
+            [_item setUserInfo:@{ @"index": @(index) }];
+            [_items addObject:_item];
         } else {
-            _item = [[CPListItem alloc] initWithText:_text detailText:_detailText image:_image showsDisclosureIndicator:_showsDisclosureIndicator];
+            NSLog(@"FM: creating CPListImageRowItem");
+            // parse images
+            NSMutableArray * _images = [NSMutableArray array];
+            if(_imageItems != nil) {
+                NSArray* slicedArray = [_imageItems subarrayWithRange:NSMakeRange(0, MIN(CPMaximumNumberOfGridImages, _imageItems.count))];//MIN() used because array must be larger than or equal to range size, else exception will be thrown
+
+                for(NSObject *imageObj in slicedArray){
+                    NSLog(@"FM: creating uiImage from imageObj");
+                    UIImage *_image = [RCTConvert UIImage:imageObj];
+                    [_images addObject:_image];
+                }
+            }
+            if (@available(iOS 14.0, *)) {
+                
+                CPListImageRowItem *_item;
+                if(_images.count > 0)
+                {
+                    _item = [[CPListImageRowItem alloc] initWithText:_text images:_images];
+                }
+                else
+                {
+                    NSLog(@"FM: Max grid images: %lu", CPMaximumNumberOfGridImages);
+                    // Show only as much images as allowed.
+                    NSArray* slicedArray = [_imageUrls subarrayWithRange:NSMakeRange(0, MIN(CPMaximumNumberOfGridImages, _imageUrls.count))];//MIN() used because array must be larger than or equal to range size, else exception will be thrown
+                    NSLog(@"FM: slicedArray count: %lu", slicedArray.count);
+                    
+                    // create with img urls
+                    NSMutableArray *arr = [NSMutableArray arrayWithCapacity:slicedArray.count];
+//                    for (NSUInteger i = 0; i < slicedArray.count; i++) {
+//                        [arr addObject:[NSNull null]];
+//                    }
+//                    NSLog(@"FM: added empty slots to array");
+                    
+                    _item = [[CPListImageRowItem alloc] initWithText:_text images:arr];
+                    
+                    NSLog(@"FM: got: %lu images for row item. %lu", arr.count, slicedArray.count);
+                    
+                    int index = 0;
+                    for(NSString* imgUrl in slicedArray) {
+//                        NSLog(@"FM: calling update for imgurl: %@", imgUrl);
+                        [self updateListRowItemImageWithURL:_item imgUrl:imgUrl index:index];
+                        index++;
+                    }
+                }
+                
+               
+                    
+                [_item setUserInfo:@{ @"index": @(index) }];
+                [_items addObject:_item];
+            }
+            
         }
-        if ([item objectForKey:@"isPlaying"]) {
-            [_item setPlaying:[RCTConvert BOOL:[item objectForKey:@"isPlaying"]]];
-        }
-        if (@available(iOS 14.0, *) && [item objectForKey:@"playbackProgress"]) {
-            [_item setPlaybackProgress:[RCTConvert CGFloat:[item objectForKey:@"playbackProgress"]]];
-        }
-        if (@available(iOS 14.0, *) && [item objectForKey:@"accessoryImage"]) {
-            [_item setAccessoryImage:[RCTConvert UIImage:[item objectForKey:@"accessoryImage"]]];
-        }
-        if (item[@"imgUrl"]) {
-            NSString *imgUrlString = [RCTConvert NSString:item[@"imgUrl"]];
-            [self updateItemImageWithURL:_item imgUrl:imgUrlString];
-        }
-        [_item setUserInfo:@{ @"index": @(index) }];
-        [_items addObject:_item];
         index = index + 1;
     }
     return _items;
