@@ -81,6 +81,7 @@ RCT_EXPORT_MODULE();
         @"actionButtonPressed",
         // list
         @"didSelectListItem",
+        @"didSelectListItemRowImage",
         // search
         @"updatedSearchText",
         @"searchButtonPressed",
@@ -180,53 +181,28 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)updateListRowItemImageWithURL:(CPListImageRowItem *)item imgUrl:(NSString *)imgUrlString index:(int)index {
-    NSLog(@"FM: Updating image in updateListRowItemImageWithURL at index: %d and url %@", index, imgUrlString);
+    
     NSURL *imgUrl = [NSURL URLWithString:imgUrlString];
     
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:imgUrl completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (data) {
-            NSLog(@"FM: Got data in updateListRowItemImageWithURL at index: %d", index);
             UIImage *image = [UIImage imageWithData:data];
             
-            NSLog(@"FM: created UIImage from the data");
-            NSMutableArray* newImages = [item.gridImages mutableCopy];
-            NSLog(@"FM: retrieved existing uiimages from gridImages. count: %lu", newImages.count);
-            
-            
-            @try {
-               
-                newImages[index] = image;
-            }
-            @catch (NSException *exception) {
-                NSLog(@"%@", exception);
-                NSLog(@"%@", [exception callStackSymbols]);
-                NSLog(@"cant set at index at index %d cannot be found", index);
-                NSLog(@"Max index is: %lu", newImages.count - 1);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableArray* newImages = [item.gridImages mutableCopy];
                 
                 @try {
-                    [newImages insertObject:image atIndex:index];
+                    newImages[index] = image;
                 }
-                @catch(NSException *exc2) {
-                    NSLog(@"cant insert at index at index %d cannot be found", index);
-                    NSLog(@"%@", exc2);
-                    NSLog(@"%@", [exc2 callStackSymbols]);
-                    
-                }
-               
-            }
-            @finally {
-               NSLog(@"Finally condition");
-            }
-            
-            NSLog(@"FM: set the image to index %d", index);
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"FM: Dispatching to main queue in updateListRowItemImageWithURL at index: %d", index);
-                [item updateImages:newImages];
-                NSLog(@"FM: Finished Dispatching to main queue in updateListRowItemImageWithURL");
+                @catch (NSException *exception) {
+                    // Best effort updating the array
+                    NSLog(@"Failed to update images array of CPListImageRowItem");
+                }                
+                
+                [item updateImages:newImages];                
             });
         } else {
-            NSLog(@"FM: in updateListRowItemImageWithURL Failed to load image from URL: %@", imgUrl);
+            NSLog(@"Failed to load image for CPListImageRowItem from URL: %@", imgUrl);
         }
     }];
     [task resume];
@@ -265,7 +241,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         carPlayTemplate = gridTemplate;
     }
     else if ([type isEqualToString:@"list"]) {
-        NSArray *sections = [self parseSections:[RCTConvert NSArray:config[@"sections"]]];
+        NSArray *sections = [self parseSections:[RCTConvert NSArray:config[@"sections"]] templateId:templateId];
         CPListTemplate *listTemplate;
         if (@available(iOS 15.0, *)) {
             if ([config objectForKey:@"assistant"]) {
@@ -658,7 +634,7 @@ RCT_EXPORT_METHOD(updateListTemplateSections:(NSString *)templateId sections:(NS
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
         CPListTemplate *listTemplate = (CPListTemplate*) template;
-        [listTemplate updateSections:[self parseSections:sections]];
+        [listTemplate updateSections:[self parseSections:sections templateId:templateId]];
     } else {
         NSLog(@"Failed to find template %@", template);
     }
@@ -752,6 +728,19 @@ RCT_EXPORT_METHOD(getMaximumListSectionCount:(NSString *)templateId
     if (template) {
         CPListTemplate *listTemplate = (CPListTemplate*) template;
         resolve(@(CPListTemplate.maximumSectionCount));
+    } else {
+        NSLog(@"Failed to find template %@", template);
+        reject(@"template_not_found", @"Template not found in store", nil);
+    }
+}
+
+RCT_EXPORT_METHOD(getMaximumNumberOfGridImages:(NSString *)templateId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPTemplate *template = [store findTemplateById:templateId];
+    if (template) {
+        resolve(@(CPMaximumNumberOfGridImages));
     } else {
         NSLog(@"Failed to find template %@", template);
         reject(@"template_not_found", @"Template not found in store", nil);
@@ -857,8 +846,8 @@ RCT_EXPORT_METHOD(activateVoiceControlState:(NSString*)templateId identifier:(NS
     }
 }
 
-RCT_EXPORT_METHOD(reactToUpdatedSearchText:(NSArray *)items) {
-    NSArray *sectionsItems = [self parseListItems:items startIndex:0];
+RCT_EXPORT_METHOD(reactToUpdatedSearchText:(NSArray *)items templateId:(NSString *)templateId) {
+    NSArray *sectionsItems = [self parseListItems:items startIndex:0 templateId:templateId];
 
     if (self.searchResultBlock) {
         self.searchResultBlock(sectionsItems);
@@ -1022,14 +1011,14 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     return result;
 }
 
-- (NSArray<CPListSection*>*)parseSections:(NSArray*)sections {
+- (NSArray<CPListSection*>*)parseSections:(NSArray*)sections templateId:(NSString *)templateId {
     NSMutableArray *result = [NSMutableArray array];
     int index = 0;
     for (NSDictionary *section in sections) {
         NSArray *items = [section objectForKey:@"items"];
         NSString *_sectionIndexTitle = [section objectForKey:@"sectionIndexTitle"];
         NSString *_header = [section objectForKey:@"header"];
-        NSArray *_items = [self parseListItems:items startIndex:index];
+        NSArray *_items = [self parseListItems:items startIndex:index templateId:templateId];
         CPListSection *_section = [[CPListSection alloc] initWithItems:_items header:_header sectionIndexTitle:_sectionIndexTitle];
         [result addObject:_section];
         int count = (int) [items count];
@@ -1038,9 +1027,9 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     return result;
 }
 
-- (NSArray<CPSelectableListItem>*)parseListItems:(NSArray*)items startIndex:(int)startIndex {
+- (NSArray<CPSelectableListItem>*)parseListItems:(NSArray*)items startIndex:(int)startIndex templateId:(NSString *)templateId {
     NSMutableArray *_items = [NSMutableArray array];
-    int index = startIndex;
+    int listIndex = startIndex;
     for (NSDictionary *item in items) {
         BOOL _showsDisclosureIndicator = [[item objectForKey:@"showsDisclosureIndicator"] isEqualToNumber:[NSNumber numberWithInt:1]];
         NSString *_detailText = [item objectForKey:@"detailText"];
@@ -1050,8 +1039,7 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         NSArray *_imageItems = [item objectForKey:@"images"];
         NSArray *_imageUrls = [item objectForKey:@"imgUrls"];
         
-        if(_imageItems == nil && _imageUrls == nil) {
-            NSLog(@"FM: creating regular CPListItem");
+        if (_imageItems == nil && _imageUrls == nil) {
             UIImage *_image = [RCTConvert UIImage:_imageObj];
             CPListItem *_item;
             if (@available(iOS 14.0, *)) {
@@ -1067,17 +1055,16 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
                 NSString *imgUrlString = [RCTConvert NSString:item[@"imgUrl"]];
                 [self updateItemImageWithURL:_item imgUrl:imgUrlString];
             }
-            [_item setUserInfo:@{ @"index": @(index) }];
+            [_item setUserInfo:@{ @"index": @(listIndex) }];
             [_items addObject:_item];
         } else {
-            NSLog(@"FM: creating CPListImageRowItem");
             // parse images
             NSMutableArray * _images = [NSMutableArray array];
-            if(_imageItems != nil) {
+            
+            if (_imageItems != nil) {
                 NSArray* slicedArray = [_imageItems subarrayWithRange:NSMakeRange(0, MIN(CPMaximumNumberOfGridImages, _imageItems.count))];//MIN() used because array must be larger than or equal to range size, else exception will be thrown
 
-                for(NSObject *imageObj in slicedArray){
-                    NSLog(@"FM: creating uiImage from imageObj");
+                for (NSObject *imageObj in slicedArray){
                     UIImage *_image = [RCTConvert UIImage:imageObj];
                     [_images addObject:_image];
                 }
@@ -1085,47 +1072,49 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
             if (@available(iOS 14.0, *)) {
                 
                 CPListImageRowItem *_item;
-                if(_images.count > 0)
+                if (_images.count > 0)
                 {
                     _item = [[CPListImageRowItem alloc] initWithText:_text images:_images];
                 }
                 else
                 {
-                    NSLog(@"FM: Max grid images: %lu", CPMaximumNumberOfGridImages);
                     // Show only as much images as allowed.
-                    NSArray* slicedArray = [_imageUrls subarrayWithRange:NSMakeRange(0, MIN(CPMaximumNumberOfGridImages, _imageUrls.count))];//MIN() used because array must be larger than or equal to range size, else exception will be thrown
-                    NSLog(@"FM: slicedArray count: %lu", slicedArray.count);
+                    NSArray* _slicedArray = [_imageUrls subarrayWithRange:NSMakeRange(0, MIN(CPMaximumNumberOfGridImages, _imageUrls.count))];//
                     
-                    // create with img urls
-                    NSMutableArray *arr = [NSMutableArray arrayWithCapacity:slicedArray.count];
-//                    for (NSUInteger i = 0; i < slicedArray.count; i++) {
-//                        [arr addObject:[NSNull null]];
-//                    }
-//                    NSLog(@"FM: added empty slots to array");
+                    // create array with empty UI images, that will be replaced later
+                    NSMutableArray *_imagesArray = [NSMutableArray arrayWithCapacity:_slicedArray.count];
+                    for (NSUInteger i = 0; i < _slicedArray.count; i++) {
+                        [_imagesArray addObject:[[UIImage alloc] init]];
+                    }
+                    _item = [[CPListImageRowItem alloc] initWithText:_text images:_imagesArray];
                     
-                    _item = [[CPListImageRowItem alloc] initWithText:_text images:arr];
                     
-                    NSLog(@"FM: got: %lu images for row item. %lu", arr.count, slicedArray.count);
-                    
-                    int index = 0;
-                    for(NSString* imgUrl in slicedArray) {
-//                        NSLog(@"FM: calling update for imgurl: %@", imgUrl);
-                        [self updateListRowItemImageWithURL:_item imgUrl:imgUrl index:index];
-                        index++;
+                    int _index = 0;
+                    for (NSString* imgUrl in _slicedArray) {
+                        [self updateListRowItemImageWithURL:_item imgUrl:imgUrl index:_index];
+                        _index++;
                     }
                 }
                 
-               
+                [_item setListImageRowHandler:^(CPListImageRowItem * _Nonnull item, NSInteger index, dispatch_block_t  _Nonnull completionBlock) {
+                    // Find the current template
+                    RNCPStore *store = [RNCPStore sharedManager];
+                    CPTemplate *template = [store findTemplateById:templateId];
+                    if (template) {
+                        [self sendTemplateEventWithName:template name:@"didSelectListItemRowImage" json:@{ @"index": @(listIndex), @"imageIndex": @(index)}];
+                    }
+                }];
                     
-                [_item setUserInfo:@{ @"index": @(index) }];
+                [_item setUserInfo:@{ @"index": @(listIndex) }];
                 [_items addObject:_item];
             }
             
         }
-        index = index + 1;
+        listIndex = listIndex + 1;
     }
     return _items;
 }
+
 
 - (NSArray<CPInformationItem*>*)parseInformationItems:(NSArray*)items {
     NSMutableArray *_items = [NSMutableArray array];
