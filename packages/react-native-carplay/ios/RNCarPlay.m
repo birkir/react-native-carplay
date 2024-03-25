@@ -180,8 +180,7 @@ RCT_EXPORT_MODULE();
     [task resume];
 }
 
-- (void)updateListRowItemImageWithURL:(CPListImageRowItem *)item imgUrl:(NSString *)imgUrlString index:(int)index {
-    
+- (void)updateListRowItemImageWithURL:(CPListImageRowItem *)item imgUrl:(NSString *)imgUrlString index:(int)index {    
     NSURL *imgUrl = [NSURL URLWithString:imgUrlString];
     
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:imgUrl completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -1062,7 +1061,7 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
             NSMutableArray * _images = [NSMutableArray array];
             
             if (_imageItems != nil) {
-                NSArray* slicedArray = [_imageItems subarrayWithRange:NSMakeRange(0, MIN(CPMaximumNumberOfGridImages, _imageItems.count))];//MIN() used because array must be larger than or equal to range size, else exception will be thrown
+                NSArray* slicedArray = [_imageItems subarrayWithRange:NSMakeRange(0, MIN(CPMaximumNumberOfGridImages, _imageItems.count))];
 
                 for (NSObject *imageObj in slicedArray){
                     UIImage *_image = [RCTConvert UIImage:imageObj];
