@@ -727,8 +727,8 @@ RCT_EXPORT_METHOD(getMaximumListItemImageSize:(NSString *)templateId
     if (template) {
         CPListTemplate *listTemplate = (CPListTemplate*) template;
         NSDictionary *sizeDict = @{
-            @"width": @(CPlistItem.maximumImageSize.width),
-            @"height": @(CPlistItem.maximumImageSize.height)
+            @"width": @(CPListItem.maximumImageSize.width),
+            @"height": @(CPListItem.maximumImageSize.height)
         };
         resolve(sizeDict);        
     } else {
@@ -757,6 +757,7 @@ RCT_EXPORT_METHOD(getMaximumNumberOfGridImages:(NSString *)templateId
     RNCPStore *store = [RNCPStore sharedManager];
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
+        CPListTemplate *listTemplate = (CPListTemplate*) template;
         resolve(@(CPMaximumNumberOfGridImages));
     } else {
         NSLog(@"Failed to find template %@", template);
