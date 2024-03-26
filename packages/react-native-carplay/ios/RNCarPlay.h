@@ -24,6 +24,6 @@ typedef void(^SelectedResultBlock)(void);
 
 + (void) connectWithInterfaceController:(CPInterfaceController*)interfaceController window:(CPWindow*)window;
 + (void) disconnect;
-- (NSArray<CPListSection*>*) parseSections:(NSArray*)sections;
+- (NSArray<CPListSection*>*) parseSections:(NSArray*)sections templateId:(NSString *)templateId;
 
 @end

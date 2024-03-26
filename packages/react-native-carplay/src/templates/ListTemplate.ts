@@ -1,10 +1,10 @@
-import { ListItem } from '../interfaces/ListItem';
+import { Platform } from 'react-native';
 import { CarPlay } from '../CarPlay';
+import { Action } from '../interfaces/Action';
+import { ListItem } from '../interfaces/ListItem';
 import { ListItemUpdate } from '../interfaces/ListItemUpdate';
 import { ListSection } from '../interfaces/ListSection';
 import { Template, TemplateConfig } from './Template';
-import { Action } from '../interfaces/Action';
-import { Platform } from 'react-native';
 
 export interface ListTemplateConfig extends TemplateConfig {
   /**
@@ -50,7 +50,19 @@ export interface ListTemplateConfig extends TemplateConfig {
    * When the returned promise is resolved the spinner will hide.
    * @param item Object with the selected index
    */
-  onItemSelect?(item: { index: number }): Promise<void>;
+  onItemSelect?(item: { templateId: string; index: number }): Promise<void>;
+
+  /**
+   * Fired when image row item is selected.
+   * Spinner shows by default.
+   * When the returned promise is resolved the spinner will hide.
+   * @param item Object with the selected index
+   */
+  onImageRowItemSelect?(item: {
+    templateId: string;
+    index: number;
+    imageIndex: number;
+  }): Promise<void>;
 
   /**
    * Fired when the back button is pressed
@@ -125,6 +137,19 @@ export class ListTemplate extends Template<ListTemplateConfig> {
         });
       }
     });
+
+    CarPlay.emitter.addListener(
+      'didSelectListItemRowImage',
+      (e: { templateId: string; index: number; imageIndex: number }) => {
+        if (config.onImageRowItemSelect && e.templateId === this.id) {
+          void Promise.resolve(config.onImageRowItemSelect(e)).then(() => {
+            if (Platform.OS === 'ios') {
+              CarPlay.bridge.reactToSelectedResult(true);
+            }
+          });
+        }
+      },
+    );
   }
 
   public updateSections = (sections: ListSection[]) => {
@@ -146,5 +171,17 @@ export class ListTemplate extends Template<ListTemplateConfig> {
 
   public getMaximumListSectionCount() {
     return CarPlay.bridge.getMaximumListSectionCount(this.id);
+  }
+
+  public getMaximumListItemImageSize() {
+    return CarPlay.bridge.getMaximumListItemImageSize(this.id);
+  }
+
+  public getMaximumNumberOfGridImages() {
+    return CarPlay.bridge.getMaximumNumberOfGridImages(this.id);
+  }
+
+  public getMaximumListImageRowItemImageSize() {
+    return CarPlay.bridge.getMaximumListImageRowItemImageSize(this.id);
   }
 }

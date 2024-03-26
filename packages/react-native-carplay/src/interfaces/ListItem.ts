@@ -22,9 +22,19 @@ export interface ListItem {
    */
   image?: ImageSourcePropType;
   /**
+   * A list of images shown in the ListRowImageItem
+   * @namespace iOS
+   */
+  images?: ImageSourcePropType[];
+  /**
    * Url for image displayed on the leading edge of the list item cell.
    */
   imgUrl?: null;
+  /**
+   * Url for image displayed on the leading edge of the list item cell.
+   * @namespace iOS
+   */
+  imgUrls?: string[];
   /**
    * A Boolean value indicating whether the list item cell shows a disclosure indicator on the trailing edge of the list item cell.
    * @namespace iOS
