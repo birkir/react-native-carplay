@@ -131,7 +131,7 @@ export type WindowInformation = {
 export type ImageSize = {
   width: number;
   height: number;
-}
+};
 
 export type OnConnectCallback = (window: WindowInformation) => void;
 export type OnDisconnectCallback = () => void;
