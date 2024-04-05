@@ -289,11 +289,23 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
             NSDictionary *body = @{@"templateId":templateId, @"id": _button[@"id"] };
             Class buttonClass = buttonTypeMapping[buttonType];
             if (buttonClass) {
-                CPNowPlayingButton *button = [[buttonClass alloc] initWithHandler:^(__kindof CPNowPlayingButton * _Nonnull) {
-                    if (self->hasListeners) {
-                        [self sendEventWithName:@"buttonPressed" body:body];
-                    }
-                }];
+                CPNowPlayingButton *button;
+                
+                if ([buttonType isEqualToString:@"image"]) {
+                    UIImage *_image = [RCTConvert UIImage:[_button objectForKey:@"image"]];
+                    button = [[CPNowPlayingImageButton alloc] initWithImage:_image handler:^(__kindof CPNowPlayingImageButton * _Nonnull) {
+                        if (self->hasListeners) {
+                            [self sendEventWithName:@"buttonPressed" body:body];
+                        }
+                    }];
+                } else {
+                    button = [[buttonClass alloc] initWithHandler:^(__kindof CPNowPlayingButton * _Nonnull) {
+                        if (self->hasListeners) {
+                            [self sendEventWithName:@"buttonPressed" body:body];
+                        }
+                    }];
+                }
+                
                 [buttons addObject:button];
             }
         }
