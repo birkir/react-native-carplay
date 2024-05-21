@@ -5,31 +5,31 @@ import {
   NativeModules,
   Platform,
 } from 'react-native';
+import { Action } from './interfaces/Action';
+import { Maneuver } from './interfaces/Maneuver';
+import { PauseReason } from './interfaces/PauseReason';
+import { TextConfiguration } from './interfaces/TextConfiguration';
+import { TimeRemainingColor } from './interfaces/TimeRemainingColor';
+import { TravelEstimates } from './interfaces/TravelEstimates';
+import { TripConfig } from './navigation/Trip';
 import { ActionSheetTemplate } from './templates/ActionSheetTemplate';
 import { AlertTemplate } from './templates/AlertTemplate';
 import { ContactTemplate } from './templates/ContactTemplate';
 import { GridTemplate } from './templates/GridTemplate';
 import { InformationTemplate } from './templates/InformationTemplate';
 import { ListTemplate } from './templates/ListTemplate';
-import { NavigationTemplate } from './templates/android/NavigationTemplate';
-import { PlaceListMapTemplate } from './templates/android/PlaceListMapTemplate';
-import { PlaceListNavigationTemplate } from './templates/android/PlaceListNavigationTemplate';
-import { RoutePreviewNavigationTemplate } from './templates/android/RoutePreviewNavigationTemplate';
 import { MapTemplate } from './templates/MapTemplate';
+import { NowPlayingTemplate } from './templates/NowPlayingTemplate';
 import { PointOfInterestTemplate } from './templates/PointOfInterestTemplate';
 import { SearchTemplate } from './templates/SearchTemplate';
 import { TabBarTemplate } from './templates/TabBarTemplate';
 import { VoiceControlTemplate } from './templates/VoiceControlTemplate';
-import { NowPlayingTemplate } from './templates/NowPlayingTemplate';
-import { Maneuver } from './interfaces/Maneuver';
-import { TravelEstimates } from './interfaces/TravelEstimates';
-import { PauseReason } from './interfaces/PauseReason';
-import { TripConfig } from './navigation/Trip';
-import { TimeRemainingColor } from './interfaces/TimeRemainingColor';
-import { TextConfiguration } from './interfaces/TextConfiguration';
-import { Action } from './interfaces/Action';
 import { MessageTemplate } from './templates/android/MessageTemplate';
+import { NavigationTemplate } from './templates/android/NavigationTemplate';
 import { PaneTemplate } from './templates/android/PaneTemplate';
+import { PlaceListMapTemplate } from './templates/android/PlaceListMapTemplate';
+import { PlaceListNavigationTemplate } from './templates/android/PlaceListNavigationTemplate';
+import { RoutePreviewNavigationTemplate } from './templates/android/RoutePreviewNavigationTemplate';
 
 export interface InternalCarPlay extends NativeModule {
   checkForConnection(): void;
@@ -80,10 +80,13 @@ export interface InternalCarPlay extends NativeModule {
   dismissPanningInterface(id: string, animated: boolean): void;
   getMaximumListSectionCount(id: string): Promise<number>;
   getMaximumListItemCount(id: string): Promise<number>;
+  getMaximumListItemImageSize(id: string): Promise<ImageSize>;
+  getMaximumNumberOfGridImages(id: string): Promise<number>;
+  getMaximumListImageRowItemImageSize(id: string): Promise<ImageSize>;
   reactToSelectedResult(status: boolean): void;
   updateListTemplateSections(id: string, config: unknown): void;
   updateListTemplateItem(id: string, config: unknown): void;
-  reactToUpdatedSearchText(items: unknown): void;
+  reactToUpdatedSearchText(id: string, items: unknown): void;
   updateTabBarTemplates(id: string, config: unknown): void;
   activateVoiceControlState(id: string, identifier: string): void;
   // Android
@@ -123,6 +126,11 @@ export type WindowInformation = {
   width: number;
   height: number;
   scale: number;
+};
+
+export type ImageSize = {
+  width: number;
+  height: number;
 };
 
 export type OnConnectCallback = (window: WindowInformation) => void;

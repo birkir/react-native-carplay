@@ -1,7 +1,7 @@
+import { Image, Platform } from 'react-native';
 import { CarPlay } from '../CarPlay';
 import { ListItem } from '../interfaces/ListItem';
 import { BaseEvent, Template, TemplateConfig } from './Template';
-import { Image, Platform } from 'react-native';
 
 export interface SearchTemplateConfig extends TemplateConfig {
   /**
@@ -49,7 +49,7 @@ export class SearchTemplate extends Template<SearchTemplateConfig> {
                 ...item,
                 image: item.image ? Image.resolveAssetSource(item.image) : undefined,
               }));
-              CarPlay.bridge.reactToUpdatedSearchText(parsedResults);
+              CarPlay.bridge.reactToUpdatedSearchText(e.templateId, parsedResults);
             }
           });
         }
