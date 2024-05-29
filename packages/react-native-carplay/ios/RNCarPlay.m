@@ -68,6 +68,7 @@ RCT_EXPORT_MODULE();
     return @[
         @"didConnect",
         @"didDisconnect",
+        @"didPressMenuItem",
         // interface
         @"barButtonPressed",
         @"backButtonPressed",
