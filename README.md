@@ -152,6 +152,9 @@ npx pod-install
 
 # Run the iOS or Android app
 yarn run ios|android
+
+# Run the Metro server
+yarn run start
 ```
 
 ## Declarative vs. Imperative
