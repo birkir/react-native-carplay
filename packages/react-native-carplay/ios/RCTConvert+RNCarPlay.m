@@ -44,7 +44,7 @@ RCT_ENUM_CONVERTER(CPAssistantCellActionType, (@{
     }
 
     if ([json objectForKey:@"focusedImage"]) {
-        [mapButton setImage:[RCTConvert UIImage:json[@"focusedImage"]]];
+        [mapButton setFocusedImage:[RCTConvert UIImage:json[@"focusedImage"]]];
     }
 
     if ([json objectForKey:@"disabled"]) {
