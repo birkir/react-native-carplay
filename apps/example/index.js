@@ -7,5 +7,6 @@ if (Platform.OS === 'android') {
   AppRegistry.registerComponent('RNCarPlayScene', () => AndroidAuto);
   // AppRegistry.registerRunnable('androidAuto', AndroidAutoModule);
 } else {
+  AppRegistry.registerComponent('Example', () => App);
   AppRegistry.registerComponent('RNCarPlayScene', () => App);
 }
