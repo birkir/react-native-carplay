@@ -42,7 +42,7 @@ class CarPlaySession(private val reactInstanceManager: ReactInstanceManager) : S
           invokeStartTask(reactInstanceManager.currentReactContext!!);
         }
       }
-    }, IntentFilter("org.birkir.carplay.APP_RELOAD"))
+    }, IntentFilter("org.birkir.carplay.APP_RELOAD"), Context.RECEIVER_EXPORTED)
 
     // Run JS
     runJsApplication()

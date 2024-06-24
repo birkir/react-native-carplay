@@ -187,6 +187,10 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
 
   @ReactMethod
   fun toast(text: String, duration: Int) {
+    if (!::carContext.isInitialized) {
+      Log.e(TAG, "carContext is not initialized. Cannot show toast.")
+      return
+    }
     CarToast.makeText(carContext, text, duration).show()
   }
 
@@ -271,6 +275,10 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
   }
 
   private fun createScreen(templateId: String): CarScreen? {
+    if (!::carContext.isInitialized) {
+      Log.e(TAG, "carContext not initialized")
+      return null
+    }
     val config = carTemplates[templateId];
     if (config != null) {
       val screen = CarScreen(carContext)
