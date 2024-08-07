@@ -14,6 +14,7 @@ import androidx.car.app.model.Alert
 import androidx.car.app.model.AlertCallback
 import androidx.car.app.model.CarText
 import androidx.car.app.model.Distance
+import androidx.car.app.model.TabTemplate
 import androidx.car.app.model.Template
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Callback
@@ -120,13 +121,18 @@ class CarPlayModule internal constructor(private val reactContext: ReactApplicat
   fun updateTemplate(templateId: String, config: ReadableMap) {
     handler.post {
       carTemplates[templateId] = config;
-      val screen = carScreens[name]
+      val screen = carScreens[templateId]
       if (screen != null) {
         val carScreenContext = carScreenContexts[screen];
         if (carScreenContext != null) {
           val template = parseTemplate(config, carScreenContext);
           screen.setTemplate(template, templateId, config);
           screen.invalidate()
+          // If this is a tab template, we need to update the main tab screen as well
+          if (template is TabTemplate) {
+            carScreens[carScreenContext.screenMarker]?.setTemplate(template, carScreenContext.screenMarker, config)
+            carScreens[carScreenContext.screenMarker]?.invalidate()
+          }
         }
       }
     }
