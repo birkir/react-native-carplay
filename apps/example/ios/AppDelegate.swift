@@ -2,12 +2,6 @@ import UIKit
 import CarPlay
 import React
 
-#if DEBUG
-#if FB_SONARKIT_ENABLED
-import FlipperKit
-#endif
-#endif
-
 @main
 class AppDelegate: RCTAppDelegate {
 
@@ -18,13 +12,9 @@ class AppDelegate: RCTAppDelegate {
 
   override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     moduleName = "RNCarPlayScene"
-    let app = super.application(application, didFinishLaunchingWithOptions: launchOptions);
-    self.rootView = self.createRootView(
-      with: self.bridge,
-      moduleName: self.moduleName,
-      initProps: self.prepareInitialProps()
-    );
-    return app;
+    initialProps = [:]
+    
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions);
   }
 
   override func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -39,7 +29,7 @@ class AppDelegate: RCTAppDelegate {
     }
   }
 
-  override func sourceURL(for bridge: RCTBridge!) -> URL! {
+  override func bundleURL() -> URL? {
     #if DEBUG
       return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index");
     #else
@@ -47,12 +37,7 @@ class AppDelegate: RCTAppDelegate {
     #endif
   }
 
-  // not exposed from RCTAppDelegate, recreating.
-  func prepareInitialProps() -> [String: Any] {
-    var initProps = self.initialProps as? [String: Any] ?? [String: Any]()
-    #if RCT_NEW_ARCH_ENABLED
-      initProps["kRNConcurrentRoot"] = concurrentRootEnabled()
-    #endif
-    return initProps
+  override func sourceURL(for bridge: RCTBridge) -> URL? {
+    return bundleURL()
   }
 }
