@@ -5,18 +5,21 @@ import React
 @main
 class AppDelegate: RCTAppDelegate {
 
-  var rootView: UIView?;
-  var concurrentRootEnabled = true;
-
-  static var shared: AppDelegate { return UIApplication.shared.delegate as! AppDelegate }
+  var rootView: UIView?
 
   override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     moduleName = "RNCarPlayScene"
     initialProps = [:]
     
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions);
+    let app = super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    self.rootView = self.createRootView(
+      with: self.bridge!,
+      moduleName: self.moduleName!,
+      initProps: self.initialProps!
+    )
+    return app
   }
-
+  
   override func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
     if (connectingSceneSession.role == UISceneSession.Role.carTemplateApplication) {
       let scene =  UISceneConfiguration(name: "CarPlay", sessionRole: connectingSceneSession.role)
@@ -31,9 +34,9 @@ class AppDelegate: RCTAppDelegate {
 
   override func bundleURL() -> URL? {
     #if DEBUG
-      return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index");
+    return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
     #else
-      return Bundle.main.url(forResource:"main", withExtension:"jsbundle")
+    return Bundle.main.url(forResource:"main", withExtension:"jsbundle")
     #endif
   }
 

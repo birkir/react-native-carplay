@@ -13,41 +13,42 @@ The Project name in this example is `Example`, which you should replace with you
 
 Create a new `AppDelegate.swift` file, once prompted, click *Create bridging headers for Swift*.
 
-Paste the following code to the `AppDelegate.swift`, it includes Flipper code.
+Paste the following code to the `AppDelegate.swift`.
 
 ```swift
 // ios/AppDelegate.swift
 import UIKit
 import CarPlay
 import React
-#if DEBUG
-#if FB_SONARKIT_ENABLED
-import FlipperKit
-#endif
-#endif
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, RCTBridgeDelegate {
 
-  var window: UIWindow?
-  var bridge: RCTBridge?;
-  var rootView: RCTRootView?;
+  var rootView: UIView?
 
-  static var shared: AppDelegate { return UIApplication.shared.delegate as! AppDelegate }
+  override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    moduleName = "RNCarPlayScene"
+    initialProps = [:]
 
-  func sourceURL(for bridge: RCTBridge!) -> URL! {
+    let app = super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    self.rootView = self.createRootView(
+      with: self.bridge!,
+      moduleName: self.moduleName!,
+      initProps: self.initialProps!
+    )
+    return app
+  }
+
+  override func bundleURL() -> URL? {
     #if DEBUG
-    return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index");
+    return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
     #else
     return Bundle.main.url(forResource:"main", withExtension:"jsbundle")
     #endif
   }
 
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    initializeFlipper(with: application)
-    self.bridge = RCTBridge.init(delegate: self, launchOptions: launchOptions)
-    self.rootView = RCTRootView.init(bridge: self.bridge!, moduleName: "Example", initialProperties: nil)
-    return true
+  override func sourceURL(for bridge: RCTBridge) -> URL? {
+    return bundleURL()
   }
 
   func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -64,20 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RCTBridgeDelegate {
 
   func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
   }
-
-  private func initializeFlipper(with application: UIApplication) {
-    #if DEBUG
-    #if FB_SONARKIT_ENABLED
-    let client = FlipperClient.shared()
-    let layoutDescriptorMapper = SKDescriptorMapper(defaults: ())
-    client?.add(FlipperKitLayoutPlugin(rootNode: application, with: layoutDescriptorMapper!))
-    client?.add(FKUserDefaultsPlugin(suiteName: nil))
-    client?.add(FlipperKitReactPlugin())
-    client?.add(FlipperKitNetworkPlugin(networkAdapter: SKIOSNetworkAdapter()))
-    client?.start()
-    #endif
-    #endif
-  }
 }
 ```
 
@@ -85,26 +72,15 @@ Paste the following to your bridging header file `Example-Bridging-Header.h`:
 
 ```objc
 // ios/Example-Bridging-Header.h
+#import <RCTAppDelegate.h>
 #import "RNCarPlay.h"
-
-#ifdef DEBUG
-#ifdef FB_SONARKIT_ENABLED
-#import <FlipperKit/FlipperClient.h>
-#import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
-#import <FlipperKitUserDefaultsPlugin/FKUserDefaultsPlugin.h>
-#import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
-#import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
-#import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
-#endif
-#endif
 ```
 
-### 3. Add flags for Swift compiler in debug mode
+### 3. Add flag for Swift compiler in debug mode
 
-Go to XCode project, hit `Build Settings`, search for `Swift Compiler - Custom Flags` and then under `Active Compilation Conditions`, add the following flags to `Debug` only:
+Go to XCode project, hit `Build Settings`, search for `Swift Compiler - Custom Flags` and then under `Active Compilation Conditions`, add the following flag to `Debug` only:
 
   - DEBUG
-  - FB_SONARKIT_ENABLED
 
 ### 4. Create Phone Scene
 
@@ -119,11 +95,16 @@ import SwiftUI
 class PhoneSceneDelegate: UIResponder, UIWindowSceneDelegate {
   var window: UIWindow?
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+
+    if session.role != .windowApplication {
+      return
+    }
+
     guard let appDelegate = (UIApplication.shared.delegate as? AppDelegate) else { return }
     guard let windowScene = (scene as? UIWindowScene) else { return }
 
     let rootViewController = UIViewController()
-    rootViewController.view = appDelegate.rootView;
+    rootViewController.view = appDelegate.rootView
 
     let window = UIWindow(windowScene: windowScene)
     window.rootViewController = rootViewController
@@ -146,13 +127,14 @@ import CarPlay
 class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
   func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,
                                   didConnect interfaceController: CPInterfaceController) {
-    RNCarPlay.connect(with: interfaceController, window: templateApplicationScene.carWindow);
+    RNCarPlay.connect(with: interfaceController, window: templateApplicationScene.carWindow)
   }
 
   func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnectInterfaceController interfaceController: CPInterfaceController) {
     RNCarPlay.disconnect()
   }
 }
+
 
 ```
 
