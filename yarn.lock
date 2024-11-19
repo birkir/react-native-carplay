@@ -5650,9 +5650,9 @@ __metadata:
   linkType: hard
 
 "dompurify@npm:^3.0.5":
-  version: 3.0.6
-  resolution: "dompurify@npm:3.0.6"
-  checksum: e5c6cdc5fe972a9d0859d939f1d86320de275be00bbef7bd5591c80b1e538935f6ce236624459a1b0c84ecd7c6a1e248684aa4637512659fccc0ce7c353828a6
+  version: 3.2.0
+  resolution: "dompurify@npm:3.2.0"
+  checksum: 54bd8e113474c1444dbabae5ea404e0d4a1bf042004070bcda2de3ea6c209f8c40686aebf60caff144bdae84175784504a42d7ac7f484fd6932d7bc4a53bf378
   languageName: node
   linkType: hard
 
