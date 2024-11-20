@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.car.app.CarContext.SCREEN_SERVICE
@@ -36,13 +37,23 @@ class CarPlaySession(private val reactInstanceManager: ReactInstanceManager) : S
     screen.marker = "root"
 
     // Handle reload events
+    if (Build.VERSION.SDK_INT >= 34 && carContext.getApplicationInfo().targetSdkVersion >= 34) {
     carContext.registerReceiver(object : BroadcastReceiver() {
       override fun onReceive(context: Context, intent: Intent) {
         if ("org.birkir.carplay.APP_RELOAD" == intent.action) {
           invokeStartTask(reactInstanceManager.currentReactContext!!);
         }
       }
-    }, IntentFilter("org.birkir.carplay.APP_RELOAD"))
+    }, IntentFilter("org.birkir.carplay.APP_RELOAD"), Context.RECEIVER_EXPORTED)
+    }else{
+           carContext.registerReceiver(object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                 if ("org.birkir.carplay.APP_RELOAD" == intent.action) {
+                     invokeStartTask(reactInstanceManager.currentReactContext!!);
+                   }
+               }
+      }, IntentFilter("org.birkir.carplay.APP_RELOAD"))
+    }
 
     // Run JS
     runJsApplication()
