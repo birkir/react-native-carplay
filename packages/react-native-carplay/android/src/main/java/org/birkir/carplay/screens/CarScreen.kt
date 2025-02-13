@@ -6,6 +6,7 @@ import androidx.car.app.Screen
 import androidx.car.app.model.Pane
 import androidx.car.app.model.PaneTemplate
 import androidx.car.app.model.PlaceListMapTemplate
+import androidx.car.app.model.TabTemplate
 import androidx.car.app.model.Template
 import androidx.car.app.navigation.model.MapTemplate
 import androidx.car.app.navigation.model.NavigationTemplate
@@ -20,6 +21,11 @@ import org.birkir.carplay.utils.VirtualRenderer
 class CarScreen(carContext: CarContext) : Screen(carContext) {
 
   var template: Template? = null
+    set(value) {
+      field = value
+      Log.d(TAG, "Template set: ${value?.javaClass?.simpleName}")
+      invalidate()
+    }
   private var virtualRenderer: VirtualRenderer? = null
 
   init {
@@ -33,7 +39,7 @@ class CarScreen(carContext: CarContext) : Screen(carContext) {
     })
   }
 
-  fun setTemplate(template: Template?, templateId: String, props: ReadableMap) {
+  fun setTemplate(template: Template?, templateId: String, props: ReadableMap?) {
     // allow MapTemplate, NavigationTemplate and PlaceListMapTemplate
     val isSurfaceTemplate = template is MapTemplate
       || template is NavigationTemplate
@@ -43,24 +49,25 @@ class CarScreen(carContext: CarContext) : Screen(carContext) {
 
     if (isSurfaceTemplate && virtualRenderer == null) {
       Log.d(TAG, "setTemplate: received navigation template with args: $templateId")
-      if (templateId == null) {
-        Log.w(
-          TAG,
-          "setTemplate: moduleName is null, please make sure you are setting id for map-template in ReactNative",
-        )
-        return
-      }
       virtualRenderer = VirtualRenderer(carContext, templateId)
     }
     this.template = template
+    if (template is TabTemplate) {
+      invalidate()
+    }
   }
 
   override fun onGetTemplate(): Template {
     Log.d(TAG, "onGetTemplate for $marker")
-    return template ?: PaneTemplate.Builder(
-      Pane.Builder().setLoading(true).build()
-    ).setTitle("RNCarPlay loading...").build()
-    // @todo allow set the loading title by translatable resource.
+    val currentTemplate = template
+    if (currentTemplate == null) {
+      Log.d(TAG, "Template is null, returning loading template")
+      return PaneTemplate.Builder(Pane.Builder().setLoading(true).build())
+        .setTitle("Loading...")
+        .build()
+    }
+    Log.d(TAG, "Returning template: ${currentTemplate::class.simpleName}")
+    return currentTemplate
   }
 
   companion object {
