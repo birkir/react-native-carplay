@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "composite": false
+  },
+  "references": [
+    {
+      "path": "../../packages/react-native-carplay"
+    }
+  ]
+}
