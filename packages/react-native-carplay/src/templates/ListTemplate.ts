@@ -50,7 +50,12 @@ export interface ListTemplateConfig extends TemplateConfig {
    * When the returned promise is resolved the spinner will hide.
    * @param item Object with the selected index
    */
-  onItemSelect?(item: { templateId: string; index: number }): Promise<void>;
+  onItemSelect?(
+    item: {
+      templateId: string;
+      index: number;
+      itemId?: string;
+    }): Promise<void>;
 
   /**
    * Fired when image row item is selected.
@@ -61,7 +66,9 @@ export interface ListTemplateConfig extends TemplateConfig {
   onImageRowItemSelect?(item: {
     templateId: string;
     index: number;
+    itemId?: string;
     imageIndex: number;
+    imageId?: string;
   }): Promise<void>;
 
   /**
@@ -128,20 +135,29 @@ export class ListTemplate extends Template<ListTemplateConfig> {
   constructor(public config: ListTemplateConfig) {
     super(config);
 
-    CarPlay.emitter.addListener('didSelectListItem', (e: { templateId: string; index: number }) => {
-      if (config.onItemSelect && e.templateId === this.id) {
-        void Promise.resolve(config.onItemSelect(e)).then(() => {
-          if (Platform.OS === 'ios') {
-            CarPlay.bridge.reactToSelectedResult(true);
-          }
-        });
-      }
-    });
+    CarPlay.selectListItemListenerMap.set(
+      this.id,
+      (e: { templateId: string; index: number; itemId?: string }) => {
+        if (config.onItemSelect) {
+          void Promise.resolve(config.onItemSelect(e)).then(() => {
+            if (Platform.OS === 'ios') {
+              CarPlay.bridge.reactToSelectedResult(true);
+            }
+          });
+        }
+      },
+    );
 
-    CarPlay.emitter.addListener(
-      'didSelectListItemRowImage',
-      (e: { templateId: string; index: number; imageIndex: number }) => {
-        if (config.onImageRowItemSelect && e.templateId === this.id) {
+    CarPlay.selectListItemRowImageListenerMap.set(
+      this.id,
+      (e: {
+        templateId: string;
+        index: number;
+        itemId?: string;
+        imageIndex: number;
+        imageId?: string;
+      }) => {
+        if (config.onImageRowItemSelect) {
           void Promise.resolve(config.onImageRowItemSelect(e)).then(() => {
             if (Platform.OS === 'ios') {
               CarPlay.bridge.reactToSelectedResult(true);

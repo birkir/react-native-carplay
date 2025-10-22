@@ -4,6 +4,7 @@
     NSMutableDictionary* _templatesStore;
     NSMutableDictionary* _navigationSessionsStore;
     NSMutableDictionary* _tripsStore;
+    NSMutableDictionary* _itemsStore;
     Boolean _connected;
 }
 
@@ -15,6 +16,7 @@
         _templatesStore = [[NSMutableDictionary alloc] init];
         _navigationSessionsStore = [[NSMutableDictionary alloc] init];
         _tripsStore = [[NSMutableDictionary alloc] init];
+        _itemsStore = [[NSMutableDictionary alloc] init];
         _connected = false;
     }
 

@@ -29,12 +29,17 @@ export interface ListItem {
   /**
    * Url for image displayed on the leading edge of the list item cell.
    */
-  imgUrl?: null;
+  imgUrl?: string;
   /**
    * Url for image displayed on the leading edge of the list item cell.
    * @namespace iOS
    */
   imgUrls?: string[];
+  /**
+   * ids corresponding to the images in imgUrls or images which will be passed back on list row item selected
+   * @namespace iOS
+  */
+  imageIds?: string[];
   /**
    * A Boolean value indicating whether the list item cell shows a disclosure indicator on the trailing edge of the list item cell.
    * @namespace iOS

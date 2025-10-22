@@ -33,6 +33,7 @@ import { RoutePreviewNavigationTemplate } from './templates/android/RoutePreview
 
 export interface InternalCarPlay extends NativeModule {
   checkForConnection(): void;
+  getConnectionStatus(): Promise<{carplay: boolean, phone: boolean}>;
   setRootTemplate(templateId: string, animated: boolean): void;
   pushTemplate(templateId: string, animated: boolean): void;
   popToTemplate(templateId: string, animated: boolean): void;
@@ -83,9 +84,12 @@ export interface InternalCarPlay extends NativeModule {
   getMaximumListItemImageSize(id: string): Promise<ImageSize>;
   getMaximumNumberOfGridImages(id: string): Promise<number>;
   getMaximumListImageRowItemImageSize(id: string): Promise<ImageSize>;
+  getTopTemplateId(): Promise<string>;
   reactToSelectedResult(status: boolean): void;
+  updateListTemplate(id: string, config: unknown): void;
   updateListTemplateSections(id: string, config: unknown): void;
   updateListTemplateItem(id: string, config: unknown): void;
+  updateListItemById(itemId: string, config: unknown): void;
   reactToUpdatedSearchText(id: string, items: unknown): void;
   updateTabBarTemplates(id: string, config: unknown): void;
   activateVoiceControlState(id: string, identifier: string): void;
@@ -156,14 +160,53 @@ export class CarPlayInterface {
    */
   public emitter = new NativeEventEmitter(RNCarPlay);
 
+  public selectListItemListenerMap = new Map<
+    string,
+    (e: { templateId: string; index: number; itemId?: string }) => void
+  >();
+  public selectListItemRowImageListenerMap = new Map<
+    string,
+    (e: {
+      templateId: string;
+      index: number;
+      itemId?: string;
+      imageIndex: number;
+      imageId?: string;
+    }) => void
+  >();
+
   private onConnectCallbacks = new Set<OnConnectCallback>();
   private onDisconnectCallbacks = new Set<OnDisconnectCallback>();
 
   constructor() {
     this.emitter.addListener('didConnect', (window: WindowInformation) => {
-      console.log('we are connected yes!');
+      console.log('Carplay Connected');
       this.connected = true;
       this.window = window;
+      this.emitter.addListener(
+        'didSelectListItem',
+        (e: { templateId: string; index: number; itemId?: string }) => {
+          const templateListener = this.selectListItemListenerMap.get(e.templateId);
+          if (templateListener) {
+            templateListener(e);
+          }
+        },
+      );
+      this.emitter.addListener(
+        'didSelectListItemRowImage',
+        (e: {
+          templateId: string;
+          index: number;
+          itemId?: string;
+          imageIndex: number;
+          imageId?: string;
+        }) => {
+          const templateListener = this.selectListItemRowImageListenerMap.get(e.templateId);
+          if (templateListener) {
+            templateListener(e);
+          }
+        },
+      );
       this.onConnectCallbacks.forEach(callback => {
         callback(window);
       });
@@ -171,6 +214,8 @@ export class CarPlayInterface {
     this.emitter.addListener('didDisconnect', () => {
       this.connected = false;
       this.window = undefined;
+      this.emitter.removeAllListeners('didSelectListItem');
+      this.emitter.removeAllListeners('didSelectListItemRowImage');
       this.onDisconnectCallbacks.forEach(callback => {
         callback();
       });
@@ -279,11 +324,10 @@ export class CarPlayInterface {
   }
 
   /**
-   * The top-most template in the navigation hierarchy stack.
-   * @todo Not implemented yet
+   * The id of the top-most template in the navigation hierarchy stack.
    */
   public get topTemplate(): Promise<string> {
-    return Promise.resolve('');
+    return this.bridge.getTopTemplateId();
   }
 
   /**

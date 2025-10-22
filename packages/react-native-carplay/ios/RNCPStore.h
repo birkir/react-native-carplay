@@ -8,6 +8,7 @@
 
 @property (nonatomic, retain) CPInterfaceController *interfaceController;
 @property (nonatomic, retain) CPWindow *window;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<CPListItem *> *> *itemsStore;
 
 + (id)sharedManager;
 - (CPTemplate*) findTemplateById: (NSString*)templateId;

@@ -159,7 +159,7 @@ RCT_EXPORT_MODULE();
     UIGraphicsImageRendererFormat *renderFormat = [UIGraphicsImageRendererFormat defaultFormat];
     renderFormat.opaque = NO;
     UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:size format:renderFormat];
-    
+
     UIImage *resizedImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
         [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
     }];
@@ -168,12 +168,14 @@ RCT_EXPORT_MODULE();
 
 - (void)updateItemImageWithURL:(CPListItem *)item imgUrl:(NSString *)imgUrlString {
     NSURL *imgUrl = [NSURL URLWithString:imgUrlString];
-    
+
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:imgUrl completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (data) {
             UIImage *image = [UIImage imageWithData:data];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [item setImage:image];
+                if(image) {
+                  [item setImage:image];
+                }
             });
         } else {
             NSLog(@"Failed to load image from URL: %@", imgUrl);
@@ -182,25 +184,27 @@ RCT_EXPORT_MODULE();
     [task resume];
 }
 
-- (void)updateListRowItemImageWithURL:(CPListImageRowItem *)item imgUrl:(NSString *)imgUrlString index:(int)index {    
+- (void)updateListRowItemImageWithURL:(CPListImageRowItem *)item imgUrl:(NSString *)imgUrlString index:(int)index {
     NSURL *imgUrl = [NSURL URLWithString:imgUrlString];
-    
+
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:imgUrl completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (data) {
             UIImage *image = [UIImage imageWithData:data];
-            
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSMutableArray* newImages = [item.gridImages mutableCopy];
-                
+
                 @try {
-                    newImages[index] = image;
+                    if(image) {
+                      newImages[index] = image;
+                    }
                 }
                 @catch (NSException *exception) {
                     // Best effort updating the array
                     NSLog(@"Failed to update images array of CPListImageRowItem");
-                }                
-                
-                [item updateImages:newImages];                
+                }
+
+                [item updateImages:newImages];
             });
         } else {
             NSLog(@"Failed to load image for CPListImageRowItem from URL: %@", imgUrl);
@@ -216,6 +220,36 @@ RCT_EXPORT_METHOD(checkForConnection) {
     }
 }
 
+RCT_REMAP_METHOD(getConnectionStatus,
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+  // Check for CarPlay scene
+  BOOL carplayConnected = NO;
+  for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+    if ([scene isKindOfClass:[CPTemplateApplicationScene class]]) {
+      carplayConnected = YES;
+      break;
+    }
+  }
+
+  // Check for phone (active foreground window scene)
+  BOOL phoneConnected = NO;
+  for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+    if ([scene isKindOfClass:[UIWindowScene class]] &&
+        scene.activationState == UISceneActivationStateForegroundActive) {
+      phoneConnected = YES;
+      break;
+    }
+  }
+
+  resolve(@{
+    @"carplay": @(carplayConnected),
+    @"phone": @(phoneConnected)
+  });
+}
+
+
 RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)config callback:(id)callback) {
     // Get the shared instance of the RNCPStore class
     RNCPStore *store = [RNCPStore sharedManager];
@@ -225,7 +259,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
     NSString *title = [RCTConvert NSString:config[@"title"]];
     NSArray *leadingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"leadingNavigationBarButtons"]] templateId:templateId];
     NSArray *trailingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"trailingNavigationBarButtons"]] templateId:templateId];
-    
+
     // Create a new CPTemplate object
     CPTemplate *carPlayTemplate = [[CPTemplate alloc] init];
 
@@ -263,7 +297,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         if (![RCTConvert BOOL:config[@"backButtonHidden"]]) {
             if (@available(iOS 14.0, *)) {
                 CPBarButton *backButton = [[CPBarButton alloc] initWithTitle:@" Back" handler:^(CPBarButton * _Nonnull barButton) {
-                    if (hasListeners) {
+                    if (self->hasListeners) {
                         [self sendEventWithName:@"backButtonPressed" body:@{@"templateId":templateId}];
                     }
                     [self popTemplate:false];
@@ -281,7 +315,6 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
                 listTemplate.emptyViewSubtitleVariants = [RCTConvert NSArray:config[@"emptyViewSubtitleVariants"]];
             }
         }
-        listTemplate.delegate = self;
         carPlayTemplate = listTemplate;
     }
     else if ([type isEqualToString:@"map"]) {
@@ -304,7 +337,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
         [nowPlayingTemplate setUpNextButtonEnabled:[RCTConvert BOOL:config[@"upNextButtonEnabled"]]];
         NSMutableArray<CPNowPlayingButton *> *buttons = [NSMutableArray new];
         NSArray<NSDictionary*> *_buttons = [RCTConvert NSDictionaryArray:config[@"buttons"]];
-        
+
         NSDictionary *buttonTypeMapping = @{
             @"shuffle": CPNowPlayingShuffleButton.class,
             @"add-to-library": CPNowPlayingAddToLibraryButton.class,
@@ -313,14 +346,14 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
             @"repeat": CPNowPlayingRepeatButton.class,
             @"image": CPNowPlayingImageButton.class
         };
-        
+
         for (NSDictionary *_button in _buttons) {
             NSString *buttonType = [RCTConvert NSString:_button[@"type"]];
             NSDictionary *body = @{@"templateId":templateId, @"id": _button[@"id"] };
             Class buttonClass = buttonTypeMapping[buttonType];
             if (buttonClass) {
                 CPNowPlayingButton *button;
-                
+
                 if ([buttonType isEqualToString:@"image"]) {
                     UIImage *_image = [RCTConvert UIImage:[_button objectForKey:@"image"]];
                     button = [[CPNowPlayingImageButton alloc] initWithImage:_image handler:^(__kindof CPNowPlayingImageButton * _Nonnull) {
@@ -335,7 +368,7 @@ RCT_EXPORT_METHOD(createTemplate:(NSString *)templateId config:(NSDictionary*)co
                         }
                     }];
                 }
-                
+
                 [buttons addObject:button];
             }
         }
@@ -647,9 +680,11 @@ RCT_EXPORT_METHOD(updateListTemplateSections:(NSString *)templateId sections:(NS
     CPTemplate *template = [store findTemplateById:templateId];
     if (template) {
         CPListTemplate *listTemplate = (CPListTemplate*) template;
-        [listTemplate updateSections:[self parseSections:sections templateId:templateId]];
+        NSArray *parsedSections = [self parseSections:sections templateId:templateId];
+
+        [listTemplate updateSections:parsedSections];
     } else {
-        NSLog(@"Failed to find template %@", template);
+        NSLog(@"Failed to find template %@", templateId);
     }
 }
 
@@ -697,6 +732,41 @@ RCT_EXPORT_METHOD(updateListTemplateItem:(NSString *)templateId config:(NSDictio
     }
 }
 
+RCT_EXPORT_METHOD(updateListItemById:(NSString *)itemId config:(NSDictionary*)config) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    NSArray<CPListItem *> *items = store.itemsStore[itemId];
+
+    if (items == nil || items.count == 0) {
+        NSLog(@"No items found for itemId %@", itemId);
+        return;
+    }
+
+    for (CPListItem *item in items) {
+        if (config[@"imgUrl"]) {
+            NSString *imgUrlString = [RCTConvert NSString:config[@"imgUrl"]];
+            [self updateItemImageWithURL:item imgUrl:imgUrlString];
+        }
+        if (config[@"image"]) {
+            [item setImage:[RCTConvert UIImage:config[@"image"]]];
+        }
+        if (config[@"text"]) {
+            [item setText:[RCTConvert NSString:config[@"text"]]];
+        }
+        if (config[@"detailText"]) {
+            [item setDetailText:[RCTConvert NSString:config[@"detailText"]]];
+        }
+        if (config[@"isPlaying"]) {
+            [item setPlaying:[RCTConvert BOOL:config[@"isPlaying"]]];
+        }
+        if (@available(iOS 14.0, *) && config[@"playbackProgress"]) {
+            [item setPlaybackProgress:[RCTConvert CGFloat:config[@"playbackProgress"]]];
+        }
+        if (@available(iOS 14.0, *) && config[@"accessoryImage"]) {
+            [item setAccessoryImage:[RCTConvert UIImage:config[@"accessoryImage"]]];
+        }
+    }
+}
+
 RCT_EXPORT_METHOD(updateInformationTemplateItems:(NSString *)templateId items:(NSArray*)items) {
     RNCPStore *store = [RNCPStore sharedManager];
     CPTemplate *template = [store findTemplateById:templateId];
@@ -733,6 +803,26 @@ RCT_EXPORT_METHOD(getMaximumListItemCount:(NSString *)templateId
     }
 }
 
+RCT_EXPORT_METHOD(getTopTemplateId:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    RNCPStore *store = [RNCPStore sharedManager];
+    CPInterfaceController *interfaceController = [store interfaceController];
+    CPTemplate *topTemplate = interfaceController.topTemplate;
+
+    if (!topTemplate) {
+        reject(@"no_top_template", @"No top template is currently visible", nil);
+        return;
+    }
+
+    NSString *templateId = topTemplate.userInfo[@"templateId"];
+    if (!templateId) {
+        reject(@"no_template_id", @"Top template does not have a templateId in userInfo", nil);
+        return;
+    }
+
+    resolve(templateId);
+}
+
 RCT_EXPORT_METHOD(getMaximumListItemImageSize:(NSString *)templateId
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
@@ -744,7 +834,7 @@ RCT_EXPORT_METHOD(getMaximumListItemImageSize:(NSString *)templateId
             @"width": @(CPListItem.maximumImageSize.width),
             @"height": @(CPListItem.maximumImageSize.height)
         };
-        resolve(sizeDict);        
+        resolve(sizeDict);
     } else {
         NSLog(@"Failed to find template %@", template);
         reject(@"template_not_found", @"Template not found in store", nil);
@@ -790,7 +880,7 @@ RCT_EXPORT_METHOD(getMaximumListImageRowItemImageSize:(NSString *)templateId
             @"width": @(CPListImageRowItem.maximumImageSize.width),
             @"height": @(CPListImageRowItem.maximumImageSize.height)
         };
-        resolve(sizeDict);    
+        resolve(sizeDict);
     } else {
         NSLog(@"Failed to find template %@", template);
         reject(@"template_not_found", @"Template not found in store", nil);
@@ -939,7 +1029,7 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     else {
       [mapTemplate setGuidanceBackgroundColor:UIColor.systemGray5Color];
     }
-    
+
     if ([config objectForKey:@"tripEstimateStyle"]) {
         [mapTemplate setTripEstimateStyle:[RCTConvert CPTripEstimateStyle:config[@"tripEstimateStyle"]]];
     }
@@ -951,7 +1041,7 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         NSArray *leadingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"leadingNavigationBarButtons"]] templateId:templateId];
         [mapTemplate setLeadingNavigationBarButtons:leadingNavigationBarButtons];
     }
-  
+
     if ([config objectForKey:@"trailingNavigationBarButtons"]){
         NSArray *trailingNavigationBarButtons = [self parseBarButtons:[RCTConvert NSArray:config[@"trailingNavigationBarButtons"]] templateId:templateId];
         [mapTemplate setTrailingNavigationBarButtons:trailingNavigationBarButtons];
@@ -1084,10 +1174,21 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         NSString *_detailText = [item objectForKey:@"detailText"];
         NSString *_text = [item objectForKey:@"text"];
         NSObject *_imageObj = [item objectForKey:@"image"];
-        
+
         NSArray *_imageItems = [item objectForKey:@"images"];
         NSArray *_imageUrls = [item objectForKey:@"imgUrls"];
-        
+        NSArray *_imageIds = [item objectForKey:@"imageIds"];
+
+        NSString *_itemId = [item objectForKey:@"id"];
+
+        if (_itemId == nil) {
+            _itemId = (id)[NSNull null];
+        }
+
+        if (_imageIds == nil) {
+            _imageIds = (id)[NSNull null];
+        }
+
         if (_imageItems == nil && _imageUrls == nil) {
             UIImage *_image = [RCTConvert UIImage:_imageObj];
             CPListItem *_item;
@@ -1100,26 +1201,61 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
             if ([item objectForKey:@"isPlaying"]) {
                 [_item setPlaying:[RCTConvert BOOL:[item objectForKey:@"isPlaying"]]];
             }
+            if (@available(iOS 14.0, *) && [item objectForKey:@"playbackProgress"]) {
+                CGFloat _playbackProgress = [RCTConvert CGFloat:[item objectForKey:@"playbackProgress"]];
+                [_item setPlaybackProgress: _playbackProgress];
+            }
             if (item[@"imgUrl"]) {
                 NSString *imgUrlString = [RCTConvert NSString:item[@"imgUrl"]];
                 [self updateItemImageWithURL:_item imgUrl:imgUrlString];
             }
-            [_item setUserInfo:@{ @"index": @(listIndex) }];
-            [_items addObject:_item];
+            [_item setUserInfo:@{
+              @"index": @(listIndex),
+              @"itemId": _itemId
+            }];
+
+            _item.handler = ^(CPListItem *selectedItem, void (^completionHandler)(void)) {
+                NSDictionary *payload = @{
+                  @"templateId": templateId,
+                  @"index": selectedItem.userInfo[@"index"],
+                  @"itemId": selectedItem.userInfo[@"itemId"]
+                };
+                if (self->hasListeners) {
+                  [self sendEventWithName:@"didSelectListItem" body:payload];
+                }
+                self.selectedResultBlock = completionHandler;
+            };
+            if (_itemId) {
+                RNCPStore *store = [RNCPStore sharedManager];
+                NSMutableArray *existing = store.itemsStore[_itemId];
+                if (existing == nil) {
+                    existing = [NSMutableArray array];
+                    store.itemsStore[_itemId] = existing;
+                }
+                [existing addObject:_item];
+            }
+
+            if (_item) {
+              [_items addObject:_item];
+            } else {
+              NSLog(@"The item was nil can't be created %@", item);
+            }
         } else {
             // parse images
             NSMutableArray * _images = [NSMutableArray array];
-            
+
             if (_imageItems != nil) {
                 NSArray* slicedArray = [_imageItems subarrayWithRange:NSMakeRange(0, MIN(CPMaximumNumberOfGridImages, _imageItems.count))];
 
                 for (NSObject *imageObj in slicedArray){
                     UIImage *_image = [RCTConvert UIImage:imageObj];
-                    [_images addObject:_image];
+                    if (_image) {
+                      [_images addObject:_image];
+                    }
                 }
             }
             if (@available(iOS 14.0, *)) {
-                
+
                 CPListImageRowItem *_item;
                 if (_images.count > 0)
                 {
@@ -1129,35 +1265,86 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
                 {
                     // Show only as much images as allowed.
                     NSArray* _slicedArray = [_imageUrls subarrayWithRange:NSMakeRange(0, MIN(CPMaximumNumberOfGridImages, _imageUrls.count))];//
-                    
+
                     // create array with empty UI images, that will be replaced later
                     NSMutableArray *_imagesArray = [NSMutableArray arrayWithCapacity:_slicedArray.count];
                     for (NSUInteger i = 0; i < _slicedArray.count; i++) {
                         [_imagesArray addObject:[[UIImage alloc] init]];
                     }
                     _item = [[CPListImageRowItem alloc] initWithText:_text images:_imagesArray];
-                    
-                    
+
+
                     int _index = 0;
                     for (NSString* imgUrl in _slicedArray) {
                         [self updateListRowItemImageWithURL:_item imgUrl:imgUrl index:_index];
                         _index++;
                     }
                 }
-                
+
+                [_item setUserInfo:@{
+                  @"index": @(listIndex),
+                  @"itemId": _itemId,
+                  @"imageIds": _imageIds
+                }];
+
                 [_item setListImageRowHandler:^(CPListImageRowItem * _Nonnull item, NSInteger index, dispatch_block_t  _Nonnull completionBlock) {
                     // Find the current template
                     RNCPStore *store = [RNCPStore sharedManager];
                     CPTemplate *template = [store findTemplateById:templateId];
+                    NSString *imageId = nil;
+
+                    id imageIdsObj = item.userInfo[@"imageIds"];
+                    if ([imageIdsObj isKindOfClass:[NSArray class]]) {
+                        NSArray *imageIds = (NSArray *)imageIdsObj;
+                        if (index < imageIds.count) {
+                            id candidate = imageIds[index];
+                            if ([candidate isKindOfClass:[NSString class]]) {
+                                imageId = candidate;
+                            }
+                        }
+                    }
+
+                    if (!imageId) {
+                        imageId = (NSString *)[NSNull null];
+                    }
+
                     if (template) {
-                        [self sendTemplateEventWithName:template name:@"didSelectListItemRowImage" json:@{ @"index": @(listIndex), @"imageIndex": @(index)}];
+                        NSMutableDictionary *payload = [@{
+                            @"index": @(listIndex),
+                            @"imageIndex": @(index),
+                            @"itemId": item.userInfo[@"itemId"],
+                        } mutableCopy];
+
+                        if (![imageId isKindOfClass:[NSNull class]]) {
+                            payload[@"imageId"] = imageId;
+                        }
+
+                        [self sendTemplateEventWithName:template
+                            name:@"didSelectListItemRowImage"
+                            json:payload];
                     }
                 }];
-                    
-                [_item setUserInfo:@{ @"index": @(listIndex) }];
-                [_items addObject:_item];
+
+                _item.handler = ^(CPListItem *selectedItem, void (^completionHandler)(void)) {
+                    NSDictionary *payload = @{
+                      @"templateId": templateId,
+                      @"index": selectedItem.userInfo[@"index"],
+                      @"itemId": selectedItem.userInfo[@"itemId"]
+                    };
+
+                    if (self->hasListeners) {
+                      [self sendEventWithName:@"didSelectListItem" body:payload];
+                    }
+
+                    self.selectedResultBlock = completionHandler;
+                };
+                if (_item) {
+                  [_items addObject:_item];
+                } else {
+                  NSLog(@"The image row item could not be created: %@", item);
+                }
             }
-            
+
         }
         listIndex = listIndex + 1;
     }
@@ -1170,7 +1357,7 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     for (NSDictionary *item in items) {
         [_items addObject:[[CPInformationItem alloc] initWithTitle:item[@"title"] detail:item[@"detail"]]];
     }
-    
+
     return _items;
 }
 
@@ -1184,7 +1371,7 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
         }];
         [_actions addObject:_action];
     }
-    
+
     return _actions;
 }
 
@@ -1374,10 +1561,28 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
     [self sendTemplateEventWithName:template name:name json:@{}];
 }
 
-- (void)sendTemplateEventWithName:(CPTemplate *)template name:(NSString*)name json:(NSDictionary*)json {
-    NSMutableDictionary *body = [[NSMutableDictionary alloc] initWithDictionary:json];
-    NSDictionary *userInfo = [template userInfo];
-    [body setObject:[userInfo objectForKey:@"templateId"] forKey:@"templateId"];
+- (void)sendTemplateEventWithName:(CPTemplate *)template name:(NSString *)name json:(NSDictionary *)json {
+    NSMutableDictionary *body = [[NSMutableDictionary alloc] initWithDictionary:json ?: @{}];
+
+    NSString *templateId = nil;
+    NSDictionary *userInfo = nil;
+
+    if ([template respondsToSelector:@selector(userInfo)]) {
+        userInfo = [template userInfo];
+    }
+
+    if ([userInfo isKindOfClass:[NSDictionary class]]) {
+        id value = userInfo[@"templateId"];
+        if ([value isKindOfClass:[NSString class]]) {
+            templateId = (NSString *)value;
+        }
+    }
+
+    if (templateId.length > 0) {
+        body[@"templateId"] = templateId;
+    }
+    body[@"templateId"] = templateId ?: @"";
+
     if (hasListeners) {
         [self sendEventWithName:name body:body];
     }
@@ -1477,14 +1682,6 @@ RCT_EXPORT_METHOD(updateMapTemplateMapButtons:(NSString*) templateId mapButtons:
 - (void)searchTemplate:(CPSearchTemplate *)searchTemplate updatedSearchText:(NSString *)searchText completionHandler:(void (^)(NSArray<CPListItem *> * _Nonnull))completionHandler {
     [self sendTemplateEventWithName:searchTemplate name:@"updatedSearchText" json:@{ @"searchText": searchText }];
     self.searchResultBlock = completionHandler;
-}
-
-# pragma ListTemplate
-
-- (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)(void))completionHandler {
-    NSNumber* index = [item.userInfo objectForKey:@"index"];
-    [self sendTemplateEventWithName:listTemplate name:@"didSelectListItem" json:@{ @"index": index }];
-    self.selectedResultBlock = completionHandler;
 }
 
 # pragma TabBarTemplate
