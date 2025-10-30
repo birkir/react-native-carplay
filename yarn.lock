@@ -4773,15 +4773,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cose-base@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "cose-base@npm:2.2.0"
-  dependencies:
-    layout-base: ^2.0.0
-  checksum: 2e694f340bf216c71fc126d237578a4168e138720011d0b48c88bf9bfc7fd45f912eff2c603ef3d1307d6e3ce6f465ed382285a764a3a6620db590c5457d2557
-  languageName: node
-  linkType: hard
-
 "cosmiconfig@npm:^5.0.5, cosmiconfig@npm:^5.1.0":
   version: 5.2.1
   resolution: "cosmiconfig@npm:5.2.1"
@@ -4990,24 +4981,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cytoscape-fcose@npm:^2.1.0":
-  version: 2.2.0
-  resolution: "cytoscape-fcose@npm:2.2.0"
-  dependencies:
-    cose-base: ^2.2.0
-  peerDependencies:
-    cytoscape: ^3.2.0
-  checksum: 94ffe6f131f9c08c2a0a7a6ce1c6c5e523a395bf8d84eba6d4a5f85e23f33788ea3ff807540861a5f78a6914a27729e06a7e6f66784f4f28ea1c030acf500121
-  languageName: node
-  linkType: hard
-
-"cytoscape@npm:^3.23.0":
-  version: 3.26.0
-  resolution: "cytoscape@npm:3.26.0"
-  dependencies:
-    heap: ^0.2.6
-    lodash: ^4.17.21
-  checksum: c6a3b2fbe99009cde6e5e2eb6ff2e0469b37f3e12b0828d676aa3c25a7ce7b6ed689b6765e9d3975d51c718a7870e358c639c9128352813b95eb342ef64a26b8
+"cytoscape@npm:^3.28.1":
+  version: 3.30.3
+  resolution: "cytoscape@npm:3.30.3"
+  checksum: 5b7cbca3580ed62768a099fb6ea86e9615fd8b5c06c3223ddea1ac63b0293243d148b61b3a5b048d730d17c8e740a204a223246bc33fc0b886f363a3b9c69ca3
   languageName: node
   linkType: hard
 
@@ -5649,10 +5626,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.0.5":
-  version: 3.0.6
-  resolution: "dompurify@npm:3.0.6"
-  checksum: e5c6cdc5fe972a9d0859d939f1d86320de275be00bbef7bd5591c80b1e538935f6ce236624459a1b0c84ecd7c6a1e248684aa4637512659fccc0ce7c353828a6
+"dompurify@npm:^3.0.5 <3.1.7":
+  version: 3.1.6
+  resolution: "dompurify@npm:3.1.6"
+  checksum: cc4fc4ccd9261fbceb2a1627a985c70af231274a26ddd3f643fd0616a0a44099bd9e4480940ce3655612063be4a1fe9f5e9309967526f8c0a99f931602323866
   languageName: node
   linkType: hard
 
@@ -5706,10 +5683,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"elkjs@npm:^0.8.2":
-  version: 0.8.2
-  resolution: "elkjs@npm:0.8.2"
-  checksum: ed615c485fa4ac1e858af509df24fdc9f61f2c6576df5f79f6a31c733fda69f235f53cd36af037aa9d2b8a935cb4f823fbd89d784b67f6e51be5100306ea1b39
+"elkjs@npm:^0.9.0":
+  version: 0.9.3
+  resolution: "elkjs@npm:0.9.3"
+  checksum: 1293e42e0ea034b39d3719f3816b7b3cbaceb52a3114f2c1bd5ddd969bb1e36ae0afef58e77864fff7a1018dc5e96c177e9b0a40c16e4aaac26eb87f5785be4b
   languageName: node
   linkType: hard
 
@@ -7387,13 +7364,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"heap@npm:^0.2.6":
-  version: 0.2.7
-  resolution: "heap@npm:0.2.7"
-  checksum: b0f3963a799e02173f994c452921a777f2b895b710119df999736bfed7477235c2860c423d9aea18a9f3b3d065cb1114d605c208cfcb8d0ac550f97ec5d28cb0
-  languageName: node
-  linkType: hard
-
 "hermes-estree@npm:0.8.0":
   version: 0.8.0
   resolution: "hermes-estree@npm:0.8.0"
@@ -8995,13 +8965,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"layout-base@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "layout-base@npm:2.0.1"
-  checksum: ef93baf044f67c3680f4f3a6d628bf4c7faba0f70f3e0abb16e4811bed087045208560347ca749e123d169cbf872505ad84e11fb21b0be925997227e042c7f43
-  languageName: node
-  linkType: hard
-
 "leven@npm:^3.1.0":
   version: 3.1.0
   resolution: "leven@npm:3.1.0"
@@ -9615,21 +9578,21 @@ __metadata:
   linkType: hard
 
 "mermaid@npm:^10.2.2":
-  version: 10.6.0
-  resolution: "mermaid@npm:10.6.0"
+  version: 10.9.3
+  resolution: "mermaid@npm:10.9.3"
   dependencies:
     "@braintree/sanitize-url": ^6.0.1
     "@types/d3-scale": ^4.0.3
     "@types/d3-scale-chromatic": ^3.0.0
-    cytoscape: ^3.23.0
+    cytoscape: ^3.28.1
     cytoscape-cose-bilkent: ^4.1.0
-    cytoscape-fcose: ^2.1.0
     d3: ^7.4.0
     d3-sankey: ^0.12.3
     dagre-d3-es: 7.0.10
     dayjs: ^1.11.7
-    dompurify: ^3.0.5
-    elkjs: ^0.8.2
+    dompurify: ^3.0.5 <3.1.7
+    elkjs: ^0.9.0
+    katex: ^0.16.9
     khroma: ^2.0.0
     lodash-es: ^4.17.21
     mdast-util-from-markdown: ^1.3.0
@@ -9638,7 +9601,7 @@ __metadata:
     ts-dedent: ^2.2.0
     uuid: ^9.0.0
     web-worker: ^1.2.0
-  checksum: 7dd4789aaba2ecf42aa51bea5e4d884d9fc1cc58e87de1a3cb8c14e4551cd9be895155954c8bb5f391d3f6dd6a11a82987ef1fe7937ec79ccdf599ca140d95be
+  checksum: 65468f6c7628d8c5ad640b3657e70d3408464d4b49e83c159ddc478ae733cb8f4ca545e16939cc8604e5f8902fb1d8bc1be0e00fa98a8bdf221d222e58d3342a
   languageName: node
   linkType: hard
 
